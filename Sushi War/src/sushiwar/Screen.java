@@ -25,7 +25,7 @@ public class Screen extends JPanel {
 		setSize(w, h);
 		setBackground(Color.decode("0x8080ff"));
 		
-		terrain = new Terrain("land01", this);
+		terrain = new Terrain("land03", this);
 		
 		Niguiri n = null;
 		

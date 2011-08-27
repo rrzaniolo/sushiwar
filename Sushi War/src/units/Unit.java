@@ -49,15 +49,28 @@ public class Unit extends Agent {
 		//	--  Vento
 		//	To do!
 	
+		int result;
 		
-		this.move( vx, 0 );
+		result = this.move( vx, 0 );
+		if (screen.hitTerrain(this)) {
+			this.move(-vx,0);
+		}
+		
 		if (!screen.hitTerrain(this)) {
-			int result = this.move( 0, vy );
+			result = this.move( 0, vy );
 
 			//	Parar de cair caso saia para baixo da tela
-			if ((result & Screen.SCREEN_OUT_BOTTOM) != 0 || screen.hitTerrain(this))
+			if ((result & Screen.SCREEN_OUT_BOTTOM) != 0 || screen.hitTerrain(this)) {
+				this.move(0,-vy);
 				vy = 0;
+				vx = ux*speed;
+				falling = false;
+			}
+			else {
+				falling = true;
+			}
 		}
+			
 		
 	}
 	
@@ -76,7 +89,9 @@ public class Unit extends Agent {
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
 		super.keyPressedOnce(e);
-		vx = ux * speed;
+		if (!falling)
+			vx = ux * speed;
+		
 		if (ux == -1)
 			facing = Direction.LEFT;
 		else if (ux == 1)
@@ -86,7 +101,8 @@ public class Unit extends Agent {
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
-		vx = ux * speed;
+		if (!falling)
+			vx = ux * speed;
 	}
 	
 	/**
@@ -107,8 +123,9 @@ public class Unit extends Agent {
 	protected double vx = 0;
 	protected double vy = 0;
 	protected Direction facing = null;
+	protected boolean falling = false;
 	
-	public static double gravity = 0.05;
+	public static double gravity = 0.1;
 	
-	private static double speed = 2;
+	private static double speed = 0.85;
 }
