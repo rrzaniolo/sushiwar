@@ -1,6 +1,7 @@
 
 package units;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,6 +31,9 @@ public abstract class Agent implements KeyListener, TimerListener {
 		this.width = width;
 		this.height = height;
 		this.radius = width/2;
+		
+		this.collisionBox = new Rectangle( x, y, width, height );
+		this.collisionBoxPosition = new Point(0,0);
 		
 		this.box = new Rectangle(x, y, width, height);
 		this.screen = screen;
@@ -84,19 +88,45 @@ public abstract class Agent implements KeyListener, TimerListener {
 		
 		this.x = x;
 		this.y = y;
-		box.setLocation( (int) this.x - width/2, (int) this.y - height/2 );
+		this.updateBox();
+//		box.setLocation( (int) this.x - width/2, (int) this.y - height/2 );
+//		this.updateCollisionBox();
 		
 		return true;
 	}
 	
 	public void setPositionX( double newX ) {
 		this.x = newX;
-		this.box.setLocation( (int) x - width/2, (int) y - height/2);
+		this.updateBox();
+//		this.box.setLocation( (int) x - width/2, (int) y - height/2);
+//		this.updateCollisionBox();
 	}
 	
 	public void setPositionY( double newY ) {
 		this.y = newY;
+		this.updateBox();
+//		this.box.setLocation( (int) x - width/2, (int) y - height/2);
+//		this.updateCollisionBox();
+	}
+	
+	public void setCollisionBox( int x, int y, int width, int height ) {
+		collisionBox.setSize(width, height);
+		collisionBoxPosition.setLocation(x,y);
+		
+		collisionBox.setLocation( box.x + collisionBoxPosition.x, box.y + collisionBoxPosition.y );
+	}
+	
+	public void setCollisionBoxCenter( int width, int height ) {
+		setCollisionBox( (this.width - width)/2, (this.height - height)/2, width, height );
+	}
+	
+	protected void updateBox() {
 		this.box.setLocation( (int) x - width/2, (int) y - height/2);
+		this.updateCollisionBox();
+	}
+	
+	protected void updateCollisionBox() {
+		collisionBox.setLocation( box.x + collisionBoxPosition.x, box.y + collisionBoxPosition.y );
 	}
 	
 	public void	toggleControl( boolean yes ) {
@@ -139,6 +169,10 @@ public abstract class Agent implements KeyListener, TimerListener {
 	
 	public Rectangle getBox() {
 		return (Rectangle) box.clone();
+	}
+	
+	public Rectangle getCollisionBox() {
+		return (Rectangle) collisionBox.clone();
 	}
 	
 	public boolean isMoving() {
@@ -251,6 +285,9 @@ public abstract class Agent implements KeyListener, TimerListener {
 	protected int uy = 0;
 	protected Rectangle box = null;
 	protected Screen screen = null;
+	
+	protected Rectangle collisionBox = null;
+	protected Point collisionBoxPosition = null;
 	
 	protected boolean respondControl = false;
 	protected boolean moving = false;

@@ -10,7 +10,6 @@ package units;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import player.DirPad;
-import player.DirPad.Direction;
 import sprite.*;
 import sushiwar.Screen;
 
@@ -23,6 +22,7 @@ public class Niguiri extends Unit {
 	public Niguiri( int x, int y, int player, Screen screen ) {
 		super(x, y, 30, 30, screen );
 		
+		setCollisionBoxCenter( 15, 15 );
 		sprite = new Sprite( "niguiri", 30, 30, screen );
 		
 		Animation anim;
@@ -67,14 +67,17 @@ public class Niguiri extends Unit {
 		super.keyPressedOnce(e);
 		System.out.println("Pressed");
 		
-		if (e.getKeyCode() == KeyEvent.VK_SPACE)
-			vy = -3.;
+		if (!falling && e.getKeyCode() == KeyEvent.VK_SPACE) {
+			applySpeed( DirPad.Direction2X(facing), -3 );
+			
+			System.out.println(DirPad.Direction2X(facing));
+		}
 		
 		if (this.isMoving())
-			this.setStatus(NiguiriStatus.SAD);
+			this.setStatus(NiguiriStatus.WALK);
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
-			this.setPosition(15,15);
+			this.setPosition(screen.getWidth()/2,15);
 		
 	}
 	

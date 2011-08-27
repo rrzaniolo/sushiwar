@@ -40,17 +40,23 @@ public class Terrain {
 	//	--  Informação  -------------------------------------------------------
 	
 	public boolean collided( Agent ag ) {
-		Rectangle box = ag.getBox();
+		Rectangle box = ag.getCollisionBox();
 		int x, y;
 		int dx, dy;
+		int minX, minY, maxX, maxY;
 		int cx = (int) box.getCenterX();
 		int cy = (int) box.getCenterY();
 		
-		for (y = (int) box.getMinY(); y < box.getMaxY(); y++) {
-			for (x = (int) box.getMinX(); x < box.getMaxX(); x++) {
+		minX = (int) Math.max( box.getMinX(), 0 );
+		minY = (int) Math.max( box.getMinY(), 0 );
+		maxX = (int) Math.min( box.getMaxX(), landImage.getWidth() );
+		maxY = (int) Math.min( box.getMaxY(), landImage.getHeight() );
+		
+		for (y = (int) minY; y < maxY; y++) {
+			for (x = (int) minX; x < maxX; x++) {
 				dx = x - cx;
 				dy = y - cy;
-				if (((landImage.getRGB(x, y) & 0x11000000) != 0) && (Math.sqrt(dx*dx+dy*dy) < ag.getRadius())) {
+				if (((landImage.getRGB(x, y) & 0x11000000) != 0)) {
 					return true;
 				}
 			}
