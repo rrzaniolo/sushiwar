@@ -1,0 +1,8 @@
+
+22 Ago. 2011 (Hossomi)
+
+Função Agent.move modificada
+
+23 Ago. 2011 (Hossomi)
+
+Zoei a função Agent.move, não mexe nela a não ser que seja pra consertar! xD
