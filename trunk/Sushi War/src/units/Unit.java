@@ -49,27 +49,43 @@ public class Unit extends Agent {
 		//	--  Vento
 		//	To do!
 	
-		int result;
+		int result, flyHeight;
 		
-		result = this.move( vx, 0 );
-		if (screen.hitTerrain(this)) {
-			this.move(-vx,0);
+		//	--  Mover em X
+		
+		result = this.move( ux*speed + vx, 0 );
+		if (screen.hitTerrain(this, true)) {
+			this.move(-(ux*speed + vx),0);
+			vx = 0;
 		}
 		
-		if (!screen.hitTerrain(this)) {
-			result = this.move( 0, vy );
+		flyHeight = screen.getAgentFlyHeight(this);
 
-			//	Parar de cair caso saia para baixo da tela
-			if ((result & Screen.SCREEN_OUT_BOTTOM) != 0 || screen.hitTerrain(this)) {
-				this.move(0,-vy);
-				vy = 0;
-				vx = ux*speed;
-				falling = false;
-			}
-			else {
-				falling = true;
-			}
+		vy = Math.min( flyHeight, vy );
+		
+		if ( vy == 0 ) {
+			falling = false;
+			vx = 0;
 		}
+		else {
+			falling = true;
+			move(0, vy);
+		}
+		
+//		if (!screen.hitTerrain(this, false)) {
+//			result = this.move( 0, vy );
+//
+//			//	Parar de cair caso saia para baixo da tela
+//			if ((result & Screen.SCREEN_OUT_BOTTOM) != 0 || screen.hitTerrain(this, false)) {
+//				this.move(0,-vy);
+//				vy = 0;
+//				vx = ux*speed;
+//				falling = false;
+//			}
+//			else {
+//				falling = true;
+//			}
+//		}
 			
 		
 	}

@@ -39,30 +39,73 @@ public class Terrain {
 	
 	//	--  Informação  -------------------------------------------------------
 	
-	public boolean collided( Agent ag ) {
+	/**
+	 * Verifica se um agente colidiu com o terreno. Se adjust for verdadeiro,
+	 * também vai ajustar para que o agente fique sobre o pixel mais alto
+	 * se estiver dentro de uma tolerância.
+	 * 
+	 * @param ag O agente a verificar
+	 * @param adjust Se vedadeiro, posiciona o agente sobre o pixel mais alto
+	 * se estiver dentro da tolerãncia
+	 * @return Verdadeiro se colidir
+	 */
+	
+	public boolean collided( Agent ag, boolean adjust ) {
 		Rectangle box = ag.getCollisionBox();
 		int x, y;
-		int dx, dy;
 		int minX, minY, maxX, maxY;
-		int cx = (int) box.getCenterX();
-		int cy = (int) box.getCenterY();
+		int maxCliff = 0;
 		
+		//	--	Encontrar a caixa onde verificar
 		minX = (int) Math.max( box.getMinX(), 0 );
 		minY = (int) Math.max( box.getMinY(), 0 );
 		maxX = (int) Math.min( box.getMaxX(), landImage.getWidth() );
 		maxY = (int) Math.min( box.getMaxY(), landImage.getHeight() );
 		
+		//	--	Verificar pixels
 		for (y = (int) minY; y < maxY; y++) {
 			for (x = (int) minX; x < maxX; x++) {
-				dx = x - cx;
-				dy = y - cy;
 				if (((landImage.getRGB(x, y) & 0x11000000) != 0)) {
-					return true;
+					
+					//	--	Calcular pixel mais alto
+					maxCliff = Math.min(y - maxY, maxCliff);
+					
+					//	--	Se não for preciso ajustar, retornar caso encontre
+					//	--	um pixel
+					if (!adjust)
+						return true;
+					
 				}
 			}
 		}
 		
-		return false;
+		//	--	Se estiver dentro da tolerância, mover
+		if (maxCliff > -cliffTolerance) {
+			ag.move(0, maxCliff);
+			return false;
+		}
+			
+		return true;
+		
+	}
+	
+	public int getAgentFlyHeight( Agent ag ) {
+		Rectangle box = ag.getCollisionBox();
+		int x, y;
+		int minX, maxX, minY, maxY;
+		
+		minX = (int) Math.max( box.getMinX(), 0 );
+		minY = (int) Math.max( box.getMaxY(), 0 );
+		maxX = (int) Math.min( box.getMaxX(), screen.getWidth() );
+		maxY = (int) screen.getHeight();
+		
+		for (y = minY; y < maxY; y++)
+			for (x = minX; x < maxX; x++)
+				if (((landImage.getRGB(x, y) & 0x11000000) != 0)) {
+					return y - minY;
+				}
+		
+		return maxY - minY;
 	}
 	
 	public void print( Graphics g ) {
@@ -73,4 +116,5 @@ public class Terrain {
 	
 	private Screen screen = null;
 	private BufferedImage landImage = null;
+	private static int cliffTolerance = 6;
 }
