@@ -7,7 +7,9 @@ package units;
  * CLASS Niguiri ------------------------------------------
  */
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import player.DirPad;
 import sprite.*;
@@ -22,7 +24,7 @@ public class Niguiri extends Unit {
 	public Niguiri( int x, int y, int player, Screen screen ) {
 		super(x, y, 30, 30, screen );
 		
-		setCollisionBoxCenter( 15, 15 );
+		setCollisionBox( 7, 9, 16, 16 );
 		sprite = new Sprite( "niguiri", 30, 30, screen );
 		
 		Animation anim;
@@ -92,6 +94,9 @@ public class Niguiri extends Unit {
 	@Override
 	public void print( Graphics g ){
 		super.print(g);
+		
+		//Graphics2D g2 = (Graphics2D) g;
+		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
 	
 	private int player = 0;

@@ -103,8 +103,12 @@ public class Screen extends JPanel {
 		return result;		
 	}
 	
-	public boolean hitTerrain( Agent ag ) {
-		return terrain.collided(ag);
+	public int getAgentFlyHeight( Agent ag ) {
+		return terrain.getAgentFlyHeight(ag);
+	}
+	
+	public boolean hitTerrain( Agent ag, boolean adjust ) {
+		return terrain.collided(ag, adjust);
 	}
 	/* 
 	 * Método chamado pelo "sistema" que reimprime todos
