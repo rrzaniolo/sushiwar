@@ -13,9 +13,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import player.DirPad;
 import sprite.*;
+import sushiwar.Constants;
 import sushiwar.Screen;
 
-public class Niguiri extends Unit {
+public class Niguiri extends Unit implements Constants {
 
 	public enum NiguiriStatus {
 		STAND, WALK, HAPPY, SAD;
@@ -25,12 +26,13 @@ public class Niguiri extends Unit {
 		super(x, y, 30, 30, screen );
 		
 		setCollisionBox( 7, 9, 16, 16 );
+		setMoveSpeed( NIGUIRI_SPEED );
 		sprite = new Sprite( "niguiri", 30, 30, screen );
 		
 		Animation anim;
-		sprite.addAnimation( new Animation("walk", 0, 8, 40, true) );
-		sprite.addAnimation( new Animation("yes", 8, 9, 40, false) );
-		sprite.addAnimation( new Animation("shit", 17, 7, 60, true, 2) );
+		sprite.addAnimation( new Animation("walk", 0, 8, 30, true) );
+		sprite.addAnimation( new Animation("yes", 8, 9, 30, false) );
+		sprite.addAnimation( new Animation("shit", 17, 7, 40, true, 2) );
 		anim = new Animation("stand", 24, 4, 40, true);
 		anim.setFramePeriod(0, 2500);
 		sprite.addAnimation( anim );
@@ -70,7 +72,7 @@ public class Niguiri extends Unit {
 		System.out.println("Pressed");
 		
 		if (!falling && e.getKeyCode() == KeyEvent.VK_SPACE) {
-			applySpeed( DirPad.Direction2X(facing), -3 );
+			applySpeed( DirPad.Direction2X(facing)*0.7, -4 );
 			
 			System.out.println(DirPad.Direction2X(facing));
 		}

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import player.DirPad.Direction;
 import sprite.Sprite;
+import sushiwar.Constants;
 import sushiwar.Screen;
 
 /**
@@ -15,7 +16,7 @@ import sushiwar.Screen;
  * animado.
  */
 
-public class Unit extends Agent {
+public class Unit extends Agent implements Constants {
 	
 	public Unit( int x, int y, int width, int height, Screen screen ) {
 		super(x, y, width, height, screen, true);
@@ -42,62 +43,65 @@ public class Unit extends Agent {
 	 */
 	@Override
 	public void update() {
+		
 		//	--  Gravidade
 		if (respondGravity)
 			vy += gravity;
 		
 		//	--  Vento
 		//	To do!
-	
-		int result, flyHeight;
 		
 		//	--  Mover em X
+		double dx;
 		
-		result = this.move( ux*speed + vx, 0 );
+		if (!falling && respondControl)
+			dx = (vx + ux*moveSpeed);
+		else
+			dx = vx;
+		
+		this.move( dx, 0 );
 		if (screen.hitTerrain(this, true)) {
-			this.move(-(ux*speed + vx),0);
+			this.move(-dx,0);
 			vx = 0;
+			vy = Math.max(vy, 0);
 		}
 		
-		flyHeight = screen.getAgentFlyHeight(this);
+		//	--	Mover em Y
+		int flyHeight = screen.getAgentFlyHeight(this);
 
 		vy = Math.min( flyHeight, vy );
 		
-		if ( vy == 0 ) {
-			falling = false;
+		if (vy != 0)
+			this.move(0, vy);
+		else
 			vx = 0;
-		}
-		else {
-			falling = true;
-			move(0, vy);
-		}
 		
-//		if (!screen.hitTerrain(this, false)) {
-//			result = this.move( 0, vy );
-//
-//			//	Parar de cair caso saia para baixo da tela
-//			if ((result & Screen.SCREEN_OUT_BOTTOM) != 0 || screen.hitTerrain(this, false)) {
-//				this.move(0,-vy);
-//				vy = 0;
-//				vx = ux*speed;
-//				falling = false;
-//			}
-//			else {
-//				falling = true;
-//			}
-//		}
-			
+		this.falling = (flyHeight > 5);
 		
 	}
 	
+	/**
+	 * Incrementa a velocidade automática.
+	 * @param vx Incremento em x
+	 * @param vy Incremento emm y
+	 */
 	public void applySpeed( double vx, double vy ) {
 		this.vx += vx;
 		this.vy += vy;
 	}
 	
+	/**
+	 * Redefine a velocidade automática.
+	 * @param vx Velocidade em x
+	 * @param vy Velocidade em y
+	 */
 	public void setSpeed( double vx, double vy ) {
 		this.vx = vx;
 		this.vy = vy;
+	}
+	
+	public void setMoveSpeed( double moveSpeed ) {
+		this.moveSpeed = moveSpeed;
 	}
 	
 	//	--	Eventos  ----------------------------------------------------------
@@ -105,8 +109,6 @@ public class Unit extends Agent {
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
 		super.keyPressedOnce(e);
-		if (!falling)
-			vx = ux * speed;
 		
 		if (ux == -1)
 			facing = Direction.LEFT;
@@ -117,8 +119,6 @@ public class Unit extends Agent {
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
-		if (!falling)
-			vx = ux * speed;
 	}
 	
 	/**
@@ -132,16 +132,18 @@ public class Unit extends Agent {
 		}
 	}
 	
+	//	-----------------------------------------------------------------------
+	
 	protected Sprite sprite = null;
 	protected boolean respondGravity = true;
 	protected boolean respondWind = false;
+	protected boolean falling = false;
 	
 	protected double vx = 0;
 	protected double vy = 0;
+	protected double moveSpeed = 0.5;
+	
 	protected Direction facing = null;
-	protected boolean falling = false;
 	
 	public static double gravity = 0.1;
-	
-	private static double speed = 0.85;
 }

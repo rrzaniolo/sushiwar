@@ -9,17 +9,17 @@ package timer;
  */
 public class Timer extends Thread {
 
-    public Timer(TimerListener listener, long millis) {
+    public Timer(TimerListener listener, long period) {
         this.listener = listener;
-        this.millis = millis;
+        this.period = period;
         this.pause = false;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (!stop) {
             try {
-                Thread.sleep(millis);
+                Thread.sleep(period);
 
                 if (!pause) {
                     listener.update();
@@ -27,13 +27,23 @@ public class Timer extends Thread {
             } catch (InterruptedException ex) {
             }
         }
+		stop = false;
     }
 
     public void pause( boolean pause ) {
         this.pause = pause;
     }
     
-    private boolean pause;
-    private long millis;
-    private TimerListener listener;
+	public void finish() {
+		stop = true;
+	}
+	
+	public void setPeriod( int period ) {
+		this.period = period;
+	}
+	
+    private boolean pause = false;
+	private boolean stop = false;
+    private long period = 1000;
+    private TimerListener listener = null;
 }
