@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import sprite.Sprite;
+import sushiwar.Constants;
 import sushiwar.Screen;
 import units.Agent;
 
@@ -19,7 +20,7 @@ import units.Agent;
  *
  * @author Hossomi
  */
-public class Terrain {
+public class Terrain implements Constants{
 	
 	public Terrain( String file, Screen screen ) {
 		//	Carregando spritesheet
@@ -80,7 +81,7 @@ public class Terrain {
 		}
 		
 		//	--	Se estiver dentro da tolerância, mover
-		if (maxCliff > -cliffTolerance) {
+		if (maxCliff > -CLIFF_TOLERANCE) {
 			ag.move(0, maxCliff);
 			return false;
 		}
@@ -88,6 +89,15 @@ public class Terrain {
 		return true;
 		
 	}
+	
+	/**
+	 * Calcula a altura de um agente em relação ao terreno atual.
+	 * A altura será em relação ao pixel mais próximo da base do agente, 
+	 * considerando toda sua extensão.
+	 * @param ag Agente a ser avaliado
+	 * @return A altura em relação ao pixel mais próximo do agente. Caso já
+	 * esteja em contato com o terreno, retorna 0.
+	 */
 	
 	public int getAgentFlyHeight( Agent ag ) {
 		Rectangle box = ag.getCollisionBox();
@@ -116,5 +126,4 @@ public class Terrain {
 	
 	private Screen screen = null;
 	private BufferedImage landImage = null;
-	private static int cliffTolerance = 6;
 }

@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import timer.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import scenario.Terrain;
+import timer.TimerListener;
 import units.Agent;
 import units.Niguiri;
 
@@ -18,15 +20,19 @@ import units.Niguiri;
  * A parte gráfica da janela, onde tudo será mostrado.
  */
 
-public class Screen extends JPanel {
+public class Screen extends JPanel implements Constants {
 	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
-		setSize(w, h);
-		setBackground(Color.decode("0x8080ff"));
 		
+		//	--	Inicializar janela
+		setSize(w, h);
+		setBackground(Color.decode("0xff8000"));
+		
+		//	--	Inicializar terreno
 		terrain = new Terrain("land03", this);
 		
+		//	--	Inicializer niguiris teste
 		Niguiri n = null;
 		
 		list = new ArrayList<Niguiri>();
@@ -36,6 +42,7 @@ public class Screen extends JPanel {
 			frame.addKeyListener(n);
 		}
 		
+		//	--	Restante!
 		this.frame = frame;
 		/*s1.addAnimation(a);
 		s2.addAnimation(a2);
@@ -110,10 +117,7 @@ public class Screen extends JPanel {
 	public boolean hitTerrain( Agent ag, boolean adjust ) {
 		return terrain.collided(ag, adjust);
 	}
-	/* 
-	 * Método chamado pelo "sistema" que reimprime todos
-	 * os objetos na tela.
-	 */
+
 	@Override
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent(g);
@@ -131,11 +135,7 @@ public class Screen extends JPanel {
 	private JFrame frame;
 	private Terrain terrain = null;
 	
-	public static int SCREEN_OUT_RIGHT = 0x00001;
-	public static int SCREEN_OUT_LEFT  = 0x00010;
-	public static int SCREEN_OUT_TOP   = 0x00100;
-	public static int SCREEN_OUT_BOTTOM= 0x01000;
-	public static int SCREEN_OUT_TOTAL = 0x10000;
+
 	
 	/*private Sprite s1 = new Sprite("niguiri", 30, 30, this );
 	private Sprite s2 = new Sprite("niguiri", 30, 30, this );

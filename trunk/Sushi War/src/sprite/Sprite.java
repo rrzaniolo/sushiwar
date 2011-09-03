@@ -20,7 +20,7 @@ import player.DirPad.Direction;
 import sushiwar.Screen;
 import timer.*;
 
-public class Sprite {
+public class Sprite implements TimerListener {
 
 	public Sprite( String file, int width, int height, Screen screen ) {	 
 		
@@ -46,26 +46,25 @@ public class Sprite {
 			x = (i/50)*(width*5+1) + (i%5)*width;
 			y = (i/5)%10*height;
 			
+			//	Sprite normal (direita)
 			spritesRight[i] = spriteSheet.getSubimage(x, y, width, height);
 
+			//	Sprite espelhado (esquerda)
 			spritesLeft[i] = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+			
+			Graphics2D g2 = (Graphics2D) spritesLeft[i].getGraphics();
+			
 			AffineTransform aft = new AffineTransform();
-			g = spritesLeft[i].getGraphics();
-			Graphics2D g2 = (Graphics2D) g;
 			aft.translate(this.size.width, 0);
 			aft.scale(-1.0, 1.0);
+			
 			g2.drawImage(spritesRight[i], aft, null);
-			g.dispose();
 			g2.dispose();
 		}
 		
 		//	Inicializando restante 
 		animations = new ArrayList<Animation>(0);
-		timer = new Timer( new TimerListener() {
-								@Override
-								public void update() {
-									updateFrame();
-								}}, timerPeriod );
+		timer = new Timer( this, timerPeriod );
 		
 		this.screen = screen;
 	}
@@ -128,7 +127,8 @@ public class Sprite {
 		return true;
 	}
 
-	public void updateFrame() {
+	@Override
+	public void update() {
 		if (animNow != null) {
 			timeCount -= timerPeriod;
 		
