@@ -37,38 +37,21 @@ public class Unit extends Agent implements Constants {
 	//	--	Manipulação  ------------------------------------------------------
 	
 	/**
-	 * Move a unidade se responder a controles.
-	 * Move a unidade se responder à gravidade.
-	 * Move a unidade se responder ao vento.
+	 * Move a unidade de acordo com gravidade, vento e controles.
 	 */
 	@Override
 	public void update() {
 		
-		//	--  Gravidade
+		//	--  Gravidade  --
+		
 		if (respondGravity)
-			vy += gravity;
+			vy += GRAVITY;
 		
-		//	--  Vento
-		//	To do!
+		//	--	Mover em Y  --
+		//	Será movido apenas se estiver acima do solo.
+		//	Cancelar movimento espontâneo em x caso atinja o solo
 		
-		//	--  Mover em X
-		double dx;
-		
-		if (!falling && respondControl)
-			dx = (vx + ux*moveSpeed);
-		else
-			dx = vx;
-		
-		this.move( dx, 0 );
-		if (screen.hitTerrain(this, true)) {
-			this.move(-dx,0);
-			vx = 0;
-			vy = Math.max(vy, 0);
-		}
-		
-		//	--	Mover em Y
 		int flyHeight = screen.getAgentFlyHeight(this);
-
 		vy = Math.min( flyHeight, vy );
 		
 		if (vy != 0)
@@ -76,8 +59,23 @@ public class Unit extends Agent implements Constants {
 		else
 			vx = 0;
 		
-		this.falling = (flyHeight > 5);
+		this.falling = (flyHeight > MOVE_FALLING_HEIGHT);
 		
+		//	--  Mover em X  --
+		//	Aplicar movimento de controle!
+		//	Retroceer movimento caso seja impossível
+		
+		double dx = vx;
+		
+		if (!falling && respondControl)
+			dx += ux * MOVE_NIGUIRI_SPEED;
+		
+		this.move( dx, 0 );
+		if (screen.hitTerrain(this, true)) {
+			this.move(-dx,0);
+			vx = 0;
+			vy = Math.max(vy, 0);
+		}
 	}
 	
 	/**
@@ -130,6 +128,30 @@ public class Unit extends Agent implements Constants {
 		if (sprite != null){
 			sprite.print( x-width/2, y-height/2, g, facing);
 		}
+		
+		if (showSpeed) {
+			String show = "";
+			g.drawString( "x: " + vx, (int) x, (int) y - 40);
+			g.drawString( "y: " + vy, (int) x, (int) y - 30);
+			if (controlPad.isDirectionPressed(Direction.LEFT))
+				show += "L ";
+			else
+				show += "  ";
+			if (controlPad.isDirectionPressed(Direction.RIGHT))
+				show += "R ";
+			else
+				show += "  ";
+			if (controlPad.isDirectionPressed(Direction.UP))
+				show += "U ";
+			else
+				show += "  ";
+			if (controlPad.isDirectionPressed(Direction.DOWN))
+				show += "D ";
+			else
+				show += "  ";
+			
+			g.drawString( show, (int) x, (int) y - 20);
+		}
 	}
 	
 	//	-----------------------------------------------------------------------
@@ -146,4 +168,6 @@ public class Unit extends Agent implements Constants {
 	protected Direction facing = null;
 	
 	public static double gravity = 0.1;
+	
+	private static final boolean showSpeed = true;
 }

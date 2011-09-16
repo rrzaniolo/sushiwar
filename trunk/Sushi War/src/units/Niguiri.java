@@ -26,7 +26,7 @@ public class Niguiri extends Unit implements Constants {
 		super(x, y, 30, 30, screen );
 		
 		setCollisionBox( 7, 9, 16, 16 );
-		setMoveSpeed( NIGUIRI_SPEED );
+		setMoveSpeed( MOVE_NIGUIRI_SPEED );
 		sprite = new Sprite( "niguiri", 30, 30, screen );
 		
 		Animation anim;
@@ -39,12 +39,6 @@ public class Niguiri extends Unit implements Constants {
 		sprite.playAnimation("stand");
 		
 		this.player = player;
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		
 	}
 	
 	public boolean playAnimation( String anim ) {
@@ -69,12 +63,10 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
 		super.keyPressedOnce(e);
-		System.out.println("Pressed");
 		
-		if (!falling && e.getKeyCode() == KeyEvent.VK_SPACE) {
-			applySpeed( DirPad.Direction2X(facing)*0.7, -4 );
-			
-			System.out.println(DirPad.Direction2X(facing));
+		//	--	Pulo! \o/  --
+		if ( !falling && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
+			setSpeed( DirPad.Direction2X(facing)*0.7, -4 );
 		}
 		
 		if (this.isMoving())
@@ -88,7 +80,6 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
-		System.out.println("Released");
 		if (!this.isMoving())
 			this.setStatus(NiguiriStatus.STAND);
 	}

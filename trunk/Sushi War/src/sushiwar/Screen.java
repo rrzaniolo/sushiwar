@@ -2,14 +2,16 @@
 package sushiwar;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import timer.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import msgbox.MsgBox;
 import scenario.Terrain;
-import timer.TimerListener;
 import units.Agent;
 import units.Niguiri;
 
@@ -29,16 +31,19 @@ public class Screen extends JPanel implements Constants {
 		setSize(w, h);
 		setBackground(Color.decode("0xff8000"));
 		
+		this.setFont( new Font("Courier New", Font.PLAIN, 12));
+		this.setForeground(Color.red);
+		
 		//	--	Inicializar terreno
 		terrain = new Terrain("land03", this);
 		
 		//	--	Inicializer niguiris teste
 		Niguiri n = null;
 		
-		list = new ArrayList<Niguiri>();
+		listNiguiri = new ArrayList<Niguiri>();
 		for( int i=0; i<1; i++) {
 			n = new Niguiri(15+(i%30)*30,15+(i/30)*30,1,this);
-			list.add( n );
+			listNiguiri.add( n );
 			frame.addKeyListener(n);
 		}
 		
@@ -124,17 +129,14 @@ public class Screen extends JPanel implements Constants {
 		
 		terrain.print(g);
 		
-		for( Niguiri n: list)
+		for( Niguiri n: listNiguiri)
 			n.print(g);
-		/*s1.print(10,10,g);
-		s2.print(40,10,g);
-		s3.print(70,10,g);*/
+
 	}
 	
-	private ArrayList<Niguiri> list;
+	private ArrayList<Niguiri> listNiguiri;
 	private JFrame frame;
 	private Terrain terrain = null;
-	
 
 	
 	/*private Sprite s1 = new Sprite("niguiri", 30, 30, this );
