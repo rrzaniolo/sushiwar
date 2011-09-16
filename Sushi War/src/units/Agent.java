@@ -42,7 +42,7 @@ public abstract class Agent implements KeyListener, TimerListener {
 		this.moveTimer = new Timer( this, 10);
 		this.moveTimer.start();
 		
-		instances.ensureCapacity( instances.size() + 1 );
+		//instances.ensureCapacity( instances.size() + 1 );
 		instances.add(this);
 	}
 	
@@ -62,6 +62,7 @@ public abstract class Agent implements KeyListener, TimerListener {
 	 * ção y.
 	 */
 	public int move( double dx, double dy ) {
+		System.out.println(this);
 		double newX = x + dx;
 		double newY = y + dy;
 		int result = 0;
@@ -140,7 +141,6 @@ public abstract class Agent implements KeyListener, TimerListener {
 	 */
 	@Override
 	public void update() {
-		
 		if (ux != 0 || uy != 0)
 			this.move( ux, uy );
 	}
@@ -199,41 +199,11 @@ public abstract class Agent implements KeyListener, TimerListener {
 
 			controlPad.setDirection( pressed, true );
 		}
-		/*
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			controlPad.setDirection( Direction.UP, true );
-			uy = -1;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			controlPad.setDirection( Direction.RIGHT, true );
-			ux = 1;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			controlPad.setDirection( Direction.DOWN, true );
-			uy = 1;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			controlPad.setDirection( Direction.LEFT, true );
-			ux = -1;
-		}
-		
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
-			this.setPosition(15, 15);
-		*/
-		
-		
-		/*if (controlPad.isDirectionPressed( Direction.DIRECTION_DOWN ) && !controlPad.isDirectionPressed( Direction.DIRECTION_UP))
-			moving = true;
-		else if (!controlPad.isDirectionPressed( Direction.DIRECTION_DOWN ) && controlPad.isDirectionPressed( Direction.DIRECTION_UP))
-			moving = true;
-		else if (controlPad.isDirectionPressed( Direction.DIRECTION_LEFT ) && ! controlPad.isDirectionPressed( Direction.DIRECTION_RIGHT))
-			moving = true;
-		else*/ 
 	}
 
 	public void keyPressedOnce( KeyEvent e ) {
 		Direction pressed = DirPad.KeyEvent2Direction(e);
-		
+		System.out.println(this);
 		ux += DirPad.Direction2X( pressed );
 		uy += DirPad.Direction2Y( pressed );
 	}
@@ -248,22 +218,6 @@ public abstract class Agent implements KeyListener, TimerListener {
 
 			controlPad.setDirection( pressed, false );
 		}
-		/*if (e.getKeyCode() == KeyEvent.VK_UP) {
-			controlPad.setDirection( Direction.UP, false );
-			uy = 0;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			controlPad.setDirection( Direction.RIGHT, false );
-			ux = 0;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			controlPad.setDirection( Direction.DOWN, false );
-			uy = 0;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			controlPad.setDirection( Direction.LEFT, false );
-			ux = 0;
-		}*/
 	}
 	
 	public void keyReleasedOnce( KeyEvent e ) {
@@ -276,6 +230,7 @@ public abstract class Agent implements KeyListener, TimerListener {
 	
 	//	-----------------------------------------------------------------------
 	
+	//	--	Posicionamento	--
 	protected double x = 0;
 	protected double y = 0;
 	protected int width = 1;
@@ -284,16 +239,18 @@ public abstract class Agent implements KeyListener, TimerListener {
 	protected int ux = 0;
 	protected int uy = 0;
 	protected Rectangle box = null;
-	protected Screen screen = null;
 	
-	protected Rectangle collisionBox = null;
+	//	--	Colisão  --
+	protected Rectangle collisionBox = null;	
 	protected Point collisionBoxPosition = null;
 	
+	//	--	Controle  --
 	protected boolean respondControl = false;
 	protected boolean moving = false;
 	protected DirPad controlPad = null;
 	protected Timer moveTimer = null;
 	
+	protected Screen screen = null;
 	protected static ArrayList<Agent> instances = new ArrayList<Agent>();
 
 }

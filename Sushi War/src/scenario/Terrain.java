@@ -81,7 +81,7 @@ public class Terrain implements Constants{
 		}
 		
 		//	--	Se estiver dentro da tolerância, mover
-		if (maxCliff > -CLIFF_TOLERANCE) {
+		if (maxCliff > -MOVE_CLIFF_TOLERANCE) {
 			ag.move(0, maxCliff);
 			return false;
 		}

@@ -1,0 +1,65 @@
+--------------------------------------------------------------------------------
+	UNITS											Arquivo de documentação
+--------------------------------------------------------------------------------
+
+< Termos > ---------------------------------------------------------------------
+
+	< Movimento de controle >
+
+		Movimento causado pelos direcionais do teclado.
+		É representado unitariamente:
+
+			Valor	x			y
+			¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+			-1		esquerda	cima
+			0		parado		parado
+			1		direita		baixo
+
+	< Movimento espontâneo >
+
+		Movimento natural causado pela gravidade, pulo, vento ou explosões.
+	
+	< Caixa de posição >
+
+		Retângulo que representa a posição do agente.
+
+	< Caixa de colisão >
+
+		Retângulo que será levado em conta ao detectar colisões com outros
+		agentes	ou com o terreno.
+
+< CLASS: Agent > ---------------------------------------------------------------
+
+	Representação genérica de um objeto no jogo em forma de retângulo ou
+	círculo.
+
+	< Características >
+
+		Não contém parte gráfica
+		Pode ser controlado pelos direcionais
+		Contém movimento de controle
+		Contém uma caixa de posição
+		Contém uma caixa de colisão relativa à posição
+
+	< Atributos >
+
+		Tipo		Atributo			Inicial		Descrição
+		¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+		double		x					0			Posição x
+		double		y					0			Posição y
+		int			width				1			Largura
+		int			height				1			Altura
+		double		radius				1			Raio
+		int			ux					0			Movimento de controle x
+		int			uy					0			Movimento de controle y
+		Rectangle	box					null		Caixa de posição
+
+		Rectangle	collisionBox		null		Caixa de colisão
+		Point		collisionBoxPos...	null		Caixa de colisão
+
+		boolean		respondControl		false		Flag: Resposta à controle
+		boolean		moving				false		Flag: Movimentando
+		DirPad		controlPad			null		Situação do controle
+		Timer		moveTimer			null		Timer de movimento
+
+		Screen		screen				null		Janela que contém o agente
