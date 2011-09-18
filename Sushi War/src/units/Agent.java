@@ -246,7 +246,7 @@ public abstract class Agent implements KeyListener, TimerListener {
 	
 	//	--	Controle  --
 	protected boolean respondControl = false;
-	protected boolean moving = false;
+	//protected boolean moving = false;
 	protected DirPad controlPad = null;
 	protected Timer moveTimer = null;
 	

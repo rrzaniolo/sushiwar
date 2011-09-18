@@ -4,7 +4,7 @@
 
 < Termos > ---------------------------------------------------------------------
 
-	< Movimento de controle >
+	< Movimento de controle/controlado >
 
 		Movimento causado pelos direcionais do teclado.
 		É representado unitariamente:
