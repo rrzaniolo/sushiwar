@@ -52,12 +52,14 @@ public class Unit extends Agent implements Constants {
 		//	Cancelar movimento espontâneo em x caso atinja o solo
 		
 		int flyHeight = screen.getAgentFlyHeight(this);
-		vy = Math.min( flyHeight, vy );
+		double dy = Math.min( flyHeight, vy );
 		
-		if (vy != 0)
-			this.move(0, vy);
-		else
+		if (dy != 0)
+			this.move(0, dy);
+		if (dy < vy) {
 			vx = 0;
+			vy = 0;
+		}
 		
 		this.falling = (flyHeight > MOVE_FALLING_HEIGHT);
 		
@@ -98,6 +100,10 @@ public class Unit extends Agent implements Constants {
 		this.vy = vy;
 	}
 	
+	/**
+	 * Define a velocidade de movimento controlado.
+	 * @param moveSpeed Velocidade de movimento controlado
+	 */
 	public void setMoveSpeed( double moveSpeed ) {
 		this.moveSpeed = moveSpeed;
 	}
@@ -131,8 +137,8 @@ public class Unit extends Agent implements Constants {
 		
 		if (showSpeed) {
 			String show = "";
-			g.drawString( "x: " + vx, (int) x, (int) y - 40);
-			g.drawString( "y: " + vy, (int) x, (int) y - 30);
+			g.drawString( "x: " + (int) x, (int) x, (int) y - 40);
+			g.drawString( "y: " + (int) y, (int) x, (int) y - 30);
 			if (controlPad.isDirectionPressed(Direction.LEFT))
 				show += "L ";
 			else

@@ -13,7 +13,8 @@ import java.awt.event.KeyEvent;
  * Contém todas as constantes do jogo! Uol!
  */
 public interface Constants {
-	//	--	Niguiri stuff  --
+	
+	//	--	Units stuff  --
 	static final int	MOVE_TIMER_PERIOD		= 10;
 	static final int	MOVE_CLIFF_TOLERANCE	= 6;
 	static final int	MOVE_FALLING_HEIGHT		= 5;
