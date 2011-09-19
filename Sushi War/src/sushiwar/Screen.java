@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import timer.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import msgbox.MsgBox;
+import player.Player;
+//import msgbox.MsgBox;
 import scenario.Terrain;
 import units.Agent;
 import units.Niguiri;
@@ -39,16 +40,18 @@ public class Screen extends JPanel implements Constants {
 		
 		//	--	Inicializer niguiris teste
 		Niguiri n = null;
-		
-		listNiguiri = new ArrayList<Niguiri>();
-		for( int i=0; i<1; i++) {
-			n = new Niguiri(15+(i%30)*30,15+(i/30)*30,1,this);
-			listNiguiri.add( n );
-			frame.addKeyListener(n);
-		}
+                Player p = null;
+
+                this.frame = frame;
+                
+                listp = new ArrayList<Player>();
+                for(int i=0; i<2; i++) {
+                    p = new Player(false, i, i, this);
+                    listp.add( p );
+                    //frame.addKeyListener(p.n);
+                }
 		
 		//	--	Restante!
-		this.frame = frame;
 		/*s1.addAnimation(a);
 		s2.addAnimation(a2);
 		s3.addAnimation(a3);
@@ -128,14 +131,18 @@ public class Screen extends JPanel implements Constants {
 		super.paintComponent(g);
 		
 		terrain.print(g);
-		
-		for( Niguiri n: listNiguiri)
-			n.print(g);
 
+                for (Player p: listp) {
+                    p.printNiguiri(g);
+                }
+                
+		//for( Niguiri n: list)
+		//	n.print(g);
 	}
 	
 	private ArrayList<Niguiri> listNiguiri;
-	private JFrame frame;
+        private ArrayList<Player> listp;
+	public JFrame frame;
 	private Terrain terrain = null;
 
 	
