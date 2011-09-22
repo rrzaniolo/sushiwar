@@ -25,9 +25,12 @@ public class Main extends JFrame {
 		
 		Screen scr = new Screen(800,600, frame);
 		frame.getContentPane().add(scr);
-		frame.setSize(800,600);
-		//frame.pack();
+		
+		//frame.setUndecorated(true);
 		frame.setVisible(true);
+		frame.setSize( 800 + frame.getInsets().left + frame.getInsets().right , 600 + frame.getInsets().top + frame.getInsets().bottom);
+		
+		frame.addKeyListener( scr );
 	}
 	
 }

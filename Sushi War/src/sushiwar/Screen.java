@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import timer.Timer;
 import javax.swing.JFrame;
@@ -23,7 +25,7 @@ import units.Niguiri;
  * A parte gráfica da janela, onde tudo será mostrado.
  */
 
-public class Screen extends JPanel implements Constants {
+public class Screen extends JPanel implements Constants, KeyListener {
 	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
@@ -32,7 +34,7 @@ public class Screen extends JPanel implements Constants {
 		setSize(w, h);
 		setBackground(Color.decode("0xff8000"));
 		
-		this.setFont( new Font("Courier New", Font.PLAIN, 12));
+		this.setFont( new Font("Courier New", Font.BOLD, 12));
 		this.setForeground(Color.red);
 		
 		//	--	Inicializar terreno
@@ -52,12 +54,7 @@ public class Screen extends JPanel implements Constants {
                 }
 		
 		//	--	Restante!
-		/*s1.addAnimation(a);
-		s2.addAnimation(a2);
-		s3.addAnimation(a3);
-		s1.playAnimation("walk");
-		s2.playAnimation("yes");
-		s3.playAnimation("shit");*/
+
 		
 	}
 	
@@ -140,13 +137,25 @@ public class Screen extends JPanel implements Constants {
 		//	n.print(g);
 	}
 	
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_E)
+			terrain.explode( listNiguiri.get(0).getPositionX(), listNiguiri.get(0).getPositionY(), 50 );
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+	}
+	
 	private ArrayList<Niguiri> listNiguiri;
         private ArrayList<Player> listp;
 	public JFrame frame;
 	private Terrain terrain = null;
-
-	
-	/*private Sprite s1 = new Sprite("niguiri", 30, 30, this );
-	private Sprite s2 = new Sprite("niguiri", 30, 30, this );
-	private Sprite s3 = new Sprite("niguiri", 30, 30, this );*/
 }
