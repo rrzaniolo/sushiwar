@@ -62,7 +62,6 @@ public abstract class Agent implements KeyListener, TimerListener {
 	 * ção y.
 	 */
 	public int move( double dx, double dy ) {
-		System.out.println(this);
 		double newX = x + dx;
 		double newY = y + dy;
 		int result = 0;
@@ -203,7 +202,6 @@ public abstract class Agent implements KeyListener, TimerListener {
 
 	public void keyPressedOnce( KeyEvent e ) {
 		Direction pressed = DirPad.KeyEvent2Direction(e);
-		System.out.println(this);
 		ux += DirPad.Direction2X( pressed );
 		uy += DirPad.Direction2Y( pressed );
 	}

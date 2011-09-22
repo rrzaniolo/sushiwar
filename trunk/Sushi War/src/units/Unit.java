@@ -142,19 +142,19 @@ public class Unit extends Agent implements Constants {
 			if (controlPad.isDirectionPressed(Direction.LEFT))
 				show += "L ";
 			else
-				show += "  ";
+				show += ". ";
 			if (controlPad.isDirectionPressed(Direction.RIGHT))
 				show += "R ";
 			else
-				show += "  ";
+				show += ". ";
 			if (controlPad.isDirectionPressed(Direction.UP))
 				show += "U ";
 			else
-				show += "  ";
+				show += ". ";
 			if (controlPad.isDirectionPressed(Direction.DOWN))
 				show += "D ";
 			else
-				show += "  ";
+				show += ". ";
 			
 			g.drawString( show, (int) x, (int) y - 20);
 		}

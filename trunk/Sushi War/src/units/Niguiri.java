@@ -27,15 +27,24 @@ public class Niguiri extends Unit implements Constants {
 		
 		setCollisionBox( 7, 9, 16, 16 );
 		setMoveSpeed( MOVE_NIGUIRI_SPEED );
-		sprite = new Sprite( "niguiri", 30, 30, screen );
+		sprite = new Sprite( "niguiri2", 30, 30, screen );
 		
-		Animation anim;
+		/*Animation anim;
 		sprite.addAnimation( new Animation("walk", 0, 8, 30, true) );
 		sprite.addAnimation( new Animation("yes", 8, 9, 30, false) );
 		sprite.addAnimation( new Animation("shit", 17, 7, 40, true, 2) );
 		anim = new Animation("stand", 24, 4, 40, true);
 		anim.setFramePeriod(0, 2500);
+		sprite.addAnimation( anim );*/
+		
+		Animation anim;
+		sprite.addAnimation( new Animation("walk", 6, 8, 40, true) );
+		sprite.addAnimation( new Animation("yes", 6, 8, 30, false) );
+		sprite.addAnimation( new Animation("shit", 17, 7, 40, true, 2) );
+		anim = new Animation("stand", 0, 6, 40, true);
+		anim.setFramePeriod(0, 2500);
 		sprite.addAnimation( anim );
+		
 		sprite.playAnimation("stand");
 		
 		this.player = player;
