@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package player;
-
+/*Testing*/
 import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.JFrame;
