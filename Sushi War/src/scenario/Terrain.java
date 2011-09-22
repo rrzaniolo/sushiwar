@@ -118,6 +118,32 @@ public class Terrain implements Constants{
 		return maxY - minY;
 	}
 	
+	/**
+	 * Cria um buraco circular no terreno.
+	 * 
+	 * @param x Coordenada x do centro da explosão
+	 * @param y Coordenada y do centro da explosão
+	 * @param r Raio da explosão
+	 */
+	public void explode( double cx, double cy, double r ) {
+		int minX = (int) Math.max( cx-r, 0 );
+		int minY = (int) Math.max( cy-r, 0 );
+		int maxX = (int) Math.min( cx+r, screen.getWidth()  );
+		int maxY = (int) Math.min( cy+r, screen.getHeight()  );
+		
+		r = r*r;
+		for (int x = minX; x < maxX; x++) {
+			for (int y = minY; y < maxY; y++) {
+				
+				double dx = x - cx;
+				double dy = y - cy;
+				
+				if (dx*dx + dy*dy <= r)
+					landImage.setRGB( x, y, 0x00000000);
+			}
+		}
+	}
+	
 	public void print( Graphics g ) {
 		Graphics2D g2 = (Graphics2D) g;
 		
