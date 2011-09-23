@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import sushiwar.Screen;
 import units.Niguiri;
-import java.awt.event.KeyListener;
 
 /**
  *
@@ -40,4 +40,4 @@ public class Player {
         for (Niguiri n: list)
             n.print(g);
     }
-}     
+}

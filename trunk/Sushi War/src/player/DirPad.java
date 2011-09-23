@@ -49,7 +49,7 @@ public class DirPad {
 		else if (e.getKeyCode() == KeyEvent.VK_LEFT)
 			return Direction.LEFT;
 		
-		return Direction.UP;
+		return null;
 	}
 	
 	public static int Direction2X ( Direction d ) {		
