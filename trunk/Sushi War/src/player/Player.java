@@ -8,6 +8,7 @@ package player;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import sushiwar.Constants;
 import sushiwar.Screen;
 import units.Niguiri;
 
@@ -15,24 +16,37 @@ import units.Niguiri;
  *
  * @author Daron Vardmir
  */
-public class Player {
+public class Player implements Constants {
+	
     public Player (boolean turn, int number, int niguiri, Screen scr){
-    this.turn = turn;
-    this.number = number;
-    this.scr = scr;
-    this.list = new ArrayList<Niguiri>();
-		for( int i=0; i<5; i++) {
-			this.n = new Niguiri(15+(i%30)*30,15+(i/30)*30,1,scr);
+		this.turn = turn;
+		this.number = number;
+		this.screen = scr;
+		this.list = new ArrayList<Niguiri>();
+
+		/*for( int i=0; i<5; i++) {
+			double r = Math.random();
+			System.out.println((int)(r*scr.getWidth()));
+			this.n = new Niguiri( (int) (r * scr.getWidth()), 0, this, scr);
 			this.list.add( this.n );
-			this.scr.frame.addKeyListener(this.n);
-                }
-    
-}
+			this.screen.frame.addKeyListener(this.n);
+		}*/
+		
+	}
+	
+	public void createNiguiri() {
+		
+		for (int i = 0; i < PLAYER_NIGUIRI_COUNT; i++) {
+			Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen );
+			list.add(n);
+			
+		}
+	}
     
     protected boolean turn = false;
     protected int number = 0;
     protected ArrayList<Niguiri> list;
-    protected Screen scr;
+    protected Screen screen;
     protected Niguiri n;
     protected JFrame frame;
     

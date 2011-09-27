@@ -18,17 +18,32 @@ import sushiwar.Screen;
 
 public class Unit extends Agent implements Constants {
 	
-	public Unit( int x, int y, int width, int height, Screen screen ) {
+	protected Sprite sprite = null;
+	protected boolean respondGravity = true;
+	protected boolean respondWind = false;
+	protected boolean falling = false;
+	
+	protected double vx = 0;
+	protected double vy = 0;
+	//protected double moveSpeed = 0.5;
+	
+	protected Direction facing = null;
+	
+	private static final boolean showSpeed = true;
+	
+	//	-----------------------------------------------------------------------
+	
+	public Unit( double x, double y, int width, int height, Screen screen ) {
 		super(x, y, width, height, screen, true);
 		
 		facing = Direction.RIGHT;
 	}
 	
-	public Unit( int x, int y, int width, int height, Screen screen, boolean respondControl ) {
+	public Unit( double x, double y, int width, int height, Screen screen, boolean respondControl ) {
 		super(x, y, width, height, screen, respondControl);
 	}	
 	
-	public Unit( int x, int y, int width, int height, Screen screen, boolean respondControl, boolean respondGravity, boolean respondWind ) {
+	public Unit( double x, double y, int width, int height, Screen screen, boolean respondControl, boolean respondGravity, boolean respondWind ) {
 		super(x, y, width, height, screen, respondControl);
 		this.respondGravity = respondGravity;
 		this.respondWind = respondWind;
@@ -45,18 +60,24 @@ public class Unit extends Agent implements Constants {
 		//	--  Gravidade  --
 		
 		if (respondGravity)
-			vy += GRAVITY;
+			vy += GRAVITY/MOVE_TIMER_PERIOD;
 		
 		//	--	Mover em Y  --
 		//	Será movido apenas se estiver acima do solo.
 		//	Cancelar movimento espontâneo em x caso atinja o solo
 		
 		int flyHeight = screen.getAgentFlyHeight(this);
-		double dy = Math.min( flyHeight, vy );
+		double dy = Math.min( flyHeight, vy/MOVE_TIMER_PERIOD );
 		
-		if (dy != 0)
+		if (vy > 0 && flyHeight < MOVE_FALLING_HEIGHT/2) {
+			this.move( 0, flyHeight );
+			vx = 0;
+			vy = 0;
+		}
+		
+		else if (dy != 0)
 			this.move(0, dy);
-		if (dy < vy) {
+		else if (dy < vy/MOVE_TIMER_PERIOD) {
 			vx = 0;
 			vy = 0;
 		}
@@ -65,14 +86,16 @@ public class Unit extends Agent implements Constants {
 		
 		//	--  Mover em X  --
 		//	Aplicar movimento de controle!
-		//	Retroceer movimento caso seja impossível
+		//	Retroceder movimento caso seja impossível
 		
 		double dx = vx;
 		
 		if (!falling && respondControl)
 			dx += ux * MOVE_NIGUIRI_SPEED;
 		
+		dx = dx/MOVE_TIMER_PERIOD;
 		this.move( dx, 0 );
+		
 		if (screen.hitTerrain(this, true)) {
 			this.move(-dx,0);
 			vx = 0;
@@ -98,14 +121,6 @@ public class Unit extends Agent implements Constants {
 	public void setSpeed( double vx, double vy ) {
 		this.vx = vx;
 		this.vy = vy;
-	}
-	
-	/**
-	 * Define a velocidade de movimento controlado.
-	 * @param moveSpeed Velocidade de movimento controlado
-	 */
-	public void setMoveSpeed( double moveSpeed ) {
-		this.moveSpeed = moveSpeed;
 	}
 	
 	//	--	Eventos  ----------------------------------------------------------
@@ -137,8 +152,8 @@ public class Unit extends Agent implements Constants {
 		
 		if (showSpeed) {
 			String show = "";
-			g.drawString( "x: " + (int) x, (int) x, (int) y - 40);
-			g.drawString( "y: " + (int) y, (int) x, (int) y - 30);
+			g.drawString( "fh: " + (int) screen.getAgentFlyHeight(this), (int) x, (int) y - 40);
+			g.drawString( "vy: " + (int) vy, (int) x, (int) y - 30);
 			if (controlPad.isDirectionPressed(Direction.LEFT))
 				show += "L ";
 			else
@@ -159,21 +174,5 @@ public class Unit extends Agent implements Constants {
 			g.drawString( show, (int) x, (int) y - 20);
 		}
 	}
-	
-	//	-----------------------------------------------------------------------
-	
-	protected Sprite sprite = null;
-	protected boolean respondGravity = true;
-	protected boolean respondWind = false;
-	protected boolean falling = false;
-	
-	protected double vx = 0;
-	protected double vy = 0;
-	protected double moveSpeed = 0.5;
-	
-	protected Direction facing = null;
-	
-	public static double gravity = 0.1;
-	
-	private static final boolean showSpeed = true;
+
 }

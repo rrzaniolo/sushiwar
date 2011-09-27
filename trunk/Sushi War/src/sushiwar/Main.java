@@ -30,7 +30,7 @@ public class Main extends JFrame {
 		frame.setVisible(true);
 		frame.setSize( 800 + frame.getInsets().left + frame.getInsets().right , 600 + frame.getInsets().top + frame.getInsets().bottom);
 		
-		frame.addKeyListener( scr );
+		frame.addMouseListener( scr );
 	}
 	
 }
