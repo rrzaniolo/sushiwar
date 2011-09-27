@@ -128,8 +128,8 @@ public class Terrain implements Constants{
 	public void explode( double cx, double cy, double r ) {
 		int minX = (int) Math.max( cx-r, 0 );
 		int minY = (int) Math.max( cy-r, 0 );
-		int maxX = (int) Math.min( cx+r, screen.getWidth()  );
-		int maxY = (int) Math.min( cy+r, screen.getHeight()  );
+		int maxX = (int) Math.min( cx+r, screen.width  );
+		int maxY = (int) Math.min( cy+r, screen.height  );
 		
 		r = r*r;
 		for (int x = minX; x < maxX; x++) {

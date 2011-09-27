@@ -17,10 +17,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import player.DirPad.Direction;
+import sushiwar.Constants;
 import sushiwar.Screen;
 import timer.*;
 
-public class Sprite implements TimerListener {
+public class Sprite implements TimerListener, Constants {
 
 	public Sprite( String file, int width, int height, Screen screen ) {	 
 		
@@ -130,7 +131,7 @@ public class Sprite implements TimerListener {
 	@Override
 	public void update() {
 		if (animNow != null) {
-			timeCount -= timerPeriod;
+			timeCount -= SPRITE_TIMER_PERIOD;
 		
 			if (timeCount <= 0) {
 				animNow.getStartFrame();

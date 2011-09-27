@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import timer.Timer;
 import player.DirPad;
 import player.DirPad.Direction;
+import sushiwar.Constants;
 import sushiwar.Screen;
 import timer.TimerListener;
 
@@ -23,30 +24,54 @@ import timer.TimerListener;
  * independente para movimentação.
  */
 
-public abstract class Agent implements KeyListener, TimerListener {
+public abstract class Agent implements KeyListener, TimerListener, Constants {
 	
-	public Agent( int x, int y, int width, int height, Screen screen ) {
+	//	--	Posicionamento	--
+	protected double x = 0;
+	protected double y = 0;
+	protected int width = 1;
+	protected int height = 1;
+	protected double radius = 1;
+	protected int ux = 0;
+	protected int uy = 0;
+	protected Rectangle box = null;
+	
+	//	--	Colisão  --
+	protected Rectangle collisionBox = null;	
+	protected Point collisionBoxPosition = null;
+	
+	//	--	Controle  --
+	protected boolean respondControl = false;
+	protected DirPad controlPad = null;
+	protected Timer moveTimer = null;
+	
+	protected Screen screen = null;
+	protected static ArrayList<Agent> instances = new ArrayList<Agent>();
+	
+	//	-----------------------------------------------------------------------
+	
+	public Agent( double x, double y, int width, int height, Screen screen ) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.radius = width/2;
 		
-		this.collisionBox = new Rectangle( x, y, width, height );
+		this.collisionBox = new Rectangle( (int) x, (int) y, width, height );
 		this.collisionBoxPosition = new Point(0,0);
 		
-		this.box = new Rectangle(x, y, width, height);
+		this.box = new Rectangle( (int) x, (int) y, width, height);
 		this.screen = screen;
 		this.controlPad = new DirPad();
 		
-		this.moveTimer = new Timer( this, 10);
+		this.moveTimer = new Timer( this, MOVE_TIMER_PERIOD);
 		this.moveTimer.start();
 		
 		//instances.ensureCapacity( instances.size() + 1 );
 		instances.add(this);
 	}
 	
-	public Agent( int x, int y, int width, int height, Screen screen, boolean respondControl ) {
+	public Agent( double x, double y, int width, int height, Screen screen, boolean respondControl ) {
 		this(x, y, width, height, screen );
 		this.respondControl = respondControl;
 	}
@@ -224,31 +249,5 @@ public abstract class Agent implements KeyListener, TimerListener {
 		ux -= DirPad.Direction2X( pressed );
 		uy -= DirPad.Direction2Y( pressed );
 	}
-	
-	
-	//	-----------------------------------------------------------------------
-	
-	//	--	Posicionamento	--
-	protected double x = 0;
-	protected double y = 0;
-	protected int width = 1;
-	protected int height = 1;
-	protected double radius = 1;
-	protected int ux = 0;
-	protected int uy = 0;
-	protected Rectangle box = null;
-	
-	//	--	Colisão  --
-	protected Rectangle collisionBox = null;	
-	protected Point collisionBoxPosition = null;
-	
-	//	--	Controle  --
-	protected boolean respondControl = false;
-	//protected boolean moving = false;
-	protected DirPad controlPad = null;
-	protected Timer moveTimer = null;
-	
-	protected Screen screen = null;
-	protected static ArrayList<Agent> instances = new ArrayList<Agent>();
 
 }
