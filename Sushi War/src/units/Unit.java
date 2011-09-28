@@ -18,17 +18,19 @@ import sushiwar.Screen;
 
 public class Unit extends Agent implements Constants {
 	
+	//	--	Imagem  --
 	protected Sprite sprite = null;
+	
+	//	--	Movimento  --
 	protected boolean respondGravity = true;
 	protected boolean respondWind = false;
 	protected boolean falling = false;
-	
+	protected double flyHeight = 0;
 	protected double vx = 0;
 	protected double vy = 0;
-	//protected double moveSpeed = 0.5;
-	
 	protected Direction facing = null;
 	
+	//	--	Debug  --
 	private static final boolean showSpeed = true;
 	
 	//	-----------------------------------------------------------------------
@@ -66,22 +68,24 @@ public class Unit extends Agent implements Constants {
 		//	Será movido apenas se estiver acima do solo.
 		//	Cancelar movimento espontâneo em x caso atinja o solo
 		
-		int flyHeight = screen.getAgentFlyHeight(this);
+		//	Calcular altura em relação ao terreno
+		flyHeight = screen.getAgentFlyHeight(this);
+		
+		//	Calcular deslocamento sem atravessar o terreno
 		double dy = Math.min( flyHeight, vy/MOVE_TIMER_PERIOD );
-		
-		if (vy > 0 && flyHeight < MOVE_FALLING_HEIGHT/2) {
-			this.move( 0, flyHeight );
-			vx = 0;
-			vy = 0;
-		}
-		
-		else if (dy != 0)
+
+		if (dy != 0)
 			this.move(0, dy);
-		else if (dy < vy/MOVE_TIMER_PERIOD) {
+		
+		//	Se o deslocamento tiver sido menor que a velocidade, significa que
+		//	atingiu o terreno
+		if (dy < vy/MOVE_TIMER_PERIOD) {
 			vx = 0;
 			vy = 0;
 		}
 		
+		//	Se a altura atual for maior que a altura de queda, unidade está
+		//	caindo
 		this.falling = (flyHeight > MOVE_FALLING_HEIGHT);
 		
 		//	--  Mover em X  --
@@ -90,13 +94,16 @@ public class Unit extends Agent implements Constants {
 		
 		double dx = vx;
 		
+		//	Se não estiver caindo e responder a controles, aplicar a velocidade
+		//	de controle
 		if (!falling && respondControl)
 			dx += ux * MOVE_NIGUIRI_SPEED;
 		
 		dx = dx/MOVE_TIMER_PERIOD;
 		this.move( dx, 0 );
 		
-		if (screen.hitTerrain(this, true)) {
+		//	Se tiver atingido terreno, cancelar movimento em X.
+		if (screen.hitTerrain(this, vy >= -MOVE_FALLING_HEIGHT)) {
 			this.move(-dx,0);
 			vx = 0;
 			vy = Math.max(vy, 0);

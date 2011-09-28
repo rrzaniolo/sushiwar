@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import player.DirPad;
 import player.Player;
 import sprite.*;
@@ -75,15 +77,19 @@ public class Niguiri extends Unit implements Constants {
 		super.keyPressedOnce(e);
 		
 		//	--	Pulo! \o/  --
-		if ( !falling && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
-			setSpeed( DirPad.Direction2X(facing)*5, -10 );
+		if ( flyHeight == 0 && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
+			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_JUMP_VX, -MOVE_NIGUIRI_JUMP_VY );
+		}
+		
+		else if ( flyHeight == 0 && e.getKeyCode() == MOVE_NIGUIRI_HJUMP_KEY ) {
+			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_HJUMP_VX, -MOVE_NIGUIRI_HJUMP_VY );
 		}
 		
 		if (this.isMoving())
 			this.setStatus(NiguiriStatus.WALK);
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
-			this.setPosition(screen.getWidth()/2,15);
+			this.setPosition(screen.getRandomX(NIGUIRI_WIDTH),15);
 		
 	}
 	
@@ -98,8 +104,8 @@ public class Niguiri extends Unit implements Constants {
 	public void print( Graphics g ){
 		super.print(g);
 		
-		Graphics2D g2 = (Graphics2D) g;
-		g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
+		//Graphics2D g2 = (Graphics2D) g;
+		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
 	
 	private Player player = null;
