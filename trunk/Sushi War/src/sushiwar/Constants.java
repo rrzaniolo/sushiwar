@@ -22,7 +22,7 @@ public interface Constants {
 	static final double MOVE_NIGUIRI_SPEED		= 7.5;
 	
 	static final int	MOVE_NIGUIRI_JUMP_KEY	= KeyEvent.VK_Q;
-	static final int	MOVE_NIGUIRI_HJUMP_KEY	= KeyEvent.VK_W;
+	static final int	MOVE_NIGUIRI_HJUMP_KEY	= KeyEvent.VK_R;
 	static final double MOVE_NIGUIRI_JUMP_VX	= 10;
 	static final double MOVE_NIGUIRI_JUMP_VY	= 40;
 	static final double MOVE_NIGUIRI_HJUMP_VX	= 3;
