@@ -21,8 +21,12 @@ import sushiwar.Screen;
 
 public class Niguiri extends Unit implements Constants {
 
+	private boolean jumping = false;
+	private Player player = null;
+	private NiguiriStatus status = null;
+	
 	public enum NiguiriStatus {
-		STAND, WALK, HAPPY, SAD;
+		STAND, WALK, JUMP, FALL, LAND;
 	}
 	
 	public Niguiri( double x, double y, Player player, Screen screen ) {
@@ -40,21 +44,21 @@ public class Niguiri extends Unit implements Constants {
 		sprite.addAnimation( anim );*/
 		
 		Animation anim;
-		sprite.addAnimation( new Animation("walk", 6, 8, 40, true) );
-		sprite.addAnimation( new Animation("yes", 6, 8, 30, false) );
-		sprite.addAnimation( new Animation("shit", 17, 7, 40, true, 2) );
+		//	Stand
 		anim = new Animation("stand", 0, 6, 40, true);
 		anim.setFramePeriod(0, 2500);
 		sprite.addAnimation( anim );
+		
+		sprite.addAnimation( new Animation("walk", 6, 8, 40, true) );
+		
+		sprite.addAnimation( new Animation("jump", 14, 3, 30, false) );
+		
+		sprite.addAnimation( new Animation("land", 17, 7, 40, false) );
 		
 		sprite.playAnimation("stand");
 		
 		screen.frame.addKeyListener( this );
 		this.player = player;
-	}
-	
-	public boolean playAnimation( String anim ) {
-		return sprite.playAnimation(anim);
 	}
 	
 	public void setStatus( NiguiriStatus now ) {
@@ -63,12 +67,27 @@ public class Niguiri extends Unit implements Constants {
 
 			if (now == NiguiriStatus.WALK)
 				playAnimation("walk");
-			else if (now == NiguiriStatus.HAPPY)
-				playAnimation("yes");
-			else if (now == NiguiriStatus.SAD)
-				playAnimation("shit");
+			else if (now == NiguiriStatus.JUMP)
+				playAnimation("jump");
+			else if (now == NiguiriStatus.FALL)
+				playAnimation("jump");
+			else if (now == NiguiriStatus.LAND)
+				playAnimation("land");
 			else if (now == NiguiriStatus.STAND)
 				playAnimation("stand");
+		}
+	}
+	
+	public void update() {
+		super.update();
+		
+		if (!onAir && vy >= 0) {
+			if (status == NiguiriStatus.JUMP)
+				setStatus(NiguiriStatus.LAND);
+			
+			else if (status == NiguiriStatus.LAND)
+				if (sprite.isDone())
+					setStatus(NiguiriStatus.STAND);
 		}
 	}
 	
@@ -79,24 +98,30 @@ public class Niguiri extends Unit implements Constants {
 		//	--	Pulo! \o/  --
 		if ( flyHeight == 0 && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
 			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_JUMP_VX, -MOVE_NIGUIRI_JUMP_VY );
+			//jumping = true;
+			setStatus(NiguiriStatus.JUMP);
+			//playAnimation( "jump" );
 		}
 		
 		else if ( flyHeight == 0 && e.getKeyCode() == MOVE_NIGUIRI_HJUMP_KEY ) {
 			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_HJUMP_VX, -MOVE_NIGUIRI_HJUMP_VY );
+			//jumping = true;
+			setStatus(NiguiriStatus.JUMP);
+			//playAnimation( "jump" );
 		}
 		
-		if (this.isMoving())
-			this.setStatus(NiguiriStatus.WALK);
+		if (!onAir && isMoving())
+			setStatus(NiguiriStatus.WALK);
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
-			this.setPosition(screen.getRandomX(NIGUIRI_WIDTH),15);
+			setPosition(screen.getRandomX(NIGUIRI_WIDTH),15);
 		
 	}
 	
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
-		if (!this.isMoving())
+		if (!isMoving() && !jumping)
 			this.setStatus(NiguiriStatus.STAND);
 	}
 	
@@ -108,6 +133,4 @@ public class Niguiri extends Unit implements Constants {
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
 	
-	private Player player = null;
-	private NiguiriStatus status = null;
 }

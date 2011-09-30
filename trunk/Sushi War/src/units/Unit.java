@@ -24,7 +24,7 @@ public class Unit extends Agent implements Constants {
 	//	--	Movimento  --
 	protected boolean respondGravity = true;
 	protected boolean respondWind = false;
-	protected boolean falling = false;
+	protected boolean onAir = false;
 	protected double flyHeight = 0;
 	protected double vx = 0;
 	protected double vy = 0;
@@ -76,7 +76,7 @@ public class Unit extends Agent implements Constants {
 
 		if (dy != 0)
 			if (this.move(0, dy) != 0)
-                            vy = 0;
+				vy = 0;
 		
 		//	Se o deslocamento tiver sido menor que a velocidade, significa que
 		//	atingiu o terreno
@@ -87,7 +87,7 @@ public class Unit extends Agent implements Constants {
 		
 		//	Se a altura atual for maior que a altura de queda, unidade está
 		//	caindo
-		this.falling = (flyHeight > MOVE_FALLING_HEIGHT);
+		this.onAir = (flyHeight > MOVE_FALLING_HEIGHT);
 		
 		//	--  Mover em X  --
 		//	Aplicar movimento de controle!
@@ -97,7 +97,7 @@ public class Unit extends Agent implements Constants {
 		
 		//	Se não estiver caindo e responder a controles, aplicar a velocidade
 		//	de controle
-		if (!falling && respondControl)
+		if (!onAir && respondControl)
 			dx += ux * MOVE_NIGUIRI_SPEED;
 		
 		dx = dx/MOVE_TIMER_PERIOD;
@@ -129,6 +129,10 @@ public class Unit extends Agent implements Constants {
 	public void setSpeed( double vx, double vy ) {
 		this.vx = vx;
 		this.vy = vy;
+	}
+	
+	public boolean playAnimation( String anim ) {
+		return sprite.playAnimation(anim);
 	}
 	
 	//	--	Eventos  ----------------------------------------------------------
