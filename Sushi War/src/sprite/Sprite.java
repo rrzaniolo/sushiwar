@@ -23,6 +23,18 @@ import timer.*;
 
 public class Sprite implements TimerListener, Constants {
 
+	private BufferedImage spriteSheet;
+	private BufferedImage []spritesRight;
+	private BufferedImage []spritesLeft;
+	private ArrayList<Animation> animations;
+	private Dimension size;
+	private Timer timer;
+	
+	private Animation animNow;
+	private int frameNow;
+	private int timeCount;
+	private Screen screen;
+	
 	public Sprite( String file, int width, int height, Screen screen ) {	 
 		
 		//	Carregando spritesheet
@@ -37,7 +49,6 @@ public class Sprite implements TimerListener, Constants {
 		g.dispose();
 		
 		//	Cortar em sprites
-		size = new Dimension(width, height);
 		int x = 0;
 		int y = 0;
 		spritesRight = new BufferedImage[100];
@@ -56,7 +67,7 @@ public class Sprite implements TimerListener, Constants {
 			Graphics2D g2 = (Graphics2D) spritesLeft[i].getGraphics();
 			
 			AffineTransform aft = new AffineTransform();
-			aft.translate(this.size.width, 0);
+			aft.translate(width, 0);
 			aft.scale(-1.0, 1.0);
 			
 			g2.drawImage(spritesRight[i], aft, null);
@@ -65,7 +76,7 @@ public class Sprite implements TimerListener, Constants {
 		
 		//	Inicializando restante 
 		animations = new ArrayList<Animation>(0);
-		timer = new Timer( this, timerPeriod );
+		timer = new Timer( this, SPRITE_TIMER_PERIOD );
 		
 		this.screen = screen;
 	}
@@ -134,7 +145,6 @@ public class Sprite implements TimerListener, Constants {
 			timeCount -= SPRITE_TIMER_PERIOD;
 		
 			if (timeCount <= 0) {
-				animNow.getStartFrame();
 				frameNow = animNow.getNextFrame( frameNow  );
 				timeCount = animNow.getFramePeriod( frameNow );
 			}
@@ -142,6 +152,10 @@ public class Sprite implements TimerListener, Constants {
 		
 		screen.repaint();
 		
+	}
+	
+	public boolean isDone() {
+		return !animNow.isLooping() && frameNow == animNow.getFrameCount()-1;
 	}
 	
 	//	--	Gráfico  --
@@ -160,18 +174,4 @@ public class Sprite implements TimerListener, Constants {
 	   
 	}
 
-	static int timerPeriod = 10;
-	
-	private BufferedImage spriteSheet;
-	private BufferedImage []spritesRight;
-	private BufferedImage []spritesLeft;
-	private ArrayList<Animation> animations;
-	private Dimension size;
-	private Timer timer;
-	
-	private Animation animNow;
-	private int frameNow;
-	private int timeCount;
-	private Screen screen;
-	
 }
