@@ -75,7 +75,8 @@ public class Unit extends Agent implements Constants {
 		double dy = Math.min( flyHeight, vy/MOVE_TIMER_PERIOD );
 
 		if (dy != 0)
-			this.move(0, dy);
+			if (this.move(0, dy) != 0)
+                            vy = 0;
 		
 		//	Se o deslocamento tiver sido menor que a velocidade, significa que
 		//	atingiu o terreno

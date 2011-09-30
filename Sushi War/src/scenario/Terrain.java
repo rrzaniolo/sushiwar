@@ -107,7 +107,7 @@ public class Terrain implements Constants{
 		minX = (int) Math.max( box.getMinX(), 0 );
 		minY = (int) Math.max( box.getMaxY(), 0 );
 		maxX = (int) Math.min( box.getMaxX(), screen.getWidth() );
-		maxY = (int) screen.getHeight();
+		maxY = (int) screen.height;
 		
 		for (y = minY; y < maxY; y++)
 			for (x = minX; x < maxX; x++)
