@@ -154,8 +154,8 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		collisionBox.setLocation( box.x + collisionBoxPosition.x, box.y + collisionBoxPosition.y );
 	}
 	
-	public void	toggleControl( boolean yes ) {
-		respondControl = yes;
+	public void toggleControl( boolean yes ) {
+            respondControl = yes;
 	}
 	
 	/**
@@ -249,5 +249,10 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		ux -= DirPad.Direction2X( pressed );
 		uy -= DirPad.Direction2Y( pressed );
 	}
-
+        
+         public void setRespondControl(KeyEvent e, boolean set){
+             if (e.getKeyCode() == KeyEvent.VK_C){
+                     this.respondControl = set;
+             }
+         }
 }
