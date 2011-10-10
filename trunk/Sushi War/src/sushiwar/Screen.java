@@ -33,7 +33,7 @@ public class Screen extends JPanel implements Constants, MouseListener {
 	public int width;
 	public int height;
 	private ArrayList<Niguiri> listNiguiri;
-    private ArrayList<Player> listp;
+        private ArrayList<Player> listp;
 	public JFrame frame;
 	private Terrain terrain = null;
 	

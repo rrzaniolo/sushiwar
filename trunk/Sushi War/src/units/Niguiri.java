@@ -29,8 +29,8 @@ public class Niguiri extends Unit implements Constants {
 		STAND, WALK, JUMP, FALL, LAND;
 	}
 	
-	public Niguiri( double x, double y, Player player, Screen screen ) {
-		super(x, y, 30, 30, screen );
+	public Niguiri( double x, double y, Player player, Screen screen, boolean respondControl ) {
+		super(x, y, 30, 30, screen, respondControl );
 		
 		setCollisionBox( 7, 9, 16, 16 );
 		sprite = new Sprite( "niguiri2", 30, 30, screen );
@@ -132,5 +132,5 @@ public class Niguiri extends Unit implements Constants {
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
-	
+       
 }

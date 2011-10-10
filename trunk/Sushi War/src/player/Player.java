@@ -6,6 +6,8 @@
 package player;
 /*Testing*/
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import sushiwar.Constants;
@@ -36,13 +38,14 @@ public class Player implements Constants {
 	
 	public void createNiguiri() {
 		
-		for (int i = 0; i < PLAYER_NIGUIRI_COUNT; i++) {
-			Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen );
+		for (int i = 0; i < PLAYER_NIGUIRI_COUNT-1; i++) {
+			Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, false );
 			list.add(n);
-			
 		}
+                Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, true );
+		list.add(n);
 	}
-    
+               
     protected boolean turn = false;
     protected int number = 0;
     protected ArrayList<Niguiri> list;
