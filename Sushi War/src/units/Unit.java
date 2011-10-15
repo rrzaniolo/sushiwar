@@ -2,6 +2,8 @@
 package units;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import player.DirPad.Direction;
 import sprite.Sprite;
@@ -163,9 +165,12 @@ public class Unit extends Agent implements Constants {
 		}
 		
 		if (showSpeed) {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			
 			String show = "";
-			g.drawString( "fh: " + (int) screen.getAgentFlyHeight(this), (int) x, (int) y - 40);
-			g.drawString( "vy: " + (int) vy, (int) x, (int) y - 30);
+			g2.drawString( "fh: " + (int) screen.getAgentFlyHeight(this), (int) x, (int) y - 40);
+			g2.drawString( "vy: " + (int) vy, (int) x, (int) y - 30);
 			if (controlPad.isDirectionPressed(Direction.LEFT))
 				show += "L ";
 			else
@@ -183,7 +188,7 @@ public class Unit extends Agent implements Constants {
 			else
 				show += ". ";
 			
-			g.drawString( show, (int) x, (int) y - 20);
+			g2.drawString( show, (int) x, (int) y - 20);
 		}
 	}
 

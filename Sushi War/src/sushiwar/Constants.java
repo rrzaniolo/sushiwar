@@ -23,17 +23,19 @@ public interface Constants {
 	
 	static final int	MOVE_NIGUIRI_JUMP_KEY	= KeyEvent.VK_Q;
 	static final int	MOVE_NIGUIRI_HJUMP_KEY	= KeyEvent.VK_W;
-        static final int    CHANGE_NIGUIRI_KEY          = KeyEvent.VK_C;
 	static final double MOVE_NIGUIRI_JUMP_VX	= 10;
 	static final double MOVE_NIGUIRI_JUMP_VY	= 40;
 	static final double MOVE_NIGUIRI_HJUMP_VX	= 3;
 	static final double MOVE_NIGUIRI_HJUMP_VY	= 55;
+	
+	static final int    CHANGE_NIGUIRI_KEY      = KeyEvent.VK_C;
 	
 	static final double GRAVITY					= 25;
 	
 	//	--	Niguiri stuff  --
 	
 	static final int	NIGUIRI_WIDTH			= 30;
+	static final double	CROSSHAIR_RADIUS		= 50;
 	
 	//	--	Sprite stuff  --
 	static final int	SPRITE_TIMER_PERIOD		= 10;

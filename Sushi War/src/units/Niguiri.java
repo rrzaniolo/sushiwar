@@ -24,6 +24,7 @@ public class Niguiri extends Unit implements Constants {
 	private boolean jumping = false;
 	private Player player = null;
 	private NiguiriStatus status = null;
+	private Crosshair crosshair = null;
 	
 	public enum NiguiriStatus {
 		STAND, WALK, JUMP, FALL, LAND;
@@ -48,14 +49,13 @@ public class Niguiri extends Unit implements Constants {
 		anim = new Animation("stand", 0, 6, 40, true);
 		anim.setFramePeriod(0, 2500);
 		sprite.addAnimation( anim );
-		
 		sprite.addAnimation( new Animation("walk", 6, 8, 40, true) );
-		
 		sprite.addAnimation( new Animation("jump", 14, 3, 30, false) );
-		
 		sprite.addAnimation( new Animation("land", 17, 7, 40, false) );
 		
 		sprite.playAnimation("stand");
+		
+		crosshair = new Crosshair( this, screen );
 		
 		screen.frame.addKeyListener( this );
 		this.player = player;
@@ -89,6 +89,8 @@ public class Niguiri extends Unit implements Constants {
 				if (sprite.isDone())
 					setStatus(NiguiriStatus.STAND);
 		}
+		
+		//crosshair.setPosition( x, y );
 	}
 	
 	@Override
@@ -110,6 +112,12 @@ public class Niguiri extends Unit implements Constants {
 			//playAnimation( "jump" );
 		}
 		
+		else if ( e.getKeyCode() == KeyEvent.VK_0)
+			crosshair.changeAngle(5);
+		
+		else if ( e.getKeyCode() == KeyEvent.VK_9)
+			crosshair.changeAngle(-5);
+		
 		if (!onAir && isMoving())
 			setStatus(NiguiriStatus.WALK);
 		
@@ -128,6 +136,7 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void print( Graphics g ){
 		super.print(g);
+		crosshair.print(g);
 		
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );

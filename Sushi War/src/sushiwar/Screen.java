@@ -5,11 +5,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Random;
 import timer.Timer;
@@ -28,17 +32,24 @@ import units.Niguiri;
  * A parte gráfica da janela, onde tudo será mostrado.
  */
 
-public class Screen extends JPanel implements Constants, MouseListener {
+public class Screen extends JPanel implements Constants {
 	
 	public int width;
 	public int height;
 	private ArrayList<Niguiri> listNiguiri;
-        private ArrayList<Player> listp;
+    private ArrayList<Player> listp;
 	public JFrame frame;
 	private Terrain terrain = null;
 	
+	private int mouseX;
+	private int mouseY;
+	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
+		
+		this.setLayout(null);
+		this.addMouseListener( new MouseControl() );
+		this.addMouseMotionListener( new MotionControl() );
 		
 		//	--	Inicializar janela
 		this.width = w;
@@ -139,43 +150,41 @@ public class Screen extends JPanel implements Constants, MouseListener {
 		return size/2 + (int) (Math.random() * (width-size));
 	}
 	
+	class MouseControl extends MouseAdapter {
+		
+		public void mousePressed( MouseEvent e ) {
+			terrain.explode( e.getX(), e.getY(), 30 );
+		}
+		
+	}
+	
+	class MotionControl extends MouseMotionAdapter {
+		
+		public void mouseMoved( MouseEvent e ) {
+			Screen.this.mouseX = e.getX();
+			Screen.this.mouseY = e.getY();
+		}
+		
+	}
+	
 	@Override
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent(g);
 		
 		terrain.print(g);
-
-                for (Player p: listp) {
-                    p.printNiguiri(g);
-                }
-                
+		
+		for (Player p: listp) {
+			p.printNiguiri(g);
+		}
+		
+        Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		g2.drawString( "mouse x: " + mouseX, this.width - 300, 15);
+		g2.drawString( "mouse y: " + mouseY, this.width - 300, 30);
+		
 		//for( Niguiri n: list)
 		//	n.print(g);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		terrain.explode( e.getX() - frame.getInsets().left, e.getY() - frame.getInsets().top, 30 );
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		//throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		//throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		//throw new UnsupportedOperationException("Not supported yet.");
 	}
 	
 }
