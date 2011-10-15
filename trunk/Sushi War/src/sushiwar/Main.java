@@ -24,13 +24,13 @@ public class Main extends JFrame {
 		Main frame = new Main();
 		
 		Screen scr = new Screen(800,600, frame);
-		frame.getContentPane().add(scr);
+		frame.add(scr);
 		
 		//frame.setUndecorated(true);
 		frame.setVisible(true);
 		frame.setSize( 800 + frame.getInsets().left + frame.getInsets().right , 600 + frame.getInsets().top + frame.getInsets().bottom);
 		
-		frame.addMouseListener( scr );
+		//frame.addMouseListener( scr );
 	}
 	
 }

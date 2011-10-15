@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -27,15 +28,16 @@ public class Sprite implements TimerListener, Constants {
 	private BufferedImage []spritesRight;
 	private BufferedImage []spritesLeft;
 	private ArrayList<Animation> animations;
-	private Dimension size;
 	private Timer timer;
+	private int width;
+	private int height;
 	
 	private Animation animNow;
 	private int frameNow;
 	private int timeCount;
 	private Screen screen;
 	
-	public Sprite( String file, int width, int height, Screen screen ) {	 
+	public Sprite( String file, int width, int height, Screen screen, boolean mirror ) {	 
 		
 		//	Carregando spritesheet
 		URL fileURL = Sprite.class.getResource("/assets/" + file + ".png");
@@ -49,12 +51,13 @@ public class Sprite implements TimerListener, Constants {
 		g.dispose();
 		
 		//	Cortar em sprites
+		int n = spriteSheet.getWidth()/width * spriteSheet.getHeight()/height;
 		int x = 0;
 		int y = 0;
 		spritesRight = new BufferedImage[100];
 		spritesLeft = new BufferedImage[100];
 		
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<n; i++) {
 			x = (i/50)*(width*5+1) + (i%5)*width;
 			y = (i/5)%10*height;
 			
@@ -62,23 +65,31 @@ public class Sprite implements TimerListener, Constants {
 			spritesRight[i] = spriteSheet.getSubimage(x, y, width, height);
 
 			//	Sprite espelhado (esquerda)
-			spritesLeft[i] = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+			if (mirror) {
+				spritesLeft[i] = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+
+				Graphics2D g2 = (Graphics2D) spritesLeft[i].getGraphics();
+
+				AffineTransform aft = new AffineTransform();
+				aft.translate(width, 0);
+				aft.scale(-1.0, 1.0);
 			
-			Graphics2D g2 = (Graphics2D) spritesLeft[i].getGraphics();
-			
-			AffineTransform aft = new AffineTransform();
-			aft.translate(width, 0);
-			aft.scale(-1.0, 1.0);
-			
-			g2.drawImage(spritesRight[i], aft, null);
-			g2.dispose();
+				g2.drawImage(spritesRight[i], aft, null);
+				g2.dispose();
+			}
 		}
 		
 		//	Inicializando restante 
 		animations = new ArrayList<Animation>(0);
 		timer = new Timer( this, SPRITE_TIMER_PERIOD );
+		this.height = height;
+		this.width = width;
 		
 		this.screen = screen;
+	}
+	
+	public Sprite( String file, int width, int height, Screen screen ) {
+		this( file, width, height, screen, true );
 	}
 	
 	//	--	Manipulação	 --
@@ -172,6 +183,18 @@ public class Sprite implements TimerListener, Constants {
 		else
 			g2.drawImage( spritesRight[frameNow + animNow.getStartFrame()], (int) x, (int) y, null);
 	   
+	}
+	
+	public void print( double x, double y, Graphics g, double angle ) {
+		Graphics2D g2 = (Graphics2D) g;
+
+		AffineTransform transform = new AffineTransform();
+		
+		transform.translate(x, y);
+		transform.rotate(angle, width/2, height/2);
+		
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.drawImage( spritesRight[frameNow + animNow.getStartFrame()], transform, null );
 	}
 
 }
