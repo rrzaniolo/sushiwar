@@ -42,6 +42,7 @@ public interface Constants {
 	
 	//	--	Player stuff  --
 	static final int PLAYER_NIGUIRI_COUNT		= 5;
+    static final int PLAYER_COUNT               = 2;
 	
 	//	--	Screen stuff  --
 	static final Color	SCREEN_DEFAULT_BGCOLOR	= Color.decode("0xff8000");

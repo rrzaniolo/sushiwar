@@ -250,9 +250,5 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		uy -= DirPad.Direction2Y( pressed );
 	}
         
-         public void setRespondControl(KeyEvent e, boolean set){
-             if (e.getKeyCode() == KeyEvent.VK_C){
-                     this.respondControl = set;
-             }
-         }
+         
 }
