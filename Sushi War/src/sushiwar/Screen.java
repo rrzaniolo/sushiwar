@@ -1,6 +1,7 @@
 
 package sushiwar;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Font;
@@ -53,7 +54,7 @@ public class Screen extends JPanel implements Constants {
 		this.setLayout(null);
 		this.addMouseListener( new MouseControl() );
 		this.addMouseMotionListener( new MotionControl() );
-        this.addKeyListener (new KeyControl());
+        frame.addKeyListener (new KeyControl());
 		
 		//	--	Inicializar janela
 		this.width = w;
@@ -174,29 +175,34 @@ public class Screen extends JPanel implements Constants {
 		
 	}
         
-        class KeyControl extends KeyAdapter {
-            
-            public void keyPressed(KeyEvent e){
-                if(e.getKeyCode()== KeyEvent.VK_C){
-                    int nextPlayer = Screen.this.niguiriActive.getPlayer().getNumber() +1;
-                    int atualPlayer = Screen.this.niguiriActive.getPlayer().getNumber();
-                    
-                    Screen.this.playerActive = Screen.this.listp.get(atualPlayer);
-                    int atualNiguiri =  Screen.this.playerActive.getNiguiriActive();
-                    ArrayList<Niguiri> atualList = Screen.this.playerActive.getNiguiriList();
-                    atualList.get(atualNiguiri).toggleControl(false);
-                                        
-                    Screen.this.playerActive = Screen.this.listp.get(nextPlayer);
-                    atualNiguiri =  Screen.this.playerActive.getNiguiriActive();
-                    atualList = Screen.this.playerActive.getNiguiriList();
-                    atualList.get(atualNiguiri+1).toggleControl(true);
-                    
-                    
-                    
-                    }
-                }
-            
-            }
+	class KeyControl extends KeyAdapter {
+
+		public void keyPressed(KeyEvent e){
+			if(e.getKeyCode()== KeyEvent.VK_C){
+				int atualPlayer = Screen.this.niguiriActive.getPlayer().getNumber();
+				int nextPlayer = atualPlayer + 1;
+				
+				if (nextPlayer >= Constants.PLAYER_COUNT)
+					nextPlayer = 0;
+				
+				Screen.this.playerActive = Screen.this.listp.get(atualPlayer);
+				int atualNiguiri =  Screen.this.playerActive.getNiguiriActive();
+				
+				ArrayList<Niguiri> atualList = Screen.this.playerActive.getNiguiriList();
+				atualList.get(atualNiguiri).toggleControl(false);
+
+				Screen.this.playerActive = Screen.this.listp.get(nextPlayer);
+				atualNiguiri =  Screen.this.playerActive.getNiguiriActive();
+				atualList = Screen.this.playerActive.getNiguiriList();
+				atualList.get(atualNiguiri).toggleControl(true);
+				
+				System.out.println(atualPlayer);
+				Screen.this.niguiriActive = atualList.get(atualNiguiri);
+				
+				}
+			}
+
+	}
 
                       
             
