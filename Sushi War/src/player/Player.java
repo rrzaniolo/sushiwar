@@ -38,19 +38,34 @@ public class Player implements Constants {
 	
 	public void createNiguiri() {
 		
-		for (int i = 0; i < PLAYER_NIGUIRI_COUNT-1; i++) {
+        int i;
+		for (i = 0; i < PLAYER_NIGUIRI_COUNT; i++) {
 			Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, false );
 			list.add(n);
 		}
-                Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, true );
-		list.add(n);
+       
+        this.niguiriActive = 0;
+        
 	}
+    
+    public int getNumber(){
+            return this.number;
+    }
+    
+    public ArrayList<Niguiri> getNiguiriList(){
+        return this.list;
+    }
+    
+    public int getNiguiriActive(){
+        return this.niguiriActive;
+    }
                
     protected boolean turn = false;
     protected int number = 0;
     protected ArrayList<Niguiri> list;
     protected Screen screen;
     protected Niguiri n;
+    protected int niguiriActive;
     protected JFrame frame;
     
     public void printNiguiri( Graphics g ) {

@@ -141,5 +141,9 @@ public class Niguiri extends Unit implements Constants {
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
+    
+    public Player getPlayer(){
+        return this.player;
+    }
        
 }

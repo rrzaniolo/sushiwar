@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -36,8 +37,10 @@ public class Screen extends JPanel implements Constants {
 	
 	public int width;
 	public int height;
+    private Player playerActive;
 	private ArrayList<Niguiri> listNiguiri;
     private ArrayList<Player> listp;
+    private Niguiri niguiriActive;
 	public JFrame frame;
 	private Terrain terrain = null;
 	
@@ -50,6 +53,7 @@ public class Screen extends JPanel implements Constants {
 		this.setLayout(null);
 		this.addMouseListener( new MouseControl() );
 		this.addMouseMotionListener( new MotionControl() );
+        this.addKeyListener (new KeyControl());
 		
 		//	--	Inicializar janela
 		this.width = w;
@@ -69,7 +73,7 @@ public class Screen extends JPanel implements Constants {
 		this.frame = frame;
 
 		listp = new ArrayList<Player>();
-		for(int i=0; i<1; i++) {
+		for(int i=0; i<Constants.PLAYER_COUNT; i++) {
 			p = new Player(false, i, i, this);
 			listp.add( p );
 			p.createNiguiri();
@@ -77,6 +81,9 @@ public class Screen extends JPanel implements Constants {
 		}
 		
 		//	--	Restante!
+        playerActive = listp.get(0);
+        niguiriActive = playerActive.getNiguiriList().get(playerActive.getNiguiriActive());
+        niguiriActive.toggleControl(true);
 
 		
 	}
@@ -166,6 +173,35 @@ public class Screen extends JPanel implements Constants {
 		}
 		
 	}
+        
+        class KeyControl extends KeyAdapter {
+            
+            public void keyPressed(KeyEvent e){
+                if(e.getKeyCode()== KeyEvent.VK_C){
+                    int nextPlayer = Screen.this.niguiriActive.getPlayer().getNumber() +1;
+                    int atualPlayer = Screen.this.niguiriActive.getPlayer().getNumber();
+                    
+                    Screen.this.playerActive = Screen.this.listp.get(atualPlayer);
+                    int atualNiguiri =  Screen.this.playerActive.getNiguiriActive();
+                    ArrayList<Niguiri> atualList = Screen.this.playerActive.getNiguiriList();
+                    atualList.get(atualNiguiri).toggleControl(false);
+                                        
+                    Screen.this.playerActive = Screen.this.listp.get(nextPlayer);
+                    atualNiguiri =  Screen.this.playerActive.getNiguiriActive();
+                    atualList = Screen.this.playerActive.getNiguiriList();
+                    atualList.get(atualNiguiri+1).toggleControl(true);
+                    
+                    
+                    
+                    }
+                }
+            
+            }
+
+                      
+            
+            
+        
 	
 	@Override
 	protected void paintComponent( Graphics g ) {
