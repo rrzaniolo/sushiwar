@@ -33,7 +33,7 @@ public class Unit extends Agent implements Constants {
 	protected Direction facing = null;
 	
 	//	--	Debug  --
-	private static final boolean showSpeed = true;
+	private static final boolean showDebug = false;
 	
 	//	-----------------------------------------------------------------------
 	
@@ -164,7 +164,7 @@ public class Unit extends Agent implements Constants {
 			sprite.print( x-width/2, y-height/2, g, facing);
 		}
 		
-		if (showSpeed) {
+		if (showDebug) {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
