@@ -7,12 +7,9 @@ package units;
  * CLASS Niguiri ------------------------------------------
  */
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import player.DirPad;
 import player.Player;
 import sprite.*;
@@ -21,10 +18,13 @@ import sushiwar.Screen;
 
 public class Niguiri extends Unit implements Constants {
 
-	private boolean jumping = false;
-	private Player player = null;
-	private NiguiriStatus status = null;
-	private Crosshair crosshair = null;
+	private boolean			jumping		= false;
+	private Player			player		= null;
+	private NiguiriStatus	status		= null;
+	private Crosshair		crosshair	= null;
+	private String			name		= null;
+	
+	private static int		niguiriCount= 0;
 	
 	public enum NiguiriStatus {
 		STAND, WALK, JUMP, FALL, LAND;
@@ -32,20 +32,14 @@ public class Niguiri extends Unit implements Constants {
 	
 	public Niguiri( double x, double y, Player player, Screen screen, boolean respondControl ) {
 		super(x, y, 30, 30, screen, respondControl );
-		
 		setCollisionBox( 7, 9, 16, 16 );
+		
+		//	--	Sprite  --
 		sprite = new Sprite( "niguiri2", 30, 30, screen );
 		
-		/*Animation anim;
-		sprite.addAnimation( new Animation("walk", 6, 8, 30, true) );
-		sprite.addAnimation( new Animation("yes", 8, 9, 30, false) );
-		sprite.addAnimation( new Animation("shit", 17, 7, 40, true, 2) );
-		anim = new Animation("stand", 0, 6, 40, true);
-		anim.setFramePeriod(0, 2500);
-		sprite.addAnimation( anim );*/
-		
+		//	--	Animations  --
 		Animation anim;
-		//	Stand
+
 		anim = new Animation("stand", 0, 6, 40, true);
 		anim.setFramePeriod(0, 2500);
 		sprite.addAnimation( anim );
@@ -55,8 +49,14 @@ public class Niguiri extends Unit implements Constants {
 		
 		sprite.playAnimation("stand");
 		
+		//	--	Crosshair  --
 		crosshair = new Crosshair( this, screen );
 		
+		//	--	Name  --
+		name = "Niguiri " + niguiriCount;
+		niguiriCount++;
+				
+		//	--	Stuff  --
 		screen.frame.addKeyListener( this );
 		this.player = player;
 	}
@@ -136,7 +136,12 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void print( Graphics g ){
 		super.print(g);
-		crosshair.print(g);
+		
+		if (respondControl)
+			crosshair.print(g);
+		
+		Graphics2D g2 = (Graphics2D) g;
+		//screen.getFont().
 		
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );

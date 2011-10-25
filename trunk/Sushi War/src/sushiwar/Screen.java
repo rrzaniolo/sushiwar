@@ -1,9 +1,7 @@
 
 package sushiwar;
 
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -18,7 +16,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Random;
-import timer.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import player.Player;
@@ -62,7 +59,7 @@ public class Screen extends JPanel implements Constants {
 		setSize(w, h);
 		setBackground(SCREEN_DEFAULT_BGCOLOR);
 		
-		//this.setFont( new Font("Arial Round Bold", Font.BOLD, 12));
+		this.setFont( new Font("Arial Round Bold", Font.BOLD, 12));
 		this.setForeground(Color.white);
 		
 		//	--	Inicializar terreno
@@ -157,6 +154,8 @@ public class Screen extends JPanel implements Constants {
 	public int getRandomX( int size ) {
 		return size/2 + (int) (Math.random() * (width-size));
 	}
+	
+	//	--	Classes de controle de eventos  --
 	
 	class MouseControl extends MouseAdapter {
 		
