@@ -45,7 +45,7 @@ public interface Constants {
     static final int PLAYER_COUNT               = 2;
 	
 	//	--	Screen stuff  --
-	static final Color	SCREEN_DEFAULT_BGCOLOR	= Color.decode("0xff8000");
+	static final Color	SCREEN_DEFAULT_BGCOLOR	= Color.decode("0x0080ff");
 	static final int	SCREEN_OUT_RIGHT		= 0x00001;
 	static final int	SCREEN_OUT_LEFT			= 0x00010;
 	static final int	SCREEN_OUT_TOP			= 0x00100;
