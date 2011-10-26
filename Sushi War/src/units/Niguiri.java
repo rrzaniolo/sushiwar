@@ -53,7 +53,7 @@ public class Niguiri extends Unit implements Constants {
 		crosshair = new Crosshair( this, screen );
 		
 		//	--	Name  --
-		name = "Niguiri " + niguiriCount;
+		name = "Niguiri " + player.getNumber() + ":" + niguiriCount;
 		niguiriCount++;
 				
 		//	--	Stuff  --
@@ -141,7 +141,10 @@ public class Niguiri extends Unit implements Constants {
 			crosshair.print(g);
 		
 		Graphics2D g2 = (Graphics2D) g;
-		//screen.getFont().
+		int size = g2.getFontMetrics().stringWidth(name);
+		
+		screen.setForeground( Player.getColor( player.getNumber() ) );
+		g2.drawString( name, (float) x-size/2, (float) y-height/2-10 );
 		
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );

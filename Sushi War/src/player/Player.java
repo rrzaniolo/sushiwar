@@ -5,9 +5,8 @@
  */
 package player;
 /*Testing*/
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import sushiwar.Constants;
@@ -19,6 +18,13 @@ import units.Niguiri;
  * @author Daron Vardmir
  */
 public class Player implements Constants {
+	
+	protected boolean turn = false;
+    protected int number = 0;
+    protected ArrayList<Niguiri> list;
+    protected Screen screen;
+    protected int niguiriActive;
+    protected JFrame frame;
 	
     public Player (boolean turn, int number, int niguiri, Screen scr){
 		this.turn = turn;
@@ -59,17 +65,18 @@ public class Player implements Constants {
     public int getNiguiriActive(){
         return this.niguiriActive;
     }
-               
-    protected boolean turn = false;
-    protected int number = 0;
-    protected ArrayList<Niguiri> list;
-    protected Screen screen;
-    protected Niguiri n;
-    protected int niguiriActive;
-    protected JFrame frame;
     
     public void printNiguiri( Graphics g ) {
         for (Niguiri n: list)
             n.print(g);
     }
+	
+	public static Color getColor( int i ) {
+		if (i==0)
+			return Color.red;
+		else if (i==1)
+			return Color.green;
+		
+		return Color.white;
+	}
 }
