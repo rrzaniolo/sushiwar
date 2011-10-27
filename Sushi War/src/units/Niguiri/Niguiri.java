@@ -1,5 +1,5 @@
 
-package units;
+package units.Niguiri;
 
 /**
  * @author Hossomi
@@ -7,14 +7,18 @@ package units;
  * CLASS Niguiri ------------------------------------------
  */
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 import player.DirPad;
 import player.Player;
 import sprite.*;
 import sushiwar.Constants;
 import sushiwar.Screen;
+import units.Unit;
 
 public class Niguiri extends Unit implements Constants {
 
@@ -22,7 +26,9 @@ public class Niguiri extends Unit implements Constants {
 	private Player			player		= null;
 	private NiguiriStatus	status		= null;
 	private Crosshair		crosshair	= null;
+	private int				life		= 0;
 	private String			name		= null;
+	private InfoBar			infoBar		= null;
 	
 	private static int		niguiriCount= 0;
 	
@@ -33,6 +39,8 @@ public class Niguiri extends Unit implements Constants {
 	public Niguiri( double x, double y, Player player, Screen screen, boolean respondControl ) {
 		super(x, y, 30, 30, screen, respondControl );
 		setCollisionBox( 7, 9, 16, 16 );
+		this.player = player;
+		this.life = NIGUIRI_INITIAL_LIFE;
 		
 		//	--	Sprite  --
 		sprite = new Sprite( "niguiri2", 30, 30, screen );
@@ -53,12 +61,13 @@ public class Niguiri extends Unit implements Constants {
 		crosshair = new Crosshair( this, screen );
 		
 		//	--	Name  --
-		name = "Niguiri " + player.getNumber() + ":" + niguiriCount;
+		name = "Niguiri " + player.getId() + ":" + niguiriCount;
 		niguiriCount++;
+		
+		infoBar = new InfoBar( this, screen );
 				
 		//	--	Stuff  --
 		screen.frame.addKeyListener( this );
-		this.player = player;
 	}
 	
 	public void setStatus( NiguiriStatus now ) {
@@ -78,6 +87,15 @@ public class Niguiri extends Unit implements Constants {
 		}
 	}
 	
+	public void setLife( int life ) {
+		this.life = life;
+	}
+	
+	public void toggle( boolean on ) {
+		super.toggle(on);
+		infoBar.setVisible(!on);
+	}
+	
 	public void update() {
 		super.update();
 		
@@ -90,7 +108,24 @@ public class Niguiri extends Unit implements Constants {
 					setStatus(NiguiriStatus.STAND);
 		}
 		
-		//crosshair.setPosition( x, y );
+		infoBar.update();
+		crosshair.update();
+	}
+	
+	public Player getPlayer(){
+        return this.player;
+    }
+	
+	public int getPlayerId() {
+		return player.getId();
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getLife() {
+		return life;
 	}
 	
 	@Override
@@ -139,19 +174,13 @@ public class Niguiri extends Unit implements Constants {
 		
 		if (respondControl)
 			crosshair.print(g);
-		
-		Graphics2D g2 = (Graphics2D) g;
-		int size = g2.getFontMetrics().stringWidth(name);
-		
-		screen.setForeground( Player.getColor( player.getNumber() ) );
-		g2.drawString( name, (float) x-size/2, (float) y-height/2-10 );
-		
+
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
     
-    public Player getPlayer(){
-        return this.player;
-    }
+	public String toString() {
+		return name;
+	}
        
 }

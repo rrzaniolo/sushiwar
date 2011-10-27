@@ -1,10 +1,12 @@
-package units;
+package units.Niguiri;
 
+import units.Niguiri.Niguiri;
 import java.awt.Graphics;
 import sprite.Animation;
 import sprite.Sprite;
 import sushiwar.Constants;
 import sushiwar.Screen;
+import units.Agent;
 
 /**
  *

@@ -65,7 +65,7 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		this.controlPad = new DirPad();
 		
 		this.moveTimer = new Timer( this, MOVE_TIMER_PERIOD);
-		this.moveTimer.start();
+		//this.moveTimer.start();
 		
 		//instances.ensureCapacity( instances.size() + 1 );
 		instances.add(this);
@@ -154,8 +154,12 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		collisionBox.setLocation( box.x + collisionBoxPosition.x, box.y + collisionBoxPosition.y );
 	}
 	
-	public void toggleControl( boolean yes ) {
+	public void toggle( boolean yes ) {
             respondControl = yes;
+	}
+	
+	public void startTimer() {
+		moveTimer.start();
 	}
 	
 	/**
