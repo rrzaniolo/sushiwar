@@ -35,14 +35,15 @@ public interface Constants {
 	//	--	Niguiri stuff  --
 	
 	static final int	NIGUIRI_WIDTH			= 30;
+	static final int	NIGUIRI_INITIAL_LIFE	= 100;
 	static final double	CROSSHAIR_RADIUS		= 50;
 	
 	//	--	Sprite stuff  --
 	static final int	SPRITE_TIMER_PERIOD		= 10;
 	
 	//	--	Player stuff  --
-	static final int PLAYER_NIGUIRI_COUNT		= 5;
-    static final int PLAYER_COUNT               = 2;
+	static final int	PLAYER_NIGUIRI_COUNT	= 5;
+    static final int	PLAYER_COUNT            = 2;
 	
 	//	--	Screen stuff  --
 	static final Color	SCREEN_DEFAULT_BGCOLOR	= Color.decode("0x0080ff");

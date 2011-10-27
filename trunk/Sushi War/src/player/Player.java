@@ -11,71 +11,80 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import sushiwar.Constants;
 import sushiwar.Screen;
-import units.Niguiri;
+import units.Niguiri.Niguiri;
 
 /**
  *
  * @author Daron Vardmir
  */
-public class Player implements Constants {
+public final class Player implements Constants {
 	
-	protected boolean turn = false;
-    protected int number = 0;
-    protected ArrayList<Niguiri> list;
-    protected Screen screen;
-    protected int niguiriActive;
-    protected JFrame frame;
+    private ArrayList<Niguiri>	niguiriList		= null;
+    private int					niguiriActiveId	= 0;
+	private Niguiri				niguiriActive	= null;
+	private int					niguiriCount	= 0;
+	private Screen				screen			= null;
+	private int					id				= 0;
+	private boolean				active			= false;
 	
-    public Player (boolean turn, int number, int niguiri, Screen scr){
-		this.turn = turn;
-		this.number = number;
-		this.screen = scr;
-		this.list = new ArrayList<Niguiri>();
-
-		/*for( int i=0; i<5; i++) {
-			double r = Math.random();
-			System.out.println((int)(r*scr.getWidth()));
-			this.n = new Niguiri( (int) (r * scr.getWidth()), 0, this, scr);
-			this.list.add( this.n );
-			this.screen.frame.addKeyListener(this.n);
-		}*/
+	private static int			count			= 0;
+	private static final Color[]color			= { Color.red, Color.blue, Color.green, Color.cyan, Color.orange, Color.magenta };
+	
+    public Player ( int niguiriCount, Screen screen){
+		this.id = Player.count;
+		this.screen = screen;
+		this.niguiriCount = niguiriCount;
+		this.niguiriList = new ArrayList<Niguiri>( niguiriCount );
+		
+		this.createNiguiri();
+		
+		Player.count++;
 		
 	}
 	
 	public void createNiguiri() {
-		
-        int i;
-		for (i = 0; i < PLAYER_NIGUIRI_COUNT; i++) {
-			Niguiri n = new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, false );
-			list.add(n);
-		}
+		for (int i = 0; i < niguiriCount; i++)
+			niguiriList.add( new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, false ) );
        
-        this.niguiriActive = 0;
-        
+        this.niguiriActiveId = 0;
+        this.niguiriActive = niguiriList.get(0);
 	}
     
-    public int getNumber(){
-            return this.number;
-    }
-    
-    public ArrayList<Niguiri> getNiguiriList(){
-        return this.list;
-    }
-    
-    public int getNiguiriActive(){
-        return this.niguiriActive;
-    }
-    
-    public void printNiguiri( Graphics g ) {
-        for (Niguiri n: list)
+	public void printNiguiri( Graphics g ) {
+        for (Niguiri n: niguiriList)
             n.print(g);
     }
 	
+	public void toggle( boolean on ) {
+		this.active = on;
+		this.niguiriActive.toggle(on);
+	}
+	
+	public void toggleActiveNiguiri( boolean on ) {
+		this.niguiriActive.toggle(on);
+	}
+	
+	public void nextNiguiri() {
+		niguiriActiveId = (niguiriActiveId + 1) % niguiriList.size();
+		niguiriActive = niguiriList.get( niguiriActiveId );
+	}
+	
+	public void startNiguiri() {
+		for (Niguiri n: niguiriList)
+			n.startTimer();
+	}
+	
+    public Niguiri getNiguiriActive(){
+        return this.niguiriList.get( niguiriActiveId );
+    }
+	
+	public int getId(){
+            return id;
+    }
+	
 	public static Color getColor( int i ) {
-		if (i==0)
-			return Color.red;
-		else if (i==1)
-			return Color.green;
+		if ( i > 0 && i < color.length )
+			return color[i];
 		
 		return Color.white;
 	}
