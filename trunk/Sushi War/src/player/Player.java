@@ -28,7 +28,7 @@ public final class Player implements Constants {
 	private boolean				active			= false;
 	
 	private static int			count			= 0;
-	private static final Color[]color			= { Color.red, Color.blue, Color.green, Color.cyan, Color.orange, Color.magenta };
+	private static final Color[]color			= { Color.red, Color.yellow, Color.green, Color.cyan, Color.orange, Color.magenta };
 	
     public Player ( int niguiriCount, Screen screen){
 		this.id = Player.count;
@@ -83,7 +83,7 @@ public final class Player implements Constants {
     }
 	
 	public static Color getColor( int i ) {
-		if ( i > 0 && i < color.length )
+		if ( i >= 0 && i < color.length )
 			return color[i];
 		
 		return Color.white;
