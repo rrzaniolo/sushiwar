@@ -7,12 +7,9 @@ package units.Niguiri;
  * CLASS Niguiri ------------------------------------------
  */
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import javax.swing.JLabel;
-import javax.swing.border.LineBorder;
 import player.DirPad;
 import player.Player;
 import sprite.*;
@@ -22,9 +19,12 @@ import units.Unit;
 
 public class Niguiri extends Unit implements Constants {
 
-	private boolean			jumping		= false;
-	private Player			player		= null;
+	//	--	Movimento  --
+	//private boolean			jumping		= false;
 	private NiguiriStatus	status		= null;
+	
+	//	--	Configurações  --
+	private Player			player		= null;
 	private Crosshair		crosshair	= null;
 	private int				life		= 0;
 	private String			name		= null;
@@ -35,6 +35,8 @@ public class Niguiri extends Unit implements Constants {
 	public enum NiguiriStatus {
 		STAND, WALK, JUMP, FALL, LAND;
 	}
+	
+	//	-----------------------------------------------------------------------
 	
 	public Niguiri( double x, double y, Player player, Screen screen, boolean respondControl ) {
 		super(x, y, 30, 30, screen, respondControl );
@@ -55,7 +57,8 @@ public class Niguiri extends Unit implements Constants {
 		sprite.addAnimation( new Animation("jump", 14, 3, 30, false) );
 		sprite.addAnimation( new Animation("land", 17, 7, 40, false) );
 		
-		sprite.playAnimation("stand");
+		sprite.playAnimation("Stand");
+		status = NiguiriStatus.STAND;
 		
 		//	--	Crosshair  --
 		crosshair = new Crosshair( this, screen );
@@ -70,20 +73,32 @@ public class Niguiri extends Unit implements Constants {
 		screen.frame.addKeyListener( this );
 	}
 	
+	//	--  Manipulação  ------------------------------------------------------
+	
 	public void setStatus( NiguiriStatus now ) {
 		if (status != now) {
+			System.out.println(this + " is now " + now.toString());
 			status = now;
 
-			if (now == NiguiriStatus.WALK)
+			if (now == NiguiriStatus.WALK) {
 				playAnimation("walk");
-			else if (now == NiguiriStatus.JUMP)
+				ready = true;
+			}
+			else if (now == NiguiriStatus.JUMP) {
 				playAnimation("jump");
-			else if (now == NiguiriStatus.FALL)
-				playAnimation("jump");
-			else if (now == NiguiriStatus.LAND)
+				ready = false;
+			}
+			else if (now == NiguiriStatus.FALL) {
+				ready = false;
+			}
+			else if (now == NiguiriStatus.LAND) {
 				playAnimation("land");
-			else if (now == NiguiriStatus.STAND)
+				ready = false;
+			}
+			else if (now == NiguiriStatus.STAND) {
 				playAnimation("stand");
+				ready = true;
+			}
 		}
 	}
 	
@@ -99,18 +114,30 @@ public class Niguiri extends Unit implements Constants {
 	public void update() {
 		super.update();
 		
-		if (!onAir && vy >= 0) {
-			if (status == NiguiriStatus.JUMP)
+		if (onAir)
+			setStatus(NiguiriStatus.FALL);
+		
+		if (!onAir) {
+			if (status == NiguiriStatus.FALL)
 				setStatus(NiguiriStatus.LAND);
 			
-			else if (status == NiguiriStatus.LAND)
+			else if (status == NiguiriStatus.LAND || status == NiguiriStatus.FALL) {
 				if (sprite.isDone())
 					setStatus(NiguiriStatus.STAND);
+			}
+			
+			else if (isMoving())
+				setStatus(NiguiriStatus.WALK);
+			else if (status == NiguiriStatus.WALK) {
+				setStatus(NiguiriStatus.STAND);
+			}
 		}
 		
 		infoBar.update();
 		crosshair.update();
 	}
+	
+	//	--  Informação  -------------------------------------------------------
 	
 	public Player getPlayer(){
         return this.player;
@@ -128,23 +155,26 @@ public class Niguiri extends Unit implements Constants {
 		return life;
 	}
 	
+	public String toString() {
+		return name;
+	}
+	
+	//	--  Eventos  ----------------------------------------------------------
+	
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
 		super.keyPressedOnce(e);
 		
-		//	--	Pulo! \o/  --
-		if ( flyHeight == 0 && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
+		//	--	Pulo normal  --
+		if ( ready && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
 			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_JUMP_VX, -MOVE_NIGUIRI_JUMP_VY );
-			//jumping = true;
 			setStatus(NiguiriStatus.JUMP);
-			//playAnimation( "jump" );
 		}
 		
-		else if ( flyHeight == 0 && e.getKeyCode() == MOVE_NIGUIRI_HJUMP_KEY ) {
+		//	--	Pulo alto  --
+		else if ( ready && e.getKeyCode() == MOVE_NIGUIRI_HJUMP_KEY ) {
 			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_HJUMP_VX, -MOVE_NIGUIRI_HJUMP_VY );
-			//jumping = true;
 			setStatus(NiguiriStatus.JUMP);
-			//playAnimation( "jump" );
 		}
 		
 		else if ( e.getKeyCode() == KeyEvent.VK_0)
@@ -164,9 +194,11 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
-		if (!isMoving() && !jumping)
-			this.setStatus(NiguiriStatus.STAND);
+		//if (!isMoving() && !jumping)
+			//this.setStatus(NiguiriStatus.STAND);
 	}
+	
+	//	--  Gráfico  ----------------------------------------------------------
 	
 	@Override
 	public void print( Graphics g ){
@@ -174,13 +206,9 @@ public class Niguiri extends Unit implements Constants {
 		
 		if (respondControl)
 			crosshair.print(g);
-
+		
 		//Graphics2D g2 = (Graphics2D) g;
 		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
-	}
-    
-	public String toString() {
-		return name;
 	}
        
 }
