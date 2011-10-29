@@ -24,13 +24,14 @@ public class Unit extends Agent implements Constants {
 	protected Sprite sprite = null;
 	
 	//	--	Movimento  --
-	protected boolean respondGravity = true;
-	protected boolean respondWind = false;
-	protected boolean onAir = false;
-	protected double flyHeight = 0;
-	protected double vx = 0;
-	protected double vy = 0;
-	protected Direction facing = null;
+	protected boolean	respondGravity	= true;
+	protected boolean	respondWind		= false;
+	protected boolean	ready			= true;
+	protected boolean	onAir			= false;
+	protected double	flyHeight		= 0;
+	protected double	vx				= 0;
+	protected double	vy				= 0;
+	protected Direction facing			= null;
 	
 	//	--	Debug  --
 	private static final boolean showDebug = false;
@@ -99,7 +100,7 @@ public class Unit extends Agent implements Constants {
 		
 		//	Se não estiver caindo e responder a controles, aplicar a velocidade
 		//	de controle
-		if (!onAir && respondControl)
+		if (ready && respondControl)
 			dx += ux * MOVE_NIGUIRI_SPEED;
 		
 		dx = dx/MOVE_TIMER_PERIOD;

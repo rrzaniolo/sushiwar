@@ -18,7 +18,7 @@ public interface Constants {
 	//	--	Units stuff  --
 	static final int	MOVE_TIMER_PERIOD		= 10;
 	static final int	MOVE_CLIFF_TOLERANCE	= 5;
-	static final int	MOVE_FALLING_HEIGHT		= 6;
+	static final int	MOVE_FALLING_HEIGHT		= 10;
 	static final double MOVE_NIGUIRI_SPEED		= 7.5;
 	
 	static final int	MOVE_NIGUIRI_JUMP_KEY	= KeyEvent.VK_Q;
@@ -42,8 +42,8 @@ public interface Constants {
 	static final int	SPRITE_TIMER_PERIOD		= 10;
 	
 	//	--	Player stuff  --
-	static final int	PLAYER_NIGUIRI_COUNT	= 5;
-    static final int	PLAYER_COUNT            = 2;
+	static final int	PLAYER_NIGUIRI_COUNT	= 1;
+    static final int	PLAYER_COUNT            = 4;
 	
 	//	--	Screen stuff  --
 	static final Color	SCREEN_DEFAULT_BGCOLOR	= Color.decode("0x0080ff");
