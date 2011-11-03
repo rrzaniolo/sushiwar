@@ -60,7 +60,9 @@ public class Unit extends Agent implements Constants {
 	 * Move a unidade de acordo com gravidade, vento e controles.
 	 */
 	@Override
-	public void update() {
+	public int update() {
+		
+		int returnStatus = 0;
 		
 		//	--  Gravidade  --
 		
@@ -78,14 +80,15 @@ public class Unit extends Agent implements Constants {
 		double dy = Math.min( flyHeight, vy/MOVE_TIMER_PERIOD );
 
 		if (dy != 0)
-			if (this.move(0, dy) != 0)
-				vy = 0;
+			this.move(0, dy);
+				//vy = 0;
 		
 		//	Se o deslocamento tiver sido menor que a velocidade, significa que
 		//	atingiu o terreno
 		if (dy < vy/MOVE_TIMER_PERIOD) {
 			vx = 0;
 			vy = 0;
+			returnStatus += Constants.MOVE_HIT_GROUND;
 		}
 		
 		//	Se a altura atual for maior que a altura de queda, unidade está
@@ -112,6 +115,8 @@ public class Unit extends Agent implements Constants {
 			vx = 0;
 			vy = Math.max(vy, 0);
 		}
+		
+		return returnStatus;
 	}
 	
 	/**
@@ -136,6 +141,15 @@ public class Unit extends Agent implements Constants {
 	
 	public boolean playAnimation( String anim ) {
 		return sprite.playAnimation(anim);
+	}
+	
+	//	--	Informação  -------------------------------------------------------
+	
+	public boolean isFacing( Direction dir ) {
+		if (facing == dir)
+			return true;
+		
+		return false;
 	}
 	
 	//	--	Eventos  ----------------------------------------------------------

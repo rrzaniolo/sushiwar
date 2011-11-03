@@ -18,7 +18,7 @@ public interface Constants {
 	//	--	Units stuff  --
 	static final int	MOVE_TIMER_PERIOD		= 10;
 	static final int	MOVE_CLIFF_TOLERANCE	= 5;
-	static final int	MOVE_FALLING_HEIGHT		= 10;
+	static final int	MOVE_FALLING_HEIGHT		= 15;
 	static final double MOVE_NIGUIRI_SPEED		= 7.5;
 	
 	static final int	MOVE_NIGUIRI_JUMP_KEY	= KeyEvent.VK_Q;
@@ -27,6 +27,8 @@ public interface Constants {
 	static final double MOVE_NIGUIRI_JUMP_VY	= 40;
 	static final double MOVE_NIGUIRI_HJUMP_VX	= 3;
 	static final double MOVE_NIGUIRI_HJUMP_VY	= 55;
+	
+	static final int	MOVE_HIT_GROUND			= 0x1;
 	
 	static final int    CHANGE_NIGUIRI_KEY      = KeyEvent.VK_C;
 	
@@ -37,6 +39,8 @@ public interface Constants {
 	static final int	NIGUIRI_WIDTH			= 30;
 	static final int	NIGUIRI_INITIAL_LIFE	= 100;
 	static final double	CROSSHAIR_RADIUS		= 50;
+	static final double CROSSHAIR_ANGLE_MIN		= -Math.PI/2;
+	static final double CROSSHAIR_ANGLE_MAX		= Math.PI/3;
 	
 	//	--	Sprite stuff  --
 	static final int	SPRITE_TIMER_PERIOD		= 10;

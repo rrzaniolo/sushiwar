@@ -7,6 +7,6 @@ package timer;
  */
 public interface TimerListener {
 
-   public void update();
+   public int update();
 
 }
