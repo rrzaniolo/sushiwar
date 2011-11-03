@@ -77,7 +77,6 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void setStatus( NiguiriStatus now ) {
 		if (status != now) {
-			System.out.println(this + " is now " + now.toString());
 			status = now;
 
 			if (now == NiguiriStatus.WALK) {
@@ -111,14 +110,34 @@ public class Niguiri extends Unit implements Constants {
 		infoBar.setVisible(!on);
 	}
 	
-	public void update() {
-		super.update();
+	public int update() {
+		int updateStatus = super.update();
+		boolean hitGround = (updateStatus & Constants.MOVE_HIT_GROUND) != 0;
 		
-		if (onAir)
+		if (this.player.getId()==0)
+			System.out.println(this + ": " + (updateStatus | Constants.MOVE_HIT_GROUND) + " " + status.name() + " " + onAir );
+			
+		if (onAir && !hitGround)
+			setStatus( NiguiriStatus.JUMP );
+		
+		if (hitGround && status == NiguiriStatus.JUMP) {
+			setStatus( NiguiriStatus.LAND );
+		}
+		
+		if ( status == NiguiriStatus.LAND ) {
+			if (sprite.isDone()) {
+				if (isMoving())
+					setStatus( NiguiriStatus.WALK );
+				else
+					setStatus( NiguiriStatus.STAND );
+			}
+		}
+		
+		/*if (onAir)
 			setStatus(NiguiriStatus.FALL);
 		
 		if (!onAir) {
-			if (status == NiguiriStatus.FALL)
+			if (status == NiguiriStatus.FALL && (hitGround|Constants.MOVE_HIT_GROUND) > 0)
 				setStatus(NiguiriStatus.LAND);
 			
 			else if (status == NiguiriStatus.LAND || status == NiguiriStatus.FALL) {
@@ -131,10 +150,12 @@ public class Niguiri extends Unit implements Constants {
 			else if (status == NiguiriStatus.WALK) {
 				setStatus(NiguiriStatus.STAND);
 			}
-		}
+		}*/
 		
 		infoBar.update();
 		crosshair.update();
+		
+		return 0;
 	}
 	
 	//	--  Informação  -------------------------------------------------------
@@ -194,8 +215,8 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
-		//if (!isMoving() && !jumping)
-			//this.setStatus(NiguiriStatus.STAND);
+		if (!isMoving())
+			this.setStatus(NiguiriStatus.STAND);
 	}
 	
 	//	--  Gráfico  ----------------------------------------------------------

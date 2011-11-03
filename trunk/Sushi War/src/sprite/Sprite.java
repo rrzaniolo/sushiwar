@@ -150,7 +150,7 @@ public class Sprite implements TimerListener, Constants {
 	}
 
 	@Override
-	public void update() {
+	public int update() {
 		if (animNow != null) {
 			timeCount -= SPRITE_TIMER_PERIOD;
 		
@@ -161,7 +161,7 @@ public class Sprite implements TimerListener, Constants {
 		}	
 		
 		screen.repaint();
-		
+		return 0;
 	}
 	
 	public boolean isDone() {

@@ -168,9 +168,11 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 	 * alguma tecla direcional pressionada.
 	 */
 	@Override
-	public void update() {
+	public int update() {
 		if (ux != 0 || uy != 0)
 			this.move( ux, uy );
+		
+		return 0;
 	}
 	
 	//	--  Informação  -------------------------------------------------------

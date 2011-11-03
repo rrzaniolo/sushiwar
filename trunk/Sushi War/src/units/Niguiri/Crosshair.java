@@ -1,7 +1,7 @@
 package units.Niguiri;
 
-import units.Niguiri.Niguiri;
 import java.awt.Graphics;
+import player.DirPad.Direction;
 import sprite.Animation;
 import sprite.Sprite;
 import sushiwar.Constants;
@@ -17,6 +17,7 @@ public class Crosshair extends Agent implements Constants {
 	private Niguiri niguiri = null;
 	private Sprite sprite = null;
 	private double angle = 0;
+	private double rotation = 0;
 	
 	
 	public Crosshair( Niguiri niguiri, Screen screen ) {
@@ -32,11 +33,16 @@ public class Crosshair extends Agent implements Constants {
 		sprite.playAnimation("stand");
 	}
 	
-	public void update() {
+	public int update() {		
+		if (niguiri.isFacing( Direction.RIGHT ))
+			angle = rotation;
+		else
+			angle = Math.PI - rotation;
+		
 		this.x = niguiri.getPositionX() + Math.cos(angle)*CROSSHAIR_RADIUS;
 		this.y = niguiri.getPositionY() + Math.sin(angle)*CROSSHAIR_RADIUS;
 				
-		
+		return 0;
 	}
 	
 	public void print( Graphics g ) {
@@ -46,7 +52,9 @@ public class Crosshair extends Agent implements Constants {
 	}
 	
 	public void changeAngle( double delta ) {
-		angle += delta*Math.PI/180;
+		rotation -= delta*Math.PI/180;
+		rotation = Math.min(rotation, CROSSHAIR_ANGLE_MAX);
+		rotation = Math.max(rotation, CROSSHAIR_ANGLE_MIN);
 	}
 	
 }
