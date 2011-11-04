@@ -16,7 +16,7 @@ public class Crosshair extends Agent implements Constants {
 	
 	private Niguiri niguiri = null;
 	private Sprite sprite = null;
-	private double angle = 0;
+	public double angle = 0;
 	private double rotation = 0;
 	
 	
