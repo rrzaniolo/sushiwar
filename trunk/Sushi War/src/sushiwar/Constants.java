@@ -28,11 +28,12 @@ public interface Constants {
 	static final double MOVE_NIGUIRI_HJUMP_VX	= 3;
 	static final double MOVE_NIGUIRI_HJUMP_VY	= 55;
 	
-	static final int	MOVE_HIT_GROUND			= 0x1;
+	static final int	MOVE_HITGROUND_VERTICAL			= 0x01;
+	static final int	MOVE_HITGROUND_HORIZONTAL		= 0x10;
 	
 	static final int    CHANGE_NIGUIRI_KEY      = KeyEvent.VK_C;
 	
-	static final double GRAVITY					= 25;
+	static final double GRAVITY					= 15;
 	
 	//	--	Niguiri stuff  --
 	

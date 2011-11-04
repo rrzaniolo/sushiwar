@@ -2,28 +2,23 @@
 package sushiwar;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import player.Player;
-//import msgbox.MsgBox;
 import scenario.Terrain;
 import units.Agent;
 import units.Niguiri.Niguiri;
+import units.missile.Missile;
 
 /**
  * @author Hossomi
@@ -40,8 +35,9 @@ public class Screen extends JPanel implements Constants {
 	private int					playerActiveId	= 0;
     private ArrayList<Player>	playerList		= null;
     private Niguiri				niguiriActive	= null;
+	public	ArrayList<Missile>	missileList		= null;
 	public	JFrame				frame			= null;
-	private Terrain				terrain			= null;
+	public	Terrain				terrain			= null;
 	
 	private int					mouseX;
 	private int					mouseY;
@@ -80,6 +76,8 @@ public class Screen extends JPanel implements Constants {
 
 		for (Player p: playerList)
 			p.startNiguiri();
+		
+		missileList = new ArrayList<Missile>(0);
 	}
 	
 	public int isPointInScreen( int x, int y ) {
@@ -195,12 +193,8 @@ public class Screen extends JPanel implements Constants {
 			p.printNiguiri(g);
 		}
 		
-        Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		g2.drawString( "mouse x: " + mouseX, this.width - 300, 15);
-		g2.drawString( "mouse y: " + mouseY, this.width - 300, 30);
-		
+        for (Missile m: missileList)
+			m.print(g);
 		//for( Niguiri n: list)
 		//	n.print(g);
 	}

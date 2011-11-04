@@ -8,7 +8,6 @@ package units.Niguiri;
  */
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import player.DirPad;
 import player.Player;
@@ -16,16 +15,16 @@ import sprite.*;
 import sushiwar.Constants;
 import sushiwar.Screen;
 import units.Unit;
+import units.missile.ExplodingSushi;
 
 public class Niguiri extends Unit implements Constants {
 
 	//	--	Movimento  --
-	//private boolean			jumping		= false;
 	private NiguiriStatus	status		= null;
 	
 	//	--	Configurações  --
 	private Player			player		= null;
-	private Crosshair		crosshair	= null;
+	public  Crosshair		crosshair	= null;
 	private int				life		= 0;
 	private String			name		= null;
 	private InfoBar			infoBar		= null;
@@ -112,10 +111,7 @@ public class Niguiri extends Unit implements Constants {
 	
 	public int update() {
 		int updateStatus = super.update();
-		boolean hitGround = (updateStatus & Constants.MOVE_HIT_GROUND) != 0;
-		
-		if (this.player.getId()==0)
-			System.out.println(this + ": " + (updateStatus | Constants.MOVE_HIT_GROUND) + " " + status.name() + " " + onAir );
+		boolean hitGround = (updateStatus & Constants.MOVE_HITGROUND_VERTICAL) != 0;
 			
 		if (onAir && !hitGround)
 			setStatus( NiguiriStatus.JUMP );
@@ -198,10 +194,10 @@ public class Niguiri extends Unit implements Constants {
 			setStatus(NiguiriStatus.JUMP);
 		}
 		
-		else if ( e.getKeyCode() == KeyEvent.VK_0)
+		else if ( e.getKeyCode() == KeyEvent.VK_UP)
 			crosshair.changeAngle(5);
 		
-		else if ( e.getKeyCode() == KeyEvent.VK_9)
+		else if ( e.getKeyCode() == KeyEvent.VK_DOWN)
 			crosshair.changeAngle(-5);
 		
 		if (!onAir && isMoving())
@@ -209,6 +205,10 @@ public class Niguiri extends Unit implements Constants {
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
 			setPosition(screen.getRandomX(NIGUIRI_WIDTH),15);
+		
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			new ExplodingSushi( this, screen );
+		}
 		
 	}
 	
@@ -225,7 +225,7 @@ public class Niguiri extends Unit implements Constants {
 	public void print( Graphics g ){
 		super.print(g);
 		
-		if (respondControl)
+		if (respondControl && status == NiguiriStatus.STAND )
 			crosshair.print(g);
 		
 		//Graphics2D g2 = (Graphics2D) g;

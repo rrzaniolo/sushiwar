@@ -88,7 +88,7 @@ public class Unit extends Agent implements Constants {
 		if (dy < vy/MOVE_TIMER_PERIOD) {
 			vx = 0;
 			vy = 0;
-			returnStatus += Constants.MOVE_HIT_GROUND;
+			returnStatus += Constants.MOVE_HITGROUND_VERTICAL;
 		}
 		
 		//	Se a altura atual for maior que a altura de queda, unidade está
@@ -114,6 +114,7 @@ public class Unit extends Agent implements Constants {
 			this.move(-dx,0);
 			vx = 0;
 			vy = Math.max(vy, 0);
+			returnStatus += Constants.MOVE_HITGROUND_HORIZONTAL;
 		}
 		
 		return returnStatus;
