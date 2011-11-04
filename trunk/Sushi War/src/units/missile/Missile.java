@@ -13,7 +13,7 @@ public abstract class Missile extends Unit {
 	private int			damage;
 	private int			explosionRadius;
 	
-	public Missile( int x, int y, int w, int h, int damage, int explosionRadius, Screen screen ) {
+	public Missile( double x, double y, int w, int h, int damage, int explosionRadius, Screen screen ) {
 		super( x, y, w, h,  screen );
 		this.damage = damage;
 		this.explosionRadius = explosionRadius;

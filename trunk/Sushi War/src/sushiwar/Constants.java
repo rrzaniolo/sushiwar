@@ -42,6 +42,7 @@ public interface Constants {
 	static final double	CROSSHAIR_RADIUS		= 50;
 	static final double CROSSHAIR_ANGLE_MIN		= -Math.PI/2;
 	static final double CROSSHAIR_ANGLE_MAX		= Math.PI/3;
+	static final double	NIGUIRI_FIRE_RADIUS		= 20;
 	
 	//	--	Sprite stuff  --
 	static final int	SPRITE_TIMER_PERIOD		= 10;

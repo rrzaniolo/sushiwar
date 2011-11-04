@@ -24,7 +24,7 @@ public class Niguiri extends Unit implements Constants {
 	
 	//	--	Configurações  --
 	private Player			player		= null;
-	public  Crosshair		crosshair	= null;
+	private  Crosshair		crosshair	= null;
 	private int				life		= 0;
 	private String			name		= null;
 	private InfoBar			infoBar		= null;
@@ -170,6 +170,18 @@ public class Niguiri extends Unit implements Constants {
 	
 	public int getLife() {
 		return life;
+	}
+	
+	public double getFireX() {
+		return x + Constants.NIGUIRI_FIRE_RADIUS * Math.cos( crosshair.getAngle() );
+	}
+	
+	public double getFireY() {
+		return y + Constants.NIGUIRI_FIRE_RADIUS * Math.sin( crosshair.getAngle() );
+	}
+	
+	public double getFireAngle() {
+		return crosshair.getAngle();
 	}
 	
 	public String toString() {
