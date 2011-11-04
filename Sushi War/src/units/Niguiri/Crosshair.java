@@ -16,7 +16,7 @@ public class Crosshair extends Agent implements Constants {
 	
 	private Niguiri niguiri = null;
 	private Sprite sprite = null;
-	public double angle = 0;
+	private double angle = 0;
 	private double rotation = 0;
 	
 	
@@ -55,6 +55,10 @@ public class Crosshair extends Agent implements Constants {
 		rotation -= delta*Math.PI/180;
 		rotation = Math.min(rotation, CROSSHAIR_ANGLE_MAX);
 		rotation = Math.max(rotation, CROSSHAIR_ANGLE_MIN);
+	}
+
+	double getAngle() {
+		return angle;
 	}
 	
 }

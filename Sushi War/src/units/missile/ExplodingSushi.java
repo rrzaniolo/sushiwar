@@ -19,12 +19,14 @@ public class ExplodingSushi extends Missile {
 	
 	public ExplodingSushi( Niguiri niguiri, Screen screen ) {
 		
-		super( (int) niguiri.getPositionX(), (int) niguiri.getPositionY(), 30, 30, 20, 50, screen );
+		super( niguiri.getFireX(), niguiri.getFireY(), 30, 30, 20, 50, screen );
 		
-		sprite = new Sprite( "Sushi", 20, 20, screen );
-		sprite.addAnimation( new Animation( "stand", 0, 3, 20 ) );
+		sprite = new Sprite( "Sushi", 20, 20, screen, false );
 		
-		double angle = niguiri.crosshair.angle;
+		sprite.addAnimation( new Animation( "stand", 0, 3, 50, true ) );
+		sprite.playAnimationByIndex(0);
+		
+		double angle = niguiri.getFireAngle();
 		applySpeed( speed*Math.cos(angle), speed*Math.sin(angle) );
 		
 		screen.missileList.add(this);

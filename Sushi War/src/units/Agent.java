@@ -206,7 +206,7 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 	}
 	
 	public boolean isMoving() {
-		return ux != 0 || uy != 0;
+		return ux != 0;
 	}
 	
 	public boolean isControllable() {
