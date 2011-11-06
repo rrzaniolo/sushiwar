@@ -69,7 +69,7 @@ public class Niguiri extends Unit implements Constants {
 		infoBar = new InfoBar( this, screen );
 				
 		//	--	Stuff  --
-		screen.frame.addKeyListener( this );
+		screen.addNiguiri( this );
 	}
 	
 	//	--  Manipulação  ------------------------------------------------------
@@ -102,6 +102,14 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void setLife( int life ) {
 		this.life = life;
+	}
+	
+	public void doDamage( int damage ) {
+		life -= damage;
+		if (life < 0)
+			life = 0;
+		
+		infoBar.update();
 	}
 	
 	public void toggle( boolean on ) {
