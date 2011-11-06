@@ -19,7 +19,7 @@ public interface Constants {
 	static final int	MOVE_TIMER_PERIOD		= 10;
 	static final int	MOVE_CLIFF_TOLERANCE	= 5;
 	static final int	MOVE_FALLING_HEIGHT		= 15;
-	static final double MOVE_NIGUIRI_SPEED		= 7.5;
+	static final double MOVE_NIGUIRI_SPEED		= 3;
 	
 	static final int	MOVE_NIGUIRI_JUMP_KEY	= KeyEvent.VK_Q;
 	static final int	MOVE_NIGUIRI_HJUMP_KEY	= KeyEvent.VK_W;
@@ -33,7 +33,7 @@ public interface Constants {
 	
 	static final int    CHANGE_NIGUIRI_KEY      = KeyEvent.VK_C;
 	
-	static final double GRAVITY					= 15;
+	static final double GRAVITY					= 8;
 	
 	//	--	Niguiri stuff  --
 	

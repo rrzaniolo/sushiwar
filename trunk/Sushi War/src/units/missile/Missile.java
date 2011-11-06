@@ -11,7 +11,8 @@ import units.Unit;
 public abstract class Missile extends Unit {
 	
 	private int			damage;
-	private int			explosionRadius;
+	private double		explosionRadius;
+	private double		power = 20;
 	
 	public Missile( double x, double y, int w, int h, int damage, int explosionRadius, Screen screen ) {
 		super( x, y, w, h,  screen );
@@ -29,8 +30,8 @@ public abstract class Missile extends Unit {
 	}
 	
 	public void explode() {
-		screen.terrain.explode( x, y, explosionRadius );
-		screen.missileList.remove(this);
+		screen.explode( x, y, damage, explosionRadius, power );
+		screen.removeMissile(this);
 		this.moveTimer.finish();
 	}
 }

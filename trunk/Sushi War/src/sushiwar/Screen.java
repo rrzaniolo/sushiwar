@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -35,15 +35,20 @@ public class Screen extends JPanel implements Constants {
 	private int					playerActiveId	= 0;
     private ArrayList<Player>	playerList		= null;
     private Niguiri				niguiriActive	= null;
-	public	ArrayList<Missile>	missileList		= null;
-	public	JFrame				frame			= null;
-	public	Terrain				terrain			= null;
+	private	ArrayList<Missile>	missileList		= null;
+	private ArrayList<Niguiri>	niguiriList		= null;
+	private	JFrame				frame			= null;
+	private	Terrain				terrain			= null;
 	
 	private int					mouseX;
 	private int					mouseY;
 	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
+		
+		//	--	Inicializar listas --
+		missileList = new ArrayList<Missile>(0);
+		niguiriList = new ArrayList<Niguiri>(0);
 		
 		//	--	Inicializar janela  --
 		this.setLayout( null );
@@ -76,8 +81,44 @@ public class Screen extends JPanel implements Constants {
 
 		for (Player p: playerList)
 			p.startNiguiri();
+	}
+	
+	public void addNiguiri( Niguiri niguiri ) {
+		niguiriList.add(niguiri);
+		frame.addKeyListener(niguiri);
+	}
+	
+	public void removeNiguiri( Niguiri niguiri ) {
+		niguiriList.remove(niguiri);
+		frame.removeKeyListener(niguiri);
+	}
+	
+	public void addMissile( Missile missile ) {
+		missileList.add(missile);
+	}
+	
+	public void removeMissile( Missile missile ) {
+		missileList.remove(missile);
+	}
+	
+	//public void addKeyListener( KeyListener listener ) {
+	//	frame.addKeyListener( listener );
+	//}
+	
+	public void explode( double x, double y, int damage, double radius, double power ) {
+		terrain.explode( x, y, radius );
 		
-		missileList = new ArrayList<Missile>(0);
+		for (Niguiri target: niguiriList) {
+			double dx = target.getPositionX() - x;
+			double dy = target.getPositionY() - y;
+			
+			if (dx*dx + dy*dy <= radius*radius) {
+				double angle = Math.atan2(dy, dx);
+				
+				target.applySpeed( power*Math.cos(angle), power*Math.sin(angle));
+				target.doDamage(damage);
+			}
+		}
 	}
 	
 	public int isPointInScreen( int x, int y ) {
