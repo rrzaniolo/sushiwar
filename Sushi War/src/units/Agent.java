@@ -242,10 +242,9 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		if (respondControl) {
 			Direction pressed = DirPad.KeyEvent2Direction(e);
 
-			if ( controlPad.isDirectionPressed(pressed) )
-				keyReleasedOnce(e);
-
 			controlPad.setDirection( pressed, false );
+			
+			keyReleasedOnce(e);
 		}
 	}
 	
