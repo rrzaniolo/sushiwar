@@ -62,7 +62,7 @@ public class Sprite implements TimerListener, Constants {
 			
 			//	Sprite normal (direita)
 			spritesRight[i] = spriteSheet.getSubimage(x, y, width, height);
-
+			
 			//	Sprite espelhado (esquerda)
 			if (mirror) {
 				spritesLeft[i] = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
