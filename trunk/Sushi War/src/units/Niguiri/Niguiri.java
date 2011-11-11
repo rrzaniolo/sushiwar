@@ -16,6 +16,7 @@ import sushiwar.Constants;
 import sushiwar.Screen;
 import units.Unit;
 import units.missile.ExplodingSushi;
+import units.missile.PowerBar;
 
 public class Niguiri extends Unit implements Constants {
 
@@ -29,11 +30,12 @@ public class Niguiri extends Unit implements Constants {
 	private int				damageTaken = 0;
 	private String			name		= null;
 	private InfoBar			infoBar		= null;
+	private PowerBar		powerBar	= null;
 	
 	private static int		niguiriCount= 0;
 	
 	public enum NiguiriStatus {
-		STAND, WALK, JUMP, FALL, LAND, THROWN;
+		STAND, WALK, JUMP, FALL, LAND, THROWN, FIRE;
 	}
 	
 	//	-----------------------------------------------------------------------
@@ -57,6 +59,7 @@ public class Niguiri extends Unit implements Constants {
 		sprite.addAnimation( new Animation("jump", 14, 3, 30, false) );
 		sprite.addAnimation( new Animation("land", 17, 7, 40, false) );
 		sprite.addAnimation( new Animation("dizzy", 24, 4, 60, true) );
+		sprite.addAnimation( new Animation("fire", 6, 8, 40, true) );
 		
 		sprite.playAnimation("Stand");
 		status = NiguiriStatus.STAND;
@@ -70,6 +73,9 @@ public class Niguiri extends Unit implements Constants {
 		
 		infoBar = new InfoBar( this, screen );
 				
+		//	--	Power bar  --
+		powerBar = new PowerBar( this, screen );
+		
 		//	--	Stuff  --
 		screen.addNiguiri( this );
 	}
@@ -103,6 +109,10 @@ public class Niguiri extends Unit implements Constants {
 				playAnimation("dizzy");
 				ready = false;
 			}
+			else if (now == NiguiriStatus.FIRE) {
+				playAnimation("fire");
+				ready = false;
+			}
 		}
 	}
 	
@@ -116,6 +126,13 @@ public class Niguiri extends Unit implements Constants {
 			life = 0;
 		
 		infoBar.update();
+	}
+	
+	public void fire( int power ) {
+		ExplodingSushi sushi = new ExplodingSushi( this, power, screen );
+		System.out.println("FIRE");
+		powerBar.toggle(false);
+		setStatus( NiguiriStatus.STAND );
 	}
 	
 	public void toggle( boolean on ) {
@@ -226,21 +243,29 @@ public class Niguiri extends Unit implements Constants {
 		else if ( e.getKeyCode() == KeyEvent.VK_DOWN)
 			crosshair.changeAngle(-5);
 		
+		else if ( ready && e.getKeyCode() == KeyEvent.VK_SPACE) {
+			setStatus( NiguiriStatus.FIRE );
+			powerBar.reset();
+			powerBar.toggle(true);
+		}
+		
 		if (!onAir && isMoving())
 			setStatus(NiguiriStatus.WALK);
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
 			setPosition(screen.getRandomX(NIGUIRI_WIDTH),15);
 		
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			new ExplodingSushi( this, screen );
-		}
-		
 	}
 	
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
+		
+		System.out.println( e.getKeyCode() + " " + KeyEvent.VK_SPACE);
+		if ( status == NiguiriStatus.FIRE && e.getKeyCode() == KeyEvent.VK_SPACE ) {
+			fire( powerBar.getPercentage() );
+		}
+		
 		if (!isMoving())
 			this.setStatus(NiguiriStatus.STAND);
 	}

@@ -15,9 +15,9 @@ import units.Niguiri.Niguiri;
  */
 public class ExplodingSushi extends Missile {
 	
-	static final double		speed	= 30;
+	static final double		MAX_SPEED	= 100;
 	
-	public ExplodingSushi( Niguiri niguiri, Screen screen ) {
+	public ExplodingSushi( Niguiri niguiri, double firePower, Screen screen ) {
 		
 		super( niguiri.getFireX(), niguiri.getFireY(), 30, 30, 20, 50, screen );
 		
@@ -27,6 +27,7 @@ public class ExplodingSushi extends Missile {
 		sprite.playAnimationByIndex(0);
 		
 		double angle = niguiri.getFireAngle();
+		double speed = MAX_SPEED * firePower/100;
 		applySpeed( speed*Math.cos(angle), speed*Math.sin(angle) );
 		
 		screen.addMissile(this);
