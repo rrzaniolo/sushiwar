@@ -3,11 +3,9 @@ package sushiwar;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -18,6 +16,7 @@ import player.Player;
 import scenario.Terrain;
 import units.Agent;
 import units.Niguiri.Niguiri;
+import units.Niguiri.Niguiri.NiguiriStatus;
 import units.missile.Missile;
 
 /**
@@ -116,7 +115,8 @@ public class Screen extends JPanel implements Constants {
 				double angle = Math.atan2(dy, dx);
 				
 				target.applySpeed( power*Math.cos(angle), power*Math.sin(angle));
-				target.doDamage(damage);
+				target.applyDamage(damage);
+				target.setStatus( NiguiriStatus.DIZZY );
 			}
 		}
 	}
@@ -232,6 +232,10 @@ public class Screen extends JPanel implements Constants {
 		
 		for (Player p: playerList) {
 			p.printNiguiri(g);
+		}
+		
+		for (Niguiri n: niguiriList) {
+			n.printCrosshair(g);
 		}
 		
         for (Missile m: missileList)

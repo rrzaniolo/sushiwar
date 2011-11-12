@@ -1,7 +1,9 @@
 package units.missile;
 
+import java.awt.Color;
 import javax.swing.BoundedRangeModel;
 import javax.swing.JProgressBar;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeListener;
 import sushiwar.Constants;
 import sushiwar.Screen;
@@ -31,6 +33,9 @@ public class PowerBar implements Constants {
 					   (int) niguiri.getPositionY() + 50,
 					   POWERBAR_WIDTH,
 					   POWERBAR_HEIGHT );
+		bar.setBorder( new LineBorder( Color.white ) );
+		bar.setBackground( Color.black );
+
 		screen.add( bar );
 		bar.setVisible(false);
 		
@@ -49,11 +54,15 @@ public class PowerBar implements Constants {
 		if (percent < 100) {
 			percent += 1;
 			bar.setValue(percent);
+			
+			int g = 255 - percent*255/100;
+			bar.setForeground( new Color( 0xffff0000 | g << 8 ) );
 		}
 	}
 	
 	public void toggle( boolean on ) {
 		bar.setVisible(on);
+		update();
 		
 		if (timer.isAlive())
 			timer.pause(!on);
@@ -64,6 +73,7 @@ public class PowerBar implements Constants {
 	public void reset() {
 		percent = 0;
 		bar.setValue(0);
+		bar.setForeground( Color.yellow );
 	}
 	
 	public int getPercentage() {
