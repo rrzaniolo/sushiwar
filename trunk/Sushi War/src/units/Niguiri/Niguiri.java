@@ -35,7 +35,7 @@ public class Niguiri extends Unit implements Constants {
 	private static int		niguiriCount= 0;
 	
 	public enum NiguiriStatus {
-		STAND, WALK, JUMP, FALL, LAND, THROWN, FIRE;
+		STAND, WALK, JUMP, FALL, LAND, DIZZY, FIRE, CRY, DIE;
 	}
 	
 	//	-----------------------------------------------------------------------
@@ -47,7 +47,7 @@ public class Niguiri extends Unit implements Constants {
 		this.life = NIGUIRI_INITIAL_LIFE;
 		
 		//	--	Sprite  --
-		sprite = new Sprite( "niguiri3", 30, 30, screen );
+		sprite = new Sprite( "niguiri4", 30, 30, screen );
 		
 		//	--	Animations  --
 		Animation anim;
@@ -58,8 +58,14 @@ public class Niguiri extends Unit implements Constants {
 		sprite.addAnimation( new Animation("walk", 6, 8, 40, true) );
 		sprite.addAnimation( new Animation("jump", 14, 3, 30, false) );
 		sprite.addAnimation( new Animation("land", 17, 7, 40, false) );
-		sprite.addAnimation( new Animation("dizzy", 24, 4, 60, true) );
-		sprite.addAnimation( new Animation("fire", 6, 8, 40, true) );
+		sprite.addAnimation( new Animation("dizzy", 24, 8, 25, true) );
+		sprite.addAnimation( new Animation("fire", 32, 3, 40, false) );
+		anim = new Animation("cry", 35, 8, 60, true);
+		anim.setFramePeriod(4, 1000);
+		sprite.addAnimation( anim );
+		anim = new Animation("die", 43, 12, 60, false);
+		anim.setFramePeriod(3, 1000);
+		sprite.addAnimation( anim );
 		
 		sprite.playAnimation("Stand");
 		status = NiguiriStatus.STAND;
@@ -105,12 +111,20 @@ public class Niguiri extends Unit implements Constants {
 				playAnimation("stand");
 				ready = true;
 			}
-			else if (now == NiguiriStatus.THROWN) {
+			else if (now == NiguiriStatus.DIZZY) {
 				playAnimation("dizzy");
 				ready = false;
 			}
 			else if (now == NiguiriStatus.FIRE) {
-				playAnimation("fire");
+				playAnimation("die");
+				ready = false;
+			}
+			else if (now == NiguiriStatus.CRY) {
+				playAnimation("cry");
+				ready = false;
+			}
+			else if (now == NiguiriStatus.DIE) {
+				playAnimation("die");
 				ready = false;
 			}
 		}
@@ -120,12 +134,12 @@ public class Niguiri extends Unit implements Constants {
 		this.life = life;
 	}
 	
-	public void doDamage( int damage ) {
-		life -= damage;
-		if (life < 0)
-			life = 0;
-		
-		infoBar.update();
+	public void applyDamage( int damage ) {
+		damageTaken += damage;
+	}
+	
+	public void kill() {
+		setStatus( NiguiriStatus.DIE );
 	}
 	
 	public void fire( int power ) {
@@ -143,9 +157,13 @@ public class Niguiri extends Unit implements Constants {
 	public int update() {
 		int updateStatus = super.update();
 		boolean hitGround = (updateStatus & Constants.MOVE_HITGROUND_VERTICAL) != 0;
-			
-		if (onAir && !hitGround)
-			setStatus( NiguiriStatus.JUMP );
+		
+		if (onAir && !hitGround) {
+			if (damageTaken == 0)
+				setStatus( NiguiriStatus.JUMP );
+			else
+				setStatus( NiguiriStatus.DIZZY );
+		}
 		
 		if (hitGround && status == NiguiriStatus.JUMP) {
 			setStatus( NiguiriStatus.LAND );
@@ -159,26 +177,7 @@ public class Niguiri extends Unit implements Constants {
 					setStatus( NiguiriStatus.STAND );
 			}
 		}
-		
-		/*if (onAir)
-			setStatus(NiguiriStatus.FALL);
-		
-		if (!onAir) {
-			if (status == NiguiriStatus.FALL && (hitGround|Constants.MOVE_HIT_GROUND) > 0)
-				setStatus(NiguiriStatus.LAND);
-			
-			else if (status == NiguiriStatus.LAND || status == NiguiriStatus.FALL) {
-				if (sprite.isDone())
-					setStatus(NiguiriStatus.STAND);
-			}
-			
-			else if (isMoving())
-				setStatus(NiguiriStatus.WALK);
-			else if (status == NiguiriStatus.WALK) {
-				setStatus(NiguiriStatus.STAND);
-			}
-		}*/
-		
+				
 		infoBar.update();
 		crosshair.update();
 		
@@ -213,6 +212,10 @@ public class Niguiri extends Unit implements Constants {
 	
 	public double getFireAngle() {
 		return crosshair.getAngle();
+	}
+	
+	public int getDamageTaken() {
+		return damageTaken;
 	}
 	
 	public String toString() {
@@ -275,12 +278,11 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void print( Graphics g ){
 		super.print(g);
-		
+	}
+	
+	public void printCrosshair( Graphics g ) {
 		if (respondControl && status == NiguiriStatus.STAND )
 			crosshair.print(g);
-		
-		//Graphics2D g2 = (Graphics2D) g;
-		//g2.fill(collisionBox);//.fillRect( (int) collisionBox.getMinX(), (int) collisionBox.getMinY(), (int) collisionBox.width, (int) collisionBox.height );
 	}
        
 }

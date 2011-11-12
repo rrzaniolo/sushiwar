@@ -10,14 +10,19 @@ import units.Unit;
  */
 public abstract class Missile extends Unit {
 	
-	private int			damage;
-	private double		explosionRadius;
-	private double		power = 100;
+	private		int			damage;
+	private		double		explosionRadius;
+	protected	double		explosionPower;
 	
-	public Missile( double x, double y, int w, int h, int damage, int explosionRadius, Screen screen ) {
+	protected static final double	MAX_SPEED = 50;
+	
+	public Missile( double x, double y, int w, int h, int damage, int explosionRadius, int explosionPower, Screen screen ) {
 		super( x, y, w, h,  screen );
+		setCollisionBoxCenter( 5, 5 );
+		
 		this.damage = damage;
 		this.explosionRadius = explosionRadius;
+		this.explosionPower = explosionPower;
 	}
 	
 	public int update() {
@@ -30,7 +35,7 @@ public abstract class Missile extends Unit {
 	}
 	
 	public void explode() {
-		screen.explode( x, y, damage, explosionRadius, power );
+		screen.explode( x, y, damage, explosionRadius, explosionPower );
 		screen.removeMissile(this);
 		this.moveTimer.finish();
 	}
