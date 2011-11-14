@@ -10,10 +10,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import player.Player;
 import scenario.Terrain;
+import timer.Timer;
+import timer.TimerListener;
 import units.Agent;
 import units.Niguiri.Niguiri;
 import units.Niguiri.Niguiri.NiguiriStatus;
@@ -38,9 +42,15 @@ public class Screen extends JPanel implements Constants {
 	private ArrayList<Niguiri>	niguiriList		= null;
 	private	JFrame				frame			= null;
 	private	Terrain				terrain			= null;
+	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
+	private Timer				gameTimer;
 	
 	private int					mouseX;
 	private int					mouseY;
+	
+	public enum GameStatus {
+		PLAYER_TURN, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
+	}
 	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
@@ -80,6 +90,9 @@ public class Screen extends JPanel implements Constants {
 
 		for (Player p: playerList)
 			p.startNiguiri();
+		
+		gameTimer = new Timer( new TimerControl(), 1000 );
+		gameTimer.start();
 	}
 	
 	public void addNiguiri( Niguiri niguiri ) {
@@ -99,10 +112,15 @@ public class Screen extends JPanel implements Constants {
 	public void removeMissile( Missile missile ) {
 		missileList.remove(missile);
 	}
-	
-	//public void addKeyListener( KeyListener listener ) {
-	//	frame.addKeyListener( listener );
-	//}
+
+	public void setGameStatus( GameStatus status ) {
+		gameStatus = status;
+		System.out.println( status.toString() );
+		if (status == GameStatus.PLAYER_TURN)
+			pauseTurn(false);
+		else
+			pauseTurn(true);
+	}
 	
 	public void explode( double x, double y, int damage, double radius, double power ) {
 		terrain.explode( x, y, radius );
@@ -119,6 +137,23 @@ public class Screen extends JPanel implements Constants {
 				target.setStatus( NiguiriStatus.DIZZY );
 			}
 		}
+		
+		setGameStatus( Screen.GameStatus.EXPLOSION_TIME );
+	}
+	
+	public void pauseTurn( boolean pause ) {
+		playerActive.toggle( !pause );
+	}
+	
+	public void nextTurn() {
+		playerActive.toggle(false);
+				
+		playerActiveId = ( playerActiveId + 1 ) % PLAYER_COUNT;
+		playerActive = playerList.get( playerActiveId );
+		playerActive.nextNiguiri();
+		playerActive.toggle( true );
+		
+		setGameStatus( GameStatus.PLAYER_TURN );
 	}
 	
 	public int isPointInScreen( int x, int y ) {
@@ -190,6 +225,48 @@ public class Screen extends JPanel implements Constants {
 		return size/2 + (int) (Math.random() * (width-size));
 	}
 	
+	public boolean checkMovement() {
+		for (Niguiri n: niguiriList)
+			if (n.getSpeed() > 0 )
+				return true;
+		
+		return false;
+	}
+	
+	public GameStatus getGameStatus() {
+		return gameStatus;
+	}
+	
+	public void update() {
+		if ( gameStatus == GameStatus.PLAYER_TURN ) {
+			
+		}
+		else if ( gameStatus == GameStatus.EXPLOSION_TIME ) {
+			if (!checkMovement())
+				setGameStatus( GameStatus.DAMAGE_DEAL );
+		}
+		else if ( gameStatus == GameStatus.DAMAGE_DEAL ) {
+			for (Niguiri n: niguiriList )
+				n.doDamage();
+			
+			try {
+				Timer.sleep(2000);
+			} catch (InterruptedException ex) {	}
+			
+			setGameStatus( GameStatus.NIGUIRI_DEATH );
+		}
+		else if ( gameStatus == GameStatus.NIGUIRI_DEATH ) {
+			for (Niguiri n: niguiriList )
+				if (n.getLife() == 0)
+					n.kill();
+			try {
+				Timer.sleep(2000);
+			} catch (InterruptedException ex) { }
+			
+			nextTurn();
+		}
+	}
+	
 	//	--	Classes de controle de eventos  --
 	
 	class MouseControl extends MouseAdapter {
@@ -213,17 +290,22 @@ public class Screen extends JPanel implements Constants {
 
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode()== KeyEvent.VK_C){
-				playerActive.toggle(false);
 				
-				playerActiveId = ( playerActiveId + 1 ) % PLAYER_COUNT;
-				playerActive = playerList.get( playerActiveId );
-				playerActive.nextNiguiri();
-				playerActive.toggle( true );
 			}
 		}
 
 	}
 
+	class TimerControl implements TimerListener {
+
+		@Override
+		public int update() {
+			Screen.this.update();
+			return 0;
+		}
+		
+	}
+	
 	@Override
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent(g);
@@ -240,6 +322,7 @@ public class Screen extends JPanel implements Constants {
 		
         for (Missile m: missileList)
 			m.print(g);
+		
 		//for( Niguiri n: list)
 		//	n.print(g);
 	}
