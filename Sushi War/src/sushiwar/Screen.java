@@ -61,11 +61,6 @@ public class Screen extends JPanel implements Constants {
         
         // --   Inicilizar som --
         url = Screen.class.getClassLoader().getResource("Music/" + music);
-        
-        System.out.println("----------"); // só pra achar a url mais fácil...
-        System.out.println(url);
-        System.out.println("----------");
-        
         this.music = url.getPath();
         this.gameSound = new Sound(music);
 		
