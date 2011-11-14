@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +45,9 @@ public class Screen extends JPanel implements Constants {
 	private	Terrain				terrain			= null;
 	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
 	private Timer				gameTimer;
+    private Sound               gameSound       = null;
+    private URL                 url;
+    private String              music           = "(00)CanonD";
 	
 	private int					mouseX;
 	private int					mouseY;
@@ -54,6 +58,14 @@ public class Screen extends JPanel implements Constants {
 	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
+        
+        // --   Inicilizar som --
+        url = Screen.class.getResource("/Music/(00)CanonD.mp3");
+        System.out.println("----------"); // só pra achar a url mais fácil...
+        System.out.println(url);
+        System.out.println("----------");
+        this.music = url.toString();
+        this.gameSound = new Sound(music);
 		
 		//	--	Inicializar listas --
 		missileList = new ArrayList<Missile>(0);
@@ -93,6 +105,7 @@ public class Screen extends JPanel implements Constants {
 		
 		gameTimer = new Timer( new TimerControl(), 1000 );
 		gameTimer.start();
+        gameSound.start();   
 	}
 	
 	public void addNiguiri( Niguiri niguiri ) {
