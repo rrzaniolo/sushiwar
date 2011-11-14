@@ -1,6 +1,7 @@
 
 package sushiwar;
 
+// -- Manipula a execução dos son e musicas do Jogo --
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
