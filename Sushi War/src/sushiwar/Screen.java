@@ -271,6 +271,7 @@ public class Screen extends JPanel implements Constants {
 	
 	class MouseControl extends MouseAdapter {
 		
+        @Override
 		public void mousePressed( MouseEvent e ) {
 			terrain.explode( e.getX(), e.getY(), 30 );
 		}
@@ -279,6 +280,7 @@ public class Screen extends JPanel implements Constants {
 	
 	class MotionControl extends MouseMotionAdapter {
 		
+        @Override
 		public void mouseMoved( MouseEvent e ) {
 			Screen.this.mouseX = e.getX();
 			Screen.this.mouseY = e.getY();
@@ -288,6 +290,7 @@ public class Screen extends JPanel implements Constants {
         
 	class KeyControl extends KeyAdapter {
 
+        @Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode()== KeyEvent.VK_C){
 				
