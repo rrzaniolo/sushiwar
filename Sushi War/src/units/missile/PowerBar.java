@@ -23,14 +23,14 @@ public class PowerBar implements Constants {
 	private Timer				timer;
 	
 	private static final int	POWERBAR_WIDTH	= 100;
-	private static final int	POWERBAR_HEIGHT	= 5;
+	private static final int	POWERBAR_HEIGHT	= 10;
 	
 	public PowerBar( Niguiri niguiri, Screen screen ) {
 		//model = new BoundedRangeModel()
 		bar = new JProgressBar(0, 100);
 		bar.setValue(0);
 		bar.setBounds( (int) niguiri.getPositionX() - POWERBAR_WIDTH/2,
-					   (int) niguiri.getPositionY() + 50,
+					   (int) niguiri.getPositionY() + 30,
 					   POWERBAR_WIDTH,
 					   POWERBAR_HEIGHT );
 		bar.setBorder( new LineBorder( Color.white ) );

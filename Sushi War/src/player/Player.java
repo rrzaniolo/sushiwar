@@ -69,6 +69,13 @@ public final class Player implements Constants {
 		niguiriActive = niguiriList.get( niguiriActiveId );
 	}
 	
+	public void removeNiguiri( Niguiri niguiri ) {
+		if (niguiri == niguiriActive)
+			nextNiguiri();
+		
+		niguiriList.remove(niguiri);
+	}
+	
 	public void startNiguiri() {
 		for (Niguiri n: niguiriList)
 			n.startTimer();

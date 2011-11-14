@@ -116,7 +116,7 @@ public class Niguiri extends Unit implements Constants {
 				ready = false;
 			}
 			else if (now == NiguiriStatus.FIRE) {
-				playAnimation("die");
+				playAnimation("fire");
 				ready = false;
 			}
 			else if (now == NiguiriStatus.CRY) {
@@ -136,6 +136,12 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void applyDamage( int damage ) {
 		damageTaken += damage;
+	}
+	
+	public void doDamage() {
+		life = Math.max( life -= damageTaken, 0 );
+		if (life == 0)
+			kill();
 	}
 	
 	public void kill() {
@@ -158,14 +164,20 @@ public class Niguiri extends Unit implements Constants {
 		int updateStatus = super.update();
 		boolean hitGround = (updateStatus & Constants.MOVE_HITGROUND_VERTICAL) != 0;
 		
-		if (onAir && !hitGround) {
+		if (status == NiguiriStatus.DIE) {
+			if (sprite.isDone()) {
+				remove();
+			}
+		}
+		
+		else if (onAir && !hitGround) {
 			if (damageTaken == 0)
 				setStatus( NiguiriStatus.JUMP );
 			else
 				setStatus( NiguiriStatus.DIZZY );
 		}
 		
-		if (hitGround && status == NiguiriStatus.JUMP) {
+		if (hitGround && (status == NiguiriStatus.JUMP || status == NiguiriStatus.DIZZY) ) {
 			setStatus( NiguiriStatus.LAND );
 		}
 		
@@ -182,6 +194,13 @@ public class Niguiri extends Unit implements Constants {
 		crosshair.update();
 		
 		return 0;
+	}
+	
+	public void remove() {
+		player.removeNiguiri(this);
+		moveTimer.finish();
+		sprite.remove();
+		screen.removeNiguiri(this);
 	}
 	
 	//	--  Informação  -------------------------------------------------------
