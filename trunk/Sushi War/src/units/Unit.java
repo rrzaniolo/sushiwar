@@ -153,6 +153,10 @@ public class Unit extends Agent implements Constants {
 		return false;
 	}
 	
+	public double getSpeed() {
+		return Math.sqrt( vx*vx + vy*vy );
+	}
+	
 	//	--	Eventos  ----------------------------------------------------------
 	
 	@Override

@@ -140,8 +140,7 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void doDamage() {
 		life = Math.max( life -= damageTaken, 0 );
-		if (life == 0)
-			kill();
+		damageTaken = 0;
 	}
 	
 	public void kill() {
@@ -150,9 +149,9 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void fire( int power ) {
 		ExplodingSushi sushi = new ExplodingSushi( this, power, screen );
-		System.out.println("FIRE");
 		powerBar.toggle(false);
 		setStatus( NiguiriStatus.STAND );
+		
 	}
 	
 	public void toggle( boolean on ) {
@@ -283,7 +282,6 @@ public class Niguiri extends Unit implements Constants {
 	public void keyReleasedOnce( KeyEvent e ) {
 		super.keyReleasedOnce(e);
 		
-		System.out.println( e.getKeyCode() + " " + KeyEvent.VK_SPACE);
 		if ( status == NiguiriStatus.FIRE && e.getKeyCode() == KeyEvent.VK_SPACE ) {
 			fire( powerBar.getPercentage() );
 		}
