@@ -148,7 +148,11 @@ public class Sprite implements TimerListener, Constants {
 		
 		return true;
 	}
-
+	
+	public void remove() {
+		timer.finish();
+	}
+	
 	@Override
 	public int update() {
 		if (animNow != null) {
