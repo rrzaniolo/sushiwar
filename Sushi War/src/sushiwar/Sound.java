@@ -31,7 +31,7 @@ public class Sound extends Thread{
         try {
             this.player.play();
         } catch (JavaLayerException ex) {
-            
+            System.out.println(ex.getMessage());
         }
     }
 
