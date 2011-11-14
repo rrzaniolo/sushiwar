@@ -47,7 +47,7 @@ public class Screen extends JPanel implements Constants {
 	private Timer				gameTimer;
     private Sound               gameSound       = null;
     private URL                 url;
-    private String              music           = "MushishiOP";
+    private String              music           = "(00)CanonD.mp3";
 	
 	private int					mouseX;
 	private int					mouseY;
@@ -60,13 +60,13 @@ public class Screen extends JPanel implements Constants {
 		super();
         
         // --   Inicilizar som --
-        url = Screen.class.getResource("/Music/MushishiOP.mp3");
+        url = Screen.class.getClassLoader().getResource("Music/" + music);
         
         System.out.println("----------"); // só pra achar a url mais fácil...
         System.out.println(url);
         System.out.println("----------");
         
-        this.music = url.toString();
+        this.music = url.getPath();
         this.gameSound = new Sound(music);
 		
 		//	--	Inicializar listas --

@@ -15,15 +15,16 @@ public class Sound extends Thread{
     private String music;
     
     public Sound(String music) {
+        music = music.replaceAll("%20", " ");
         try {
             this.music = music;
             this.fls = new FileInputStream(this.music);
             this.player = new Player(fls);
             }
         catch (FileNotFoundException ex) {
-                Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
-            }            catch (JavaLayerException ex) {
-                Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(ex.getMessage());
+            }catch (JavaLayerException ex) {
+                System.out.println(ex.getMessage());
             }
              
 }
