@@ -11,6 +11,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import player.DirPad;
 import player.Player;
+import sound.Music;
+import sound.Sound;
 import sprite.*;
 import sushiwar.Constants;
 import sushiwar.Screen;
@@ -46,28 +48,7 @@ public class Niguiri extends Unit implements Constants {
 		this.player = player;
 		this.life = NIGUIRI_INITIAL_LIFE;
 		
-		//	--	Sprite  --
-		sprite = new Sprite( "niguiri4", 30, 30, screen );
-		
-		//	--	Animations  --
-		Animation anim;
-
-		anim = new Animation("stand", 0, 6, 40, true);
-		anim.setFramePeriod(0, 2500);
-		sprite.addAnimation( anim );
-		sprite.addAnimation( new Animation("walk", 6, 8, 40, true) );
-		sprite.addAnimation( new Animation("jump", 14, 3, 30, false) );
-		sprite.addAnimation( new Animation("land", 17, 7, 40, false) );
-		sprite.addAnimation( new Animation("dizzy", 24, 8, 25, true) );
-		sprite.addAnimation( new Animation("fire", 32, 3, 40, false) );
-		anim = new Animation("cry", 35, 8, 60, true);
-		anim.setFramePeriod(4, 1000);
-		sprite.addAnimation( anim );
-		anim = new Animation("die", 43, 12, 60, false);
-		anim.setFramePeriod(3, 1000);
-		sprite.addAnimation( anim );
-		
-		sprite.playAnimation("Stand");
+		sprite = new NiguiriSprite( screen );
 		status = NiguiriStatus.STAND;
 		
 		//	--	Crosshair  --

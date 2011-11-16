@@ -31,8 +31,8 @@ public class Sprite implements TimerListener, Constants {
 	private int width;
 	private int height;
 	
-	private Animation animNow;
-	private int frameNow;
+	protected Animation animNow;
+	protected int frameNow;
 	private int timeCount;
 	private Screen screen;
 	

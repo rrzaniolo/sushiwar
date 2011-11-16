@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import player.Player;
 import scenario.Terrain;
+import sound.Music;
 import timer.Timer;
 import timer.TimerListener;
 import units.Agent;
@@ -45,9 +46,6 @@ public class Screen extends JPanel implements Constants {
 	private	Terrain				terrain			= null;
 	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
 	private Timer				gameTimer;
-    private Sound               gameSound       = null;
-    private URL                 url;
-    private String              music           = "(00)CanonD.mp3";
 	
 	private int					mouseX;
 	private int					mouseY;
@@ -59,10 +57,13 @@ public class Screen extends JPanel implements Constants {
 	public Screen( int w, int h, JFrame frame ) {
 		super();
         
-        // --   Inicilizar som --
+        /*// --   Inicilizar som --
         url = Screen.class.getClassLoader().getResource("Music/" + music);
         this.music = url.getPath();
         this.gameSound = new Sound(music);
+		*/
+		
+		Music gameMusic = new Music("Jinggle");
 		
 		//	--	Inicializar listas --
 		missileList = new ArrayList<Missile>(0);
@@ -102,7 +103,8 @@ public class Screen extends JPanel implements Constants {
 		
 		gameTimer = new Timer( new TimerControl(), 1000 );
 		gameTimer.start();
-        gameSound.start();   
+        
+		gameMusic.play();
 	}
 	
 	public void addNiguiri( Niguiri niguiri ) {
