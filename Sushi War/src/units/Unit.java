@@ -183,32 +183,14 @@ public class Unit extends Agent implements Constants {
 		if (sprite != null){
 			sprite.print( x-width/2, y-height/2, g, facing);
 		}
-		
-		if (showDebug) {
-			Graphics2D g2 = (Graphics2D) g;
-			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	}
+	
+	public void print( Graphics g, double sx, double sy ) {
+		if (sprite != null){
+			double nx = x-width/2 + sx;
+			double ny = y-height/2 + sy;
 			
-			String show = "";
-			g2.drawString( "fh: " + (int) screen.getAgentFlyHeight(this), (int) x, (int) y - 40);
-			g2.drawString( "vy: " + (int) vy, (int) x, (int) y - 30);
-			if (controlPad.isDirectionPressed(Direction.LEFT))
-				show += "L ";
-			else
-				show += ". ";
-			if (controlPad.isDirectionPressed(Direction.RIGHT))
-				show += "R ";
-			else
-				show += ". ";
-			if (controlPad.isDirectionPressed(Direction.UP))
-				show += "U ";
-			else
-				show += ". ";
-			if (controlPad.isDirectionPressed(Direction.DOWN))
-				show += "D ";
-			else
-				show += ". ";
-			
-			g2.drawString( show, (int) x, (int) y - 20);
+			sprite.print( nx, ny, g, facing);
 		}
 	}
 

@@ -98,8 +98,12 @@ public class NiguiriButton {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (action != null)
-				action.execute();
+			if (action != null) {
+				int mx = e.getX();
+				int my = e.getY();
+				if ( mx > x && mx < x+width && my > y && my < y+height )
+					action.execute();
+			}
 		}
 		
 	}

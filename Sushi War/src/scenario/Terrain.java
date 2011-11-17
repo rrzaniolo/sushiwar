@@ -4,6 +4,7 @@
  */
 package scenario;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -22,16 +23,46 @@ import units.Agent;
  */
 public class Terrain implements Constants{
 	
+	private static final int BORDER_WIDTH = 5;
+	
 	public Terrain( String file, Screen screen ) {
-		//	Carregando spritesheet
-		URL fileURL = Sprite.class.getResource("/assets/" + file + ".png");
+		//	Imagem do terreno
+		URL fileURL = Terrain.class.getResource("/assets/" + file + ".png");
 		Image tmpImage = new ImageIcon(fileURL).getImage();
 		
-		//	Copiando para uma BufferedImage, para que
-		//	possamos cortá-la em sprites
+		//	Imagem da textura
+		fileURL = Terrain.class.getResource("/assets/foreground.png");
+		Image tmpTex = new ImageIcon(fileURL).getImage();
+		
+		BufferedImage texture = new BufferedImage( tmpTex.getWidth(null), tmpTex.getHeight(null), BufferedImage.TYPE_INT_ARGB );
+		Graphics g = texture.getGraphics();
+		g.drawImage(tmpTex, 0, 0, null);
+		
+		//	Construir a imagem do terreno
 		landImage = new BufferedImage( tmpImage.getWidth(null), tmpImage.getHeight(null), BufferedImage.TYPE_INT_ARGB );
-		Graphics g = landImage.getGraphics();
+		g = landImage.getGraphics();
 		g.drawImage(tmpImage, 0, 0, null);
+		
+		int width = landImage.getWidth();
+		int height = landImage.getHeight();
+		for (int i = 0; i < width; i++)
+			for (int j = 0; j < height; j++)
+				if ((landImage.getRGB(i, j) & 0x11000000) != 0) {
+					
+					boolean isBorder = false;
+					
+					//  Verificar se é borda
+					for (int m = -BORDER_WIDTH; m < BORDER_WIDTH && !isBorder; m++)
+						for (int n = -BORDER_WIDTH; n < BORDER_WIDTH && !isBorder; n++)
+							if (i+m >= 0 && j+n >= 0 && i+m < width && j+n < height)
+								if ((landImage.getRGB(i+m, j+n) & 0x11000000) == 0)
+									isBorder = true;
+					
+					if (isBorder)
+						landImage.setRGB(i, j, Math.min(0xffffffff, texture.getRGB(i,j) + 0x00404000));
+					else
+						landImage.setRGB(i, j, texture.getRGB(i,j));
+				}
 		g.dispose();
 		
 		//	Restante
@@ -115,7 +146,8 @@ public class Terrain implements Constants{
 					return y - minY;
 				}
 		
-		return maxY - minY;
+		return 1500;
+		//return maxY - minY;
 	}
 	
 	/**
@@ -148,6 +180,15 @@ public class Terrain implements Constants{
 		Graphics2D g2 = (Graphics2D) g;
 		
 		g2.drawImage( landImage, 0, 0, null );
+	}
+	
+	public void print( Graphics g, double sx, double sy ) {
+		Graphics2D g2 = (Graphics2D) g;
+		
+		int x = (int) sx;
+		int y = (int) sy;
+		
+		g2.drawImage( landImage, x, y, null );
 	}
 	
 	private Screen screen = null;

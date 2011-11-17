@@ -55,6 +55,11 @@ public final class Player implements Constants {
             n.print(g);
     }
 	
+	public void printNiguiri( Graphics g, double sx, double sy ) {
+        for (Niguiri n: niguiriList)
+            n.print(g, sx, sy);
+    }
+	
 	public void toggle( boolean on ) {
 		this.active = on;
 		this.niguiriActive.toggle(on);
