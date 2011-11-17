@@ -51,6 +51,12 @@ public class Crosshair extends Agent implements Constants {
 		}
 	}
 	
+	public void print( Graphics g, double sx, double sy ) {
+		if (sprite != null){
+			sprite.print( x-width/2 + sx, y-height/2 + sy, g, angle );
+		}
+	}
+	
 	public void changeAngle( double delta ) {
 		rotation -= delta*Math.PI/180;
 		rotation = Math.min(rotation, CROSSHAIR_ANGLE_MAX);

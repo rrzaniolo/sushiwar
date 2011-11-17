@@ -11,11 +11,9 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import player.DirPad;
 import player.Player;
-import sound.Music;
-import sound.Sound;
-import sprite.*;
 import sushiwar.Constants;
 import sushiwar.Screen;
+import sushiwar.Screen.GameStatus;
 import units.Unit;
 import units.missile.ExplodingSushi;
 import units.missile.PowerBar;
@@ -133,6 +131,7 @@ public class Niguiri extends Unit implements Constants {
 		powerBar.toggle(false);
 		setStatus( NiguiriStatus.STAND );
 		
+		screen.setGameStatus( Screen.GameStatus.MISSILE_FLY );
 	}
 	
 	public void toggle( boolean on ) {
@@ -169,7 +168,14 @@ public class Niguiri extends Unit implements Constants {
 					setStatus( NiguiriStatus.STAND );
 			}
 		}
-				
+		
+		int boxStatus = screen.isBoxInScreen(box);
+		if ((boxStatus & 0x11011) != 0 && (boxStatus &0x10000) > 0) {
+			if (screen.getGameStatus() == GameStatus.PLAYER_TURN)
+				screen.setGameStatus( GameStatus.EXPLOSION_TIME );
+			remove();
+		}
+		
 		infoBar.update();
 		crosshair.update();
 		
@@ -281,9 +287,18 @@ public class Niguiri extends Unit implements Constants {
 		super.print(g);
 	}
 	
+	public void print( Graphics g, double sx, double sy ){
+		super.print(g, sx, sy);
+	}
+	
 	public void printCrosshair( Graphics g ) {
 		if (respondControl && status == NiguiriStatus.STAND )
 			crosshair.print(g);
+	}
+	
+	public void printCrosshair( Graphics g, double sx, double sy ) {
+		if (respondControl && status == NiguiriStatus.STAND )
+			crosshair.print(g, sx, sy);
 	}
        
 }

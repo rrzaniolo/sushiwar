@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import player.Player;
@@ -55,6 +57,10 @@ public class Screen extends JPanel implements Constants {
 	private	Terrain				terrain			= null;
 	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
 	private Timer				gameTimer;
+	private double				shakeMagnitude;
+	private Timer				shakeTimer;
+	
+	private Image				background;
 	
 	private NiguiriButton		button;
 	
@@ -62,15 +68,15 @@ public class Screen extends JPanel implements Constants {
 	private int					mouseY;
 	
 	public enum GameStatus {
-		PLAYER_TURN, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
+		PLAYER_TURN, MISSILE_FLY, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
 	}
 	
 	public Screen( int w, int h, JFrame frame ) {
 		super();
         
-        InputStream url = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
+        InputStream is = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
 		try {
-			Font theFont = Font.createFont( Font.TRUETYPE_FONT, url );
+			Font theFont = Font.createFont( Font.TRUETYPE_FONT, is );
 			setFont( theFont.deriveFont(Font.PLAIN, 20));
 			
 			
@@ -98,11 +104,12 @@ public class Screen extends JPanel implements Constants {
 		setSize(w, h);
 		setBackground(SCREEN_DEFAULT_BGCOLOR);
 		
-		//this.setFont( new Font("Arial Round Bold", Font.BOLD, 12));
+		URL url = Screen.class.getResource("/assets/background.png");
+		background = new ImageIcon(url).getImage();
 		this.setForeground(Color.white);
 		
 		//	--	Inicializar terreno  --
-		terrain = new Terrain("land03", this);
+		terrain = new Terrain("land06", this);
 		
 		//	--	Inicializer jogadores  --
 
@@ -118,10 +125,13 @@ public class Screen extends JPanel implements Constants {
 		for (Player p: playerList)
 			p.startNiguiri();
 		
-		gameTimer = new Timer( new TimerControl(), 1000 );
+		gameTimer = new Timer( new TimerControl(), 250 );
 		gameTimer.start();
         
 		gameMusic.play();
+		
+		shakeTimer = new Timer( new ShakeControl(), 100 );
+		shakeTimer.start();
 		
 		//	--	Teste de botão  --
 		button = new NiguiriButton( 20, 20, 150, "SAIR", this );
@@ -159,6 +169,10 @@ public class Screen extends JPanel implements Constants {
 			pauseTurn(true);
 	}
 	
+	public void setShakeMagnitude( double mag ) {
+		shakeMagnitude = mag;
+	}
+	
 	public void explode( double x, double y, int damage, double radius, double power ) {
 		terrain.explode( x, y, radius );
 		
@@ -175,7 +189,8 @@ public class Screen extends JPanel implements Constants {
 			}
 		}
 		
-		setGameStatus( Screen.GameStatus.EXPLOSION_TIME );
+		setGameStatus( GameStatus.EXPLOSION_TIME );
+		setShakeMagnitude( power*10 );
 	}
 	
 	public void pauseTurn( boolean pause ) {
@@ -275,6 +290,7 @@ public class Screen extends JPanel implements Constants {
 	}
 	
 	public void update() {
+		
 		if ( gameStatus == GameStatus.PLAYER_TURN ) {
 			
 		}
@@ -302,6 +318,12 @@ public class Screen extends JPanel implements Constants {
 			
 			nextTurn();
 		}
+	}
+	
+	public void updateShake() {
+		shakeMagnitude /= 2;
+		if (shakeMagnitude < 3)
+			shakeMagnitude = 0;
 	}
 	
 	//	--	Classes de controle de eventos  --
@@ -346,18 +368,32 @@ public class Screen extends JPanel implements Constants {
 		
 	}
 	
+	class ShakeControl implements TimerListener {
+
+		@Override
+		public int update() {
+			Screen.this.updateShake();
+			return 0;
+		}
+		
+	}
+	
 	@Override
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent(g);
+		g.drawImage( background, 0, 0, null );
 		
-		terrain.print(g);
+		double sx = Math.random()*shakeMagnitude - shakeMagnitude/2;
+		double sy = Math.random()*shakeMagnitude - shakeMagnitude/2;
+
+		terrain.print(g, sx, sy);
 		
 		for (Player p: playerList) {
-			p.printNiguiri(g);
+			p.printNiguiri(g, sx, sy);
 		}
 		
 		for (Niguiri n: niguiriList) {
-			n.printCrosshair(g);
+			n.printCrosshair(g, sx, sy);
 		}
 		
         for (Missile m: missileList)

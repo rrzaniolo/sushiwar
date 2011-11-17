@@ -23,10 +23,10 @@ public interface Constants {
 	
 	static final int	MOVE_NIGUIRI_JUMP_KEY	= KeyEvent.VK_Q;
 	static final int	MOVE_NIGUIRI_HJUMP_KEY	= KeyEvent.VK_W;
-	static final double MOVE_NIGUIRI_JUMP_VX	= 10;
-	static final double MOVE_NIGUIRI_JUMP_VY	= 40;
+	static final double MOVE_NIGUIRI_JUMP_VX	= 15;
+	static final double MOVE_NIGUIRI_JUMP_VY	= 20;
 	static final double MOVE_NIGUIRI_HJUMP_VX	= 3;
-	static final double MOVE_NIGUIRI_HJUMP_VY	= 55;
+	static final double MOVE_NIGUIRI_HJUMP_VY	= 30;
 	
 	static final int	MOVE_HITGROUND_VERTICAL			= 0x01;
 	static final int	MOVE_HITGROUND_HORIZONTAL		= 0x10;

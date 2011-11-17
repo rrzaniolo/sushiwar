@@ -93,9 +93,6 @@ public abstract class Agent implements KeyListener, TimerListener, Constants {
 		
 		setPosition(newX, newY);
 		result = screen.isBoxInScreen( box );
-		
-		if (result != 0)
-			screen.adjustAgentInScreen(this);
 
 		return result;
 	}
