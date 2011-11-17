@@ -70,8 +70,10 @@ public final class Player implements Constants {
 	}
 	
 	public void removeNiguiri( Niguiri niguiri ) {
-		if (niguiri == niguiriActive)
-			nextNiguiri();
+		if (niguiriList.size() == 1)
+			screen.removePlayer(this);
+		else if (niguiri == niguiriActive)
+				nextNiguiri();
 		
 		niguiriList.remove(niguiri);
 	}

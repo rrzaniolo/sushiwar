@@ -23,6 +23,7 @@ public class InfoBar implements Constants {
 	private JLabel		nameLabel			= null;
 	private JLabel		lifeLabel			= null;
 	private Niguiri		niguiri				= null;
+	private Screen		screen;
 	
 	static final Color	BACKGROUND_COLOR	= Color.black;
 	static final Color	BORDER_COLOR		= Color.white;
@@ -81,9 +82,11 @@ public class InfoBar implements Constants {
 		lifeLabel.setHorizontalAlignment( JLabel.CENTER );
 		screen.add( lifeLabel );
 		
+		this.screen = screen;
+		
 	}
 	
-	void update() {
+	public void update() {
 		
 		nameLabel.setLocation( (int) niguiri.getPositionX() - NAMELABEL_WIDTH/2,
 							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT*3+1) );
@@ -92,7 +95,12 @@ public class InfoBar implements Constants {
 							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT*2) );
 	}
 	
-	void setVisible( boolean is ) {
+	public void remove() {
+		screen.remove(nameLabel);
+		screen.remove(lifeLabel);
+	}
+	
+	public void setVisible( boolean is ) {
 		nameLabel.setVisible(is);
 		lifeLabel.setVisible(is);
 	}
