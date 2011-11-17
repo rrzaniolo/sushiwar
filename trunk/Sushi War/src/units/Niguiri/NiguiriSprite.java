@@ -1,6 +1,7 @@
 
 package units.Niguiri;
 
+import javax.swing.JPanel;
 import sound.Sound;
 import sprite.Animation;
 import sprite.Sprite;
@@ -12,7 +13,7 @@ import sushiwar.Screen;
  */
 public class NiguiriSprite extends Sprite {
 	
-	public NiguiriSprite( Screen screen ) {
+	public NiguiriSprite( JPanel screen ) {
 		//	--	Sprite  --
 		super( "niguiri4", 30, 30, screen );
 		
@@ -37,6 +38,7 @@ public class NiguiriSprite extends Sprite {
 		this.playAnimation("Stand");
 	}
 	
+    @Override
 	public int update() {
 		int updateStatus = super.update();
 		

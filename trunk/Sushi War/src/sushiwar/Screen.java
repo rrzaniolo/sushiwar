@@ -134,7 +134,7 @@ public class Screen extends JPanel implements Constants {
 		shakeTimer.start();
 		
 		//	--	Teste de botão  --
-		button = new NiguiriButton( 20, 20, 150, "SAIR", this );
+		button = new NiguiriButton( 20, 20, 150, "SAIR", (JPanel)this );
 		button.setAction( new ActionControl() );
 	}
 	

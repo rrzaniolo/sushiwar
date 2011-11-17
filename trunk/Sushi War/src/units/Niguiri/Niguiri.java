@@ -9,6 +9,7 @@ package units.Niguiri;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import javax.swing.JPanel;
 import player.DirPad;
 import player.Player;
 import sushiwar.Constants;
@@ -46,7 +47,7 @@ public class Niguiri extends Unit implements Constants {
 		this.player = player;
 		this.life = NIGUIRI_INITIAL_LIFE;
 		
-		sprite = new NiguiriSprite( screen );
+		sprite = new NiguiriSprite( (JPanel)screen );
 		status = NiguiriStatus.STAND;
 		
 		//	--	Crosshair  --

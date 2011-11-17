@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import javax.swing.JPanel;
 import sushiwar.Screen;
 
 /**
@@ -22,7 +23,7 @@ public class NiguiriButton {
 	private int					x, y;
 	private int					textOffset;
 	private MouseStatus			mouseStatus;
-	private Screen				screen;
+	private JPanel				screen;
 	private ButtonAction		action;
 	
 	private static final int	height = 30;
@@ -31,7 +32,7 @@ public class NiguiriButton {
 		OVER, NONE
 	}
 	
-	public NiguiriButton( int x, int y, int width, String text, Screen screen ) {
+	public NiguiriButton( int x, int y, int width, String text, JPanel screen ) {
 		this.text = text;
 		this.x = x;
 		this.y = y;
@@ -45,7 +46,7 @@ public class NiguiriButton {
 		screen.addMouseListener( new MouseControl() );
 		
 	}
-
+    
 	public void setAction( ButtonAction action ) {
 		this.action = action;
 	}

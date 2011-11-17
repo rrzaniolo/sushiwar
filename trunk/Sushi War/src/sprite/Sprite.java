@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import player.DirPad.Direction;
 import sushiwar.Constants;
 import sushiwar.Screen;
@@ -34,9 +35,9 @@ public class Sprite implements TimerListener, Constants {
 	protected Animation animNow;
 	protected int frameNow;
 	private int timeCount;
-	private Screen screen;
+	private JPanel screen;
 	
-	public Sprite( String file, int width, int height, Screen screen, boolean mirror ) {	 
+	public Sprite( String file, int width, int height, JPanel screen, boolean mirror ) {	 
 		
 		//	Carregando spritesheet
 		URL fileURL = Sprite.class.getResource("/assets/" + file + ".png");
@@ -87,7 +88,7 @@ public class Sprite implements TimerListener, Constants {
 		this.screen = screen;
 	}
 	
-	public Sprite( String file, int width, int height, Screen screen ) {
+	public Sprite( String file, int width, int height, JPanel screen ) {
 		this( file, width, height, screen, true );
 	}
 	

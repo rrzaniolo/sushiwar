@@ -24,8 +24,10 @@ public class Main extends JFrame {
 	public static void main( String []args ) {
 		Main frame = new Main();
 		
-		Screen scr = new Screen(800,600, frame);
-		frame.add(scr);
+        MenuScreen menu = new MenuScreen(800, 600,"MushishiOP", frame);
+		frame.add(menu);
+//        Screen scr = new Screen(800,600, frame);
+//        frame.add(scr);
 		
 		//frame.setUndecorated(true);
 		frame.setVisible(true);

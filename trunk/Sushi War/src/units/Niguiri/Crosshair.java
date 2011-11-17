@@ -1,6 +1,7 @@
 package units.Niguiri;
 
 import java.awt.Graphics;
+import javax.swing.JPanel;
 import player.DirPad.Direction;
 import sprite.Animation;
 import sprite.Sprite;
@@ -24,7 +25,7 @@ public class Crosshair extends Agent implements Constants {
 		super(niguiri.getPositionX(), niguiri.getPositionY(), 40, 40, screen, false );
 		
 		this.niguiri = niguiri;
-		sprite = new Sprite( "Crosshair", 50, 40, screen );
+		sprite = new Sprite( "Crosshair", 50, 40, (JPanel)screen );
 		
 		Animation standAnim = new Animation("stand", 0, 8, 40, true );
 		standAnim.setFramePeriod( 4, 200 );

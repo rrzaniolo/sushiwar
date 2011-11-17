@@ -58,4 +58,7 @@ public interface Constants {
 	static final int	SCREEN_OUT_TOP			= 0x00100;
 	static final int	SCREEN_OUT_BOTTOM		= 0x01000;
 	static final int	SCREEN_OUT_TOTAL		= 0x10000;
+    
+    // -- Menu stuff --
+    static final Color MENU_DEFAULT_BGCOLOR     = Color.decode("0x0080ff");
 }
