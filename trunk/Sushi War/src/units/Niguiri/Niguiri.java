@@ -181,6 +181,9 @@ public class Niguiri extends Unit implements Constants {
 		moveTimer.finish();
 		sprite.remove();
 		screen.removeNiguiri(this);
+		
+		powerBar.remove();
+		infoBar.remove();
 	}
 	
 	//	--  Informação  -------------------------------------------------------

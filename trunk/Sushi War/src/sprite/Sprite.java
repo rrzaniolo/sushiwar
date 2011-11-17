@@ -155,17 +155,20 @@ public class Sprite implements TimerListener, Constants {
 	
 	@Override
 	public int update() {
+		int updateStatus = 0;
+		
 		if (animNow != null) {
 			timeCount -= SPRITE_TIMER_PERIOD;
 		
 			if (timeCount <= 0) {
 				frameNow = animNow.getNextFrame( frameNow  );
 				timeCount = animNow.getFramePeriod( frameNow );
+				updateStatus += 0x01;
 			}
 		}	
 		
 		screen.repaint();
-		return 0;
+		return updateStatus;
 	}
 	
 	public boolean isDone() {

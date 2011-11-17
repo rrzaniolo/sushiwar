@@ -21,6 +21,7 @@ public class PowerBar implements Constants {
 	private Niguiri				niguiri;
 	private int					percent;
 	private Timer				timer;
+	private Screen				screen;
 	
 	private static final int	POWERBAR_WIDTH	= 100;
 	private static final int	POWERBAR_HEIGHT	= 10;
@@ -43,6 +44,7 @@ public class PowerBar implements Constants {
 		timer = new Timer( new TimerControl(), 20 );
 		
 		this.niguiri = niguiri;
+		this.screen = screen;
 	}
 	
 	public void update() {
@@ -78,6 +80,11 @@ public class PowerBar implements Constants {
 	
 	public int getPercentage() {
 		return percent;
+	}
+	
+	public void remove() {
+		screen.remove(bar);
+		timer.finish();
 	}
 	
 	private class TimerControl implements TimerListener {

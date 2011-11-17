@@ -38,13 +38,20 @@ public class NiguiriSprite extends Sprite {
 	}
 	
 	public int update() {
-		super.update();
+		int updateStatus = super.update();
 		
-		if (frameNow == 0) {
-			if (animNow.getName().equals("walk")) {
+		if (updateStatus == 1) {
+		
+			if (animNow.getName().equals("walk") && frameNow == 0) {
 				Sound walkSound = new Sound("NiguiriMove");
 				walkSound.play();
 			}
+			
+			if (animNow.getName().equals("land") && frameNow == 1) {
+				Sound walkSound = new Sound("NiguiriMove");
+				walkSound.play();
+			}
+			
 		}
 		
 		return 0;

@@ -1,14 +1,23 @@
 
 package sushiwar;
 
+import button.ButtonAction;
+import button.NiguiriButton;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -47,6 +56,8 @@ public class Screen extends JPanel implements Constants {
 	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
 	private Timer				gameTimer;
 	
+	private NiguiriButton		button;
+	
 	private int					mouseX;
 	private int					mouseY;
 	
@@ -57,11 +68,17 @@ public class Screen extends JPanel implements Constants {
 	public Screen( int w, int h, JFrame frame ) {
 		super();
         
-        /*// --   Inicilizar som --
-        url = Screen.class.getClassLoader().getResource("Music/" + music);
-        this.music = url.getPath();
-        this.gameSound = new Sound(music);
-		*/
+        InputStream url = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
+		try {
+			Font theFont = Font.createFont( Font.TRUETYPE_FONT, url );
+			setFont( theFont.deriveFont(Font.PLAIN, 20));
+			
+			
+		} catch (FontFormatException ex) {
+			System.out.println(ex.getMessage());
+		} catch (IOException ex) {
+			System.out.println(ex.getMessage());
+		}
 		
 		Music gameMusic = new Music("Jinggle");
 		
@@ -105,6 +122,10 @@ public class Screen extends JPanel implements Constants {
 		gameTimer.start();
         
 		gameMusic.play();
+		
+		//	--	Teste de botão  --
+		button = new NiguiriButton( 20, 20, 150, "SAIR", this );
+		button.setAction( new ActionControl() );
 	}
 	
 	public void addNiguiri( Niguiri niguiri ) {
@@ -124,7 +145,11 @@ public class Screen extends JPanel implements Constants {
 	public void removeMissile( Missile missile ) {
 		missileList.remove(missile);
 	}
-
+	
+	public void removePlayer( Player player ) {
+		playerList.remove(player);
+	}
+	
 	public void setGameStatus( GameStatus status ) {
 		gameStatus = status;
 		System.out.println( status.toString() );
@@ -160,7 +185,7 @@ public class Screen extends JPanel implements Constants {
 	public void nextTurn() {
 		playerActive.toggle(false);
 				
-		playerActiveId = ( playerActiveId + 1 ) % PLAYER_COUNT;
+		playerActiveId = ( playerActiveId + 1 ) % playerList.size();
 		playerActive = playerList.get( playerActiveId );
 		playerActive.nextNiguiri();
 		playerActive.toggle( true );
@@ -338,8 +363,22 @@ public class Screen extends JPanel implements Constants {
         for (Missile m: missileList)
 			m.print(g);
 		
+		//	--	Teste de botão  --
+		button.print(g);
+		
 		//for( Niguiri n: list)
 		//	n.print(g);
+	}
+
+	//	--	TESTE DE BOTÃAAAAAAAO --
+	
+	private class ActionControl extends ButtonAction {
+
+		@Override
+		public void execute() {
+			System.exit(0);
+		}
+		
 	}
 	
 }
