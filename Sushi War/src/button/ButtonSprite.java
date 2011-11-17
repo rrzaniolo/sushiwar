@@ -4,6 +4,7 @@
  */
 package button;
 
+import javax.swing.JPanel;
 import sprite.Animation;
 import sprite.Sprite;
 import sushiwar.Screen;
@@ -14,7 +15,7 @@ import sushiwar.Screen;
  */
 public class ButtonSprite extends Sprite {
 	
-	public ButtonSprite( Screen screen ) {
+	public ButtonSprite( JPanel screen ) {
 		super( "ButtonNiguiri", 45, 45, screen );
 		
 		addAnimation( new Animation( "open", 0, 4, 20 ));

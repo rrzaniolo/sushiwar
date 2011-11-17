@@ -28,6 +28,10 @@ public class Music extends Thread {
 		repeat = false;
 		start();
 	}
+    
+    public void halt() {
+        musicPlayer.close();
+    }
 	
 	public void run() {
 		BufferedInputStream bis = null;
