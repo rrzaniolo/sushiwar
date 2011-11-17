@@ -170,7 +170,7 @@ public class Niguiri extends Unit implements Constants {
 		}
 		
 		int boxStatus = screen.isBoxInScreen(box);
-		if ((boxStatus & 0x11011) != 0 && (boxStatus &0x10000) > 0) {
+		if ((boxStatus & 0x01011) != 0 && (boxStatus &0x10000) > 0) {
 			if (screen.getGameStatus() == GameStatus.PLAYER_TURN)
 				screen.setGameStatus( GameStatus.EXPLOSION_TIME );
 			remove();
