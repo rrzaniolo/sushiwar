@@ -11,7 +11,9 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 import player.DirPad;
+import player.DirPad.Direction;
 import player.Player;
+import sound.Sound;
 import sushiwar.Constants;
 import sushiwar.Screen;
 import sushiwar.Screen.GameStatus;
@@ -47,7 +49,7 @@ public class Niguiri extends Unit implements Constants {
 		this.player = player;
 		this.life = NIGUIRI_INITIAL_LIFE;
 		
-		sprite = new NiguiriSprite( (JPanel)screen );
+		sprite = new NiguiriSprite( screen );
 		status = NiguiriStatus.STAND;
 		
 		//	--	Crosshair  --
@@ -118,9 +120,12 @@ public class Niguiri extends Unit implements Constants {
 		damageTaken += damage;
 	}
 	
-	public void doDamage() {
+	public int doDamage() {
+		int damage = damageTaken;
 		life = Math.max( life -= damageTaken, 0 );
 		damageTaken = 0;
+		
+		return damage;
 	}
 	
 	public void kill() {
@@ -175,6 +180,15 @@ public class Niguiri extends Unit implements Constants {
 			if (screen.getGameStatus() == GameStatus.PLAYER_TURN)
 				screen.setGameStatus( GameStatus.EXPLOSION_TIME );
 			remove();
+			new Sound("Aaaaah").play();
+		}
+		
+		if (ready) {
+			if (controlPad.isDirectionPressed( Direction.DOWN ))
+				crosshair.changeAngle(-1);
+			
+			if (controlPad.isDirectionPressed( Direction.UP ))
+				crosshair.changeAngle(1);
 		}
 		
 		infoBar.update();
@@ -235,7 +249,12 @@ public class Niguiri extends Unit implements Constants {
 	
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
-		super.keyPressedOnce(e);
+		if (status != NiguiriStatus.FIRE) {
+			super.keyPressedOnce(e);
+			
+			if (!onAir && isMoving())
+				setStatus(NiguiriStatus.WALK);
+		}
 		
 		//	--	Pulo normal  --
 		if ( ready && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
@@ -249,36 +268,33 @@ public class Niguiri extends Unit implements Constants {
 			setStatus(NiguiriStatus.JUMP);
 		}
 		
-		else if ( e.getKeyCode() == KeyEvent.VK_UP)
+		/*else if ( e.getKeyCode() == KeyEvent.VK_UP)
 			crosshair.changeAngle(5);
 		
 		else if ( e.getKeyCode() == KeyEvent.VK_DOWN)
 			crosshair.changeAngle(-5);
-		
+		*/
 		else if ( ready && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			setStatus( NiguiriStatus.FIRE );
 			powerBar.reset();
 			powerBar.toggle(true);
 		}
 		
-		if (!onAir && isMoving())
-			setStatus(NiguiriStatus.WALK);
-		
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE )
-			setPosition(screen.getRandomX(NIGUIRI_WIDTH),15);
-		
 	}
 	
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
-		super.keyReleasedOnce(e);
+		if (status != NiguiriStatus.FIRE) {
+			super.keyReleasedOnce(e);
+			
+			if (!isMoving())
+				this.setStatus(NiguiriStatus.STAND);
+		}
 		
 		if ( status == NiguiriStatus.FIRE && e.getKeyCode() == KeyEvent.VK_SPACE ) {
 			fire( powerBar.getPercentage() );
 		}
 		
-		if (!isMoving())
-			this.setStatus(NiguiriStatus.STAND);
 	}
 	
 	//	--  Gráfico  ----------------------------------------------------------
