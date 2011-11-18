@@ -71,7 +71,7 @@ public class Screen extends JPanel implements Constants {
 		PLAYER_TURN, MISSILE_FLY, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
 	}
 	
-	public Screen( int w, int h, JFrame frame, int numPlayers, int numNiguiris ) {
+	public Screen( int w, int h, JFrame frame, int numPlayers, int numNiguiris, String land ) {
 		super();
         
         InputStream is = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
@@ -109,7 +109,7 @@ public class Screen extends JPanel implements Constants {
 		this.setForeground(Color.white);
 		
 		//	--	Inicializar terreno  --
-		terrain = new Terrain("land06", this);
+		terrain = new Terrain(land, this);
 		
 		//	--	Inicializer jogadores  --
 
