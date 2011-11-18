@@ -2,17 +2,16 @@ package sushiwar;
 
 import button.ButtonAction;
 import button.NiguiriButton;
-import com.sun.media.controls.ActionControl;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import sound.Music;
 
@@ -23,7 +22,7 @@ import sound.Music;
 public class MenuScreen extends JPanel implements Constants {
     public	int                 width;
 	public	int                 height;
-    private int                 numberOfPlayer;
+    private int                 numberOfPlayers;
 	private	JFrame              frame			= null;
 	private Screen              scr             = null;
     private Music               menuMusic       = null;
@@ -70,7 +69,7 @@ public class MenuScreen extends JPanel implements Constants {
     
     public void setMenuVisible(boolean visuability){
         this.setVisible(visuability);
-    }
+    }  
     
     class MouseControl extends MouseAdapter {
 		
@@ -95,7 +94,9 @@ public class MenuScreen extends JPanel implements Constants {
 
 		@Override
         public void execute() {
-            scr = new Screen(800,600, frame);
+            SubMenu submenu = new SubMenu();
+            int nump = submenu.getNumberOfPlayer();
+            scr = new Screen(800,600, frame, nump, 10/nump);
             setMenuVisible(false);
             menuMusic.halt();
             frame.add(scr);
@@ -122,8 +123,23 @@ public class MenuScreen extends JPanel implements Constants {
         exit.print(g);
 		
 	}
+    
+    class SubMenu extends JOptionPane{
+        private int numberOfPlayers;     
+        private Object [] ops = {2,3,4}; 
 
+        public SubMenu(){
+            do{
+            numberOfPlayers = showOptionDialog(frame, "Escolha o Número de Jogadores", "Jogadores", 
+                    DEFAULT_OPTION, QUESTION_MESSAGE, icon, ops, null);
+            System.out.println(numberOfPlayers);
+            }while(numberOfPlayers <0);
+            
+            numberOfPlayers = numberOfPlayers +2;
+        }
+        
+        public int getNumberOfPlayer(){
+            return(numberOfPlayers);
+        }
+    }
 }
-
-
-

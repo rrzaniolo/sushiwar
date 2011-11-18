@@ -71,7 +71,7 @@ public class Screen extends JPanel implements Constants {
 		PLAYER_TURN, MISSILE_FLY, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
 	}
 	
-	public Screen( int w, int h, JFrame frame ) {
+	public Screen( int w, int h, JFrame frame, int numPlayers, int numNiguiris ) {
 		super();
         
         InputStream is = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
@@ -114,8 +114,8 @@ public class Screen extends JPanel implements Constants {
 		//	--	Inicializer jogadores  --
 
 		playerList = new ArrayList<Player>();
-		for(int i=0; i<Constants.PLAYER_COUNT; i++) {
-			playerList.add( new Player( PLAYER_NIGUIRI_COUNT, this ) );
+		for(int i=0; i<numPlayers; i++) {
+			playerList.add( new Player( numNiguiris, this ) );
 		}
 		
 		playerActiveId = 0;
