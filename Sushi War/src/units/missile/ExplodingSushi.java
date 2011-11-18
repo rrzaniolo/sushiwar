@@ -18,10 +18,10 @@ public class ExplodingSushi extends Missile {
 	
 	public ExplodingSushi( Niguiri niguiri, double firePower, Screen screen ) {
 		
-		super( niguiri.getFireX(), niguiri.getFireY(), 30, 30, 20, 50, 45, screen );
+		super( niguiri.getFireX(), niguiri.getFireY(), 30, 30, 200, 50, 45, screen );
 		
 		//	--	Sprite  --
-		sprite = new Sprite( "Sushi", 20, 20, (JPanel)screen, false );
+		sprite = new Sprite( "Sushi", 20, 20, screen, false );
 		
 		sprite.addAnimation( new Animation( "stand", 0, 8, 50, true ) );
 		sprite.playAnimationByIndex(0);

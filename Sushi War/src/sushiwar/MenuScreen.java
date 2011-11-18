@@ -3,11 +3,12 @@ package sushiwar;
 import button.ButtonAction;
 import button.NiguiriButton;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -30,33 +31,13 @@ public class MenuScreen extends JPanel implements Constants {
     private NiguiriButton       exit            = null;
     private Image				background;
     
-    private int					mouseX;
-	private int					mouseY;
-    
     
     public MenuScreen(int windowWidth, int windowHeight, String music, JFrame frame){
-        
-        // -- Inicializando Som --
-        this.menuMusic = new Music("MushishiOP");
-        menuMusic.start();
-        
-        // -- Inicializar janela --
-        //this.setName("Suschi War");
-        
-        URL url = MenuScreen.class.getResource("/assets/MenuImage2.jpg");
+		
+		//	--	Inicializando janela  --
+        URL url = MenuScreen.class.getResource("/assets/MenuImage.png");
 		background = new ImageIcon(url).getImage();
         
-        this.setVisible(true);
-        this.setLayout( null );
-        this.addMouseListener(new MouseControl());
-        this.addMouseMotionListener(new MotionControl());
-		
-        start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
-        start.setAction( new StartActionControl() );
-        
-        exit = new NiguiriButton( (windowWidth - 150)/2,(windowHeight - 45)/2 + 45 , 150, "SAIR", this );
-        exit.setAction( new ExitActionControl() );
-		
 		this.frame = frame;
 		this.width = windowWidth;
 		this.height = windowHeight;
@@ -64,31 +45,37 @@ public class MenuScreen extends JPanel implements Constants {
 		setBackground(MENU_DEFAULT_BGCOLOR);
 				
 		this.setForeground(Color.white);
+		
+        this.setVisible(true);
+        this.setLayout( null );
+		
+		//	--	Inicializando fonte  --
+        InputStream is = MenuScreen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
+		try {
+			Font theFont = Font.createFont( Font.TRUETYPE_FONT, is );
+			setFont( theFont.deriveFont(Font.PLAIN, 20));			
+		} catch (FontFormatException ex) {
+			System.out.println(ex.getMessage());
+		} catch (IOException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		// -- Inicializando música --
+        this.menuMusic = new Music("MushishiOP");
+        menuMusic.start();
+		
+		//	--	Inicializando botões  --		
+        start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
+        start.setAction( new StartActionControl() );
+        
+        exit = new NiguiriButton( (windowWidth - 150)/2,(windowHeight - 45)/2 + 45 , 150, "SAIR", this );
+        exit.setAction( new ExitActionControl() );
                         
     }
     
-    public void setMenuVisible(boolean visuability){
-        this.setVisible(visuability);
+    public void setMenuVisible(boolean visible){
+        this.setVisible(visible);
     }  
-    
-    class MouseControl extends MouseAdapter {
-		
-        @Override
-		public void mousePressed( MouseEvent e ) {
-			
-		}
-		
-	}
-	
-	class MotionControl extends MouseMotionAdapter {
-		
-        @Override
-		public void mouseMoved( MouseEvent e ) {
-			MenuScreen.this.mouseX = e.getX();
-			MenuScreen.this.mouseY = e.getY();
-		}
-		
-	}
     
     private class StartActionControl extends ButtonAction {
 

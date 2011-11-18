@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import player.Player;
 import scenario.Terrain;
 import sound.Music;
+import sound.Sound;
 import timer.Timer;
 import timer.TimerListener;
 import units.Agent;
@@ -47,27 +48,26 @@ import units.missile.Missile;
 
 public class Screen extends JPanel implements Constants {
 	
+	//	--	Janela  --
 	public	int					width;
 	public	int					height;
+	private	JFrame				frame			= null;
+	private	Terrain				terrain			= null;
+	private Image				background;
+	//	--	Jogadores  --
     private Player				playerActive	= null;
 	private int					playerActiveId	= 0;
     private ArrayList<Player>	playerList		= null;
+	//	--	Niguiris  --
     private Niguiri				niguiriActive	= null;
-	private	ArrayList<Missile>	missileList		= null;
 	private ArrayList<Niguiri>	niguiriList		= null;
-	private	JFrame				frame			= null;
-	private	Terrain				terrain			= null;
+	//	--	Projéteis  --
+	private	ArrayList<Missile>	missileList		= null;
+	//	--	Jogo  --
 	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
 	private Timer				gameTimer;
 	private double				shakeMagnitude;
 	private Timer				shakeTimer;
-	
-	private Image				background;
-	
-	private NiguiriButton		button;
-	
-	private int					mouseX;
-	private int					mouseY;
 	
 	public enum GameStatus {
 		PLAYER_TURN, MISSILE_FLY, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
@@ -76,33 +76,13 @@ public class Screen extends JPanel implements Constants {
 	public Screen( int w, int h, JFrame frame, int numPlayers, int numNiguiris, String land ) {
 		super();
         
-        InputStream is = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
-		try {
-			Font theFont = Font.createFont( Font.TRUETYPE_FONT, is );
-			setFont( theFont.deriveFont(Font.PLAIN, 20));
-			
-			
-		} catch (FontFormatException ex) {
-			System.out.println(ex.getMessage());
-		} catch (IOException ex) {
-			System.out.println(ex.getMessage());
-		}
-		
-		Music gameMusic = new Music("Jinggle");
-		
-		//	--	Inicializar listas --
-		missileList = new ArrayList<Missile>(0);
-		niguiriList = new ArrayList<Niguiri>(0);
-		
 		//	--	Inicializar janela  --
-		this.setLayout( null );
-		this.addMouseListener( new MouseControl() );
-		this.addMouseMotionListener( new MotionControl() );
-        frame.addKeyListener (new KeyControl());
-		
 		this.frame = frame;
 		this.width = w;
 		this.height = h;
+		
+		this.setLayout( null );
+		
 		setSize(w, h);
 		setBackground(SCREEN_DEFAULT_BGCOLOR);
 		
@@ -110,8 +90,27 @@ public class Screen extends JPanel implements Constants {
 		background = new ImageIcon(url).getImage();
 		this.setForeground(Color.white);
 		
+		//	--	Carregar fonte  --
+        InputStream is = Screen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
+		try {
+			Font theFont = Font.createFont( Font.TRUETYPE_FONT, is );
+			setFont( theFont.deriveFont(Font.PLAIN, 20));			
+		} catch (FontFormatException ex) {
+			System.out.println(ex.getMessage());
+		} catch (IOException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		//	--	Carregar música de jogo  --
+		Music gameMusic = new Music("Jinggle");
+		gameMusic.play();
+		
 		//	--	Inicializar terreno  --
 		terrain = new Terrain(land, this);
+		
+		//	--	Inicializar niguiris --
+		missileList = new ArrayList<Missile>(0);
+		niguiriList = new ArrayList<Niguiri>(0);
 		
 		//	--	Inicializer jogadores  --
 
@@ -127,18 +126,17 @@ public class Screen extends JPanel implements Constants {
 		for (Player p: playerList)
 			p.startNiguiri();
 		
+		//	--	Inicializar controle de estado de jogo  --
 		gameTimer = new Timer( new TimerControl(), 250 );
 		gameTimer.start();
-        
-		gameMusic.play();
 		
+		//	--	Inicializar controle de câmera  --
 		shakeTimer = new Timer( new ShakeControl(), 100 );
 		shakeTimer.start();
 		
-		//	--	Teste de botão  --
-		button = new NiguiriButton( 20, 20, 150, "SAIR", (JPanel)this );
-		button.setAction( new ActionControl() );
 	}
+	
+	//	--	Controle de agentes  --
 	
 	public void addNiguiri( Niguiri niguiri ) {
 		niguiriList.add(niguiri);
@@ -162,6 +160,8 @@ public class Screen extends JPanel implements Constants {
 		playerList.remove(player);
 	}
 	
+	//	--	Controle de status de jogo  --
+	
 	public void setGameStatus( GameStatus status ) {
 		gameStatus = status;
 		System.out.println( status.toString() );
@@ -173,6 +173,10 @@ public class Screen extends JPanel implements Constants {
 	
 	public void setShakeMagnitude( double mag ) {
 		shakeMagnitude = mag;
+	}
+	
+	public void pauseTurn( boolean pause ) {
+		playerActive.toggle( !pause );
 	}
 	
 	public void explode( double x, double y, int damage, double radius, double power ) {
@@ -195,10 +199,6 @@ public class Screen extends JPanel implements Constants {
 		setShakeMagnitude( power*10 );
 	}
 	
-	public void pauseTurn( boolean pause ) {
-		playerActive.toggle( !pause );
-	}
-	
 	public void nextTurn() {
 		playerActive.toggle(false);
 				
@@ -209,6 +209,8 @@ public class Screen extends JPanel implements Constants {
 		
 		setGameStatus( GameStatus.PLAYER_TURN );
 	}
+	
+	//	--	Informações  --
 	
 	public int isPointInScreen( int x, int y ) {
 		int result = 0;
@@ -291,18 +293,29 @@ public class Screen extends JPanel implements Constants {
 		return gameStatus;
 	}
 	
+	//	--	Atualização  --
+	
 	public void update() {
 		
 		if ( gameStatus == GameStatus.PLAYER_TURN ) {
 			
 		}
 		else if ( gameStatus == GameStatus.EXPLOSION_TIME ) {
-			if (!checkMovement())
+			if (!checkMovement()) {
 				setGameStatus( GameStatus.DAMAGE_DEAL );
+			
+				try {
+					Timer.sleep(2000);
+				} catch (InterruptedException ex) {	}
+			}
 		}
 		else if ( gameStatus == GameStatus.DAMAGE_DEAL ) {
+			int totalDamage = 0;
 			for (Niguiri n: niguiriList )
-				n.doDamage();
+				totalDamage += n.doDamage();
+			
+			if (totalDamage > 0)
+				new Sound("Pain").play();
 			
 			try {
 				Timer.sleep(2000);
@@ -311,12 +324,19 @@ public class Screen extends JPanel implements Constants {
 			setGameStatus( GameStatus.NIGUIRI_DEATH );
 		}
 		else if ( gameStatus == GameStatus.NIGUIRI_DEATH ) {
+			boolean hasDeath = false;
 			for (Niguiri n: niguiriList )
-				if (n.getLife() == 0)
+				if (n.getLife() == 0) {
 					n.kill();
+					hasDeath = true;
+				}
+			
+			if (hasDeath)
+				new Sound("Death").play();
+			
             if(playerList.size() <= 1){
                 JOptionPane gameOver = new JOptionPane();
-                gameOver.showMessageDialog(frame,"Player " + (playerList.get(0).getId()+1) + " Venceu", "Game Over", JOptionPane.INFORMATION_MESSAGE, null);
+                JOptionPane.showMessageDialog(frame,"Player " + (playerList.get(0).getId()+1) + " Venceu", "Game Over", JOptionPane.INFORMATION_MESSAGE, null);
                 frame.remove(this);
                 
             }
@@ -335,36 +355,6 @@ public class Screen extends JPanel implements Constants {
 	}
 	
 	//	--	Classes de controle de eventos  --
-	
-	class MouseControl extends MouseAdapter {
-		
-        @Override
-		public void mousePressed( MouseEvent e ) {
-			terrain.explode( e.getX(), e.getY(), 30 );
-		}
-		
-	}
-	
-	class MotionControl extends MouseMotionAdapter {
-		
-        @Override
-		public void mouseMoved( MouseEvent e ) {
-			Screen.this.mouseX = e.getX();
-			Screen.this.mouseY = e.getY();
-		}
-		
-	}
-        
-	class KeyControl extends KeyAdapter {
-
-        @Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()== KeyEvent.VK_C){
-				
-			}
-		}
-
-	}
 
 	class TimerControl implements TimerListener {
 
@@ -386,6 +376,8 @@ public class Screen extends JPanel implements Constants {
 		
 	}
 	
+	//	--	Controle de gráfico  --
+	
 	@Override
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent(g);
@@ -406,23 +398,8 @@ public class Screen extends JPanel implements Constants {
 		
         for (Missile m: missileList)
 			m.print(g);
-		
-		//	--	Teste de botão  --
-		button.print(g);
-		
-		//for( Niguiri n: list)
-		//	n.print(g);
+
 	}
 
-	//	--	TESTE DE BOTÃAAAAAAAO --
-	
-	private class ActionControl extends ButtonAction {
-
-		@Override
-		public void execute() {
-			System.exit(0);
-		}
-		
-	}
 	
 }

@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import sound.Sound;
 import sprite.Animation;
 import sprite.Sprite;
-import sushiwar.Screen;
 
 /**
  *
@@ -35,7 +34,7 @@ public class NiguiriSprite extends Sprite {
 		anim.setFramePeriod(3, 1000);
 		this.addAnimation( anim );
 		
-		this.playAnimation("Stand");
+		this.playAnimation("stand");
 	}
 	
     @Override
@@ -44,7 +43,7 @@ public class NiguiriSprite extends Sprite {
 		
 		if (updateStatus == 1) {
 		
-			if (animNow.getName().equals("walk") && frameNow == 0) {
+			if (animNow.getName().equals("walk") && frameNow == 1) {
 				Sound walkSound = new Sound("NiguiriMove");
 				walkSound.play();
 			}
@@ -52,6 +51,11 @@ public class NiguiriSprite extends Sprite {
 			if (animNow.getName().equals("land") && frameNow == 1) {
 				Sound walkSound = new Sound("NiguiriMove");
 				walkSound.play();
+			}
+			
+			if (animNow.getName().equals("fire") && frameNow == 1) {
+				Sound fireSound = new Sound("Attack");
+				fireSound.play();
 			}
 			
 		}

@@ -7,7 +7,6 @@ package button;
 import javax.swing.JPanel;
 import sprite.Animation;
 import sprite.Sprite;
-import sushiwar.Screen;
 
 /**
  *
