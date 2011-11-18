@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import player.Player;
 import scenario.Terrain;
@@ -312,6 +314,12 @@ public class Screen extends JPanel implements Constants {
 			for (Niguiri n: niguiriList )
 				if (n.getLife() == 0)
 					n.kill();
+            if(playerList.size() <= 1){
+                JOptionPane gameOver = new JOptionPane();
+                gameOver.showMessageDialog(frame,"Player " + (playerList.get(0).getId()+1) + " Venceu", "Game Over", JOptionPane.INFORMATION_MESSAGE, null);
+                frame.remove(this);
+                
+            }
 			try {
 				Timer.sleep(2000);
 			} catch (InterruptedException ex) { }
