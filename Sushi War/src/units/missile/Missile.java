@@ -1,7 +1,7 @@
 package units.missile;
 
-import sushiwar.Constants;
 import sushiwar.Screen;
+import sushiwar.Screen.GameStatus;
 import units.Unit;
 
 /**
@@ -25,11 +25,19 @@ public abstract class Missile extends Unit {
 		this.explosionPower = explosionPower;
 	}
 	
+    @Override
 	public int update() {
 		int updateStatus = super.update();
 		
 		if (updateStatus > 0)
 			explode();
+        
+        int boxStatus = screen.isBoxInScreen(box);
+		if ((boxStatus & 0x01011) != 0 && (boxStatus &0x10000) > 0) {
+			screen.removeMissile(this);
+            this.moveTimer.finish();
+            screen.setGameStatus( GameStatus.DAMAGE_DEAL );
+        }
 		
 		return updateStatus;
 	}

@@ -43,7 +43,7 @@ public class MenuScreen extends JPanel implements Constants {
         // -- Inicializar janela --
         //this.setName("Suschi War");
         
-        URL url = MenuScreen.class.getResource("/assets/MenuImage.jpg");
+        URL url = MenuScreen.class.getResource("/assets/MenuImage2.jpg");
 		background = new ImageIcon(url).getImage();
         
         this.setVisible(true);
@@ -96,7 +96,9 @@ public class MenuScreen extends JPanel implements Constants {
         public void execute() {
             SubMenu submenu = new SubMenu();
             int nump = submenu.getNumberOfPlayer();
-            scr = new Screen(800,600, frame, nump, 10/nump);
+            SubMenu2 submenu2 = new SubMenu2();
+            String land = submenu2.getLand();
+            scr = new Screen(800,600, frame, nump, 10/nump, land);
             setMenuVisible(false);
             menuMusic.halt();
             frame.add(scr);
@@ -126,7 +128,7 @@ public class MenuScreen extends JPanel implements Constants {
     
     class SubMenu extends JOptionPane{
         private int numberOfPlayers;     
-        private Object [] ops = {2,3,4}; 
+        private Object [] ops = {"2 Players","3 Players","4 Players"}; 
 
         public SubMenu(){
             do{
@@ -140,6 +142,26 @@ public class MenuScreen extends JPanel implements Constants {
         
         public int getNumberOfPlayer(){
             return(numberOfPlayers);
+        }
+    }
+    
+    class SubMenu2 extends JOptionPane{
+        private String land;
+        private int indice;
+        private Object [] ops = {"land01","land02","land03","land04","land05","land06","land07"}; 
+
+        public SubMenu2(){
+            do{
+             this.indice = showOptionDialog(frame, "Escolha o Terreno no qual deseja jogar", "Terreno", 
+                    DEFAULT_OPTION, QUESTION_MESSAGE, icon, ops, null);
+            //System.out.println(indice);
+            }while(indice <0);
+            
+            this.land = (String)(ops[indice]);
+        }
+        
+        public String getLand(){
+            return(land);
         }
     }
 }
