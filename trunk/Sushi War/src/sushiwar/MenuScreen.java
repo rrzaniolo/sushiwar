@@ -24,7 +24,7 @@ public class MenuScreen extends JPanel implements Constants {
     public	int                 width;
 	public	int                 height;
     private int                 numberOfPlayers;
-	private	JFrame              frame			= null;
+	private	Main	            frame			= null;
 	private Screen              scr             = null;
     private Music               menuMusic       = null;
     private NiguiriButton       start           = null;
@@ -32,7 +32,7 @@ public class MenuScreen extends JPanel implements Constants {
     private Image				background;
     
     
-    public MenuScreen(int windowWidth, int windowHeight, String music, JFrame frame){
+    public MenuScreen(int windowWidth, int windowHeight, String music, Main frame){
 		
 		//	--	Inicializando janela  --
         URL url = MenuScreen.class.getResource("/assets/MenuImage.png");
@@ -62,7 +62,6 @@ public class MenuScreen extends JPanel implements Constants {
 		
 		// -- Inicializando música --
         this.menuMusic = new Music("MushishiOP");
-        menuMusic.start();
 		
 		//	--	Inicializando botões  --		
         start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
@@ -73,10 +72,16 @@ public class MenuScreen extends JPanel implements Constants {
                         
     }
     
-    public void setMenuVisible(boolean visible){
-        this.setVisible(visible);
+    public void showMenu (){
+        this.setVisible(true);
+		menuMusic.play();
     }  
     
+	public void hideMenu() {
+		this.setVisible(false);
+		menuMusic.halt();
+	}
+	
     private class StartActionControl extends ButtonAction {
 
 		@Override
@@ -85,11 +90,8 @@ public class MenuScreen extends JPanel implements Constants {
             int nump = submenu.getNumberOfPlayer();
             SubMenu2 submenu2 = new SubMenu2();
             String land = submenu2.getLand();
-            scr = new Screen(800,600, frame, nump, 10/nump, land);
-            setMenuVisible(false);
-            menuMusic.halt();
-            frame.add(scr);
-            scr.setVisible(true);
+            
+            frame.startGame( nump, land );
 		}
 		
 	}
