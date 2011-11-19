@@ -42,6 +42,10 @@ public final class Player implements Constants {
 		
 	}
 	
+	public static void resetPlayerCount() {
+		count = 0;
+	}
+	
 	public void createNiguiri() {
 		for (int i = 0; i < niguiriCount; i++)
 			niguiriList.add( new Niguiri( screen.getRandomX(NIGUIRI_WIDTH), 15, this, screen, false ) );

@@ -152,6 +152,7 @@ public class Niguiri extends Unit implements Constants {
 		if (status == NiguiriStatus.DIE) {
 			if (sprite.isDone()) {
 				remove();
+				screen.explode( getPositionX(), getPositionY(), 5, 20, 35 );
 			}
 		}
 		

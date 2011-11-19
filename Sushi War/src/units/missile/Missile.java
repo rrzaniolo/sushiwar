@@ -19,7 +19,7 @@ public abstract class Missile extends Unit {
 	
 	public Missile( double x, double y, int w, int h, int damage, int explosionRadius, int explosionPower, Screen screen ) {
 		super( x, y, w, h,  screen );
-		setCollisionBoxCenter( 2, 2 );
+		setCollisionBoxCenter( 5, 5 );
 		
 		this.damage = damage;
 		this.explosionRadius = explosionRadius;

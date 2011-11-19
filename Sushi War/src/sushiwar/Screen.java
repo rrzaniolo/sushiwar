@@ -1,30 +1,17 @@
 
 package sushiwar;
 
-import button.ButtonAction;
-import button.NiguiriButton;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -51,7 +38,7 @@ public class Screen extends JPanel implements Constants {
 	//	--	Janela  --
 	public	int					width;
 	public	int					height;
-	private	JFrame				frame			= null;
+	private	Main				frame			= null;
 	private	Terrain				terrain			= null;
 	private Image				background;
 	//	--	Jogadores  --
@@ -66,14 +53,16 @@ public class Screen extends JPanel implements Constants {
 	//	--	Jogo  --
 	private GameStatus			gameStatus		= GameStatus.PLAYER_TURN;
 	private Timer				gameTimer;
+	private Music				gameMusic;
 	private double				shakeMagnitude;
 	private Timer				shakeTimer;
+	private boolean				gameOver;
 	
 	public enum GameStatus {
 		PLAYER_TURN, MISSILE_FLY, EXPLOSION_TIME, DAMAGE_DEAL, NIGUIRI_DEATH
 	}
 	
-	public Screen( int w, int h, JFrame frame, int numPlayers, int numNiguiris, String land ) {
+	public Screen( int w, int h, Main frame ) {
 		super();
         
 		//	--	Inicializar janela  --
@@ -102,11 +91,11 @@ public class Screen extends JPanel implements Constants {
 		}
 		
 		//	--	Carregar música de jogo  --
-		Music gameMusic = new Music("Jinggle");
-		gameMusic.play();
+		gameMusic = new Music("Jinggle");
+		//gameMusic.play();
 		
 		//	--	Inicializar terreno  --
-		terrain = new Terrain(land, this);
+		//terrain = new Terrain(land, this);
 		
 		//	--	Inicializar niguiris --
 		missileList = new ArrayList<Missile>(0);
@@ -114,26 +103,72 @@ public class Screen extends JPanel implements Constants {
 		
 		//	--	Inicializer jogadores  --
 
-		playerList = new ArrayList<Player>();
-		for(int i=0; i<numPlayers; i++) {
-			playerList.add( new Player( numNiguiris, this ) );
+		playerList = new ArrayList<Player>(0);
+		//for(int i=0; i<numPlayers; i++) {
+		//	playerList.add( new Player( numNiguiris, this ) );
+		//}
+		
+		//playerActiveId = 0;
+        //playerActive = playerList.get(0);
+        //playerActive.toggle( true );
+
+		//for (Player p: playerList)
+		//	p.startNiguiri();
+		
+		//	--	Inicializar controle de estado de jogo  --
+		//gameTimer = new Timer( new TimerControl(), 250 );
+		//gameTimer.start();
+		
+		//	--	Inicializar controle de câmera  --
+		//shakeTimer = new Timer( new ShakeControl(), 100 );
+		//shakeTimer.start();
+		
+	}
+	
+	public void startGame( int playerCount, String land ) {
+		terrain = new Terrain(land, this);
+		
+		int niguiriCount = 1;//0/playerCount;
+		for(int i=0; i<playerCount; i++) {
+			playerList.add( new Player( niguiriCount, this ) );
 		}
 		
 		playerActiveId = 0;
         playerActive = playerList.get(0);
         playerActive.toggle( true );
-
+		
 		for (Player p: playerList)
 			p.startNiguiri();
 		
-		//	--	Inicializar controle de estado de jogo  --
+		//gameMusic.start();
+		
 		gameTimer = new Timer( new TimerControl(), 250 );
 		gameTimer.start();
 		
-		//	--	Inicializar controle de câmera  --
 		shakeTimer = new Timer( new ShakeControl(), 100 );
 		shakeTimer.start();
+	}
+	
+	public void clearGame() {
+		niguiriList.clear();
+		playerList.clear();
+		missileList.clear();
+		gameTimer.finish();
+		shakeTimer.finish();
+		Player.resetPlayerCount();
 		
+		gameOver = false;
+		gameStatus = GameStatus.PLAYER_TURN;
+	}
+	
+	public void showGame() {
+		setVisible(true);
+		gameMusic.play();
+	}
+	
+	public void hideGame() {
+		setVisible(false);
+		gameMusic.halt();
 	}
 	
 	//	--	Controle de agentes  --
@@ -157,7 +192,15 @@ public class Screen extends JPanel implements Constants {
 	}
 	
 	public void removePlayer( Player player ) {
+		if (player == playerActive) {
+			playerActiveId = ( playerActiveId + 1 ) % playerList.size();
+			playerActive = playerList.get( playerActiveId );
+		}
 		playerList.remove(player);
+		
+		for ( int i = 0; i < playerList.size(); i++ )
+			if (playerList.get(i) == playerActive)
+				playerActiveId = i;
 	}
 	
 	//	--	Controle de status de jogo  --
@@ -200,14 +243,16 @@ public class Screen extends JPanel implements Constants {
 	}
 	
 	public void nextTurn() {
-		playerActive.toggle(false);
 				
-		playerActiveId = ( playerActiveId + 1 ) % playerList.size();
-		playerActive = playerList.get( playerActiveId );
-		playerActive.nextNiguiri();
-		playerActive.toggle( true );
+		if ( !playerList.isEmpty()) {
+			playerActive.toggle(false);
+			playerActiveId = ( playerActiveId + 1 ) % playerList.size();
+			playerActive = playerList.get( playerActiveId );
+			playerActive.nextNiguiri();
+			playerActive.toggle( true );
+			setGameStatus( GameStatus.PLAYER_TURN );
+		}
 		
-		setGameStatus( GameStatus.PLAYER_TURN );
 	}
 	
 	//	--	Informações  --
@@ -297,9 +342,12 @@ public class Screen extends JPanel implements Constants {
 	
 	public void update() {
 		
+		//	--	Estado: turno do jogador
 		if ( gameStatus == GameStatus.PLAYER_TURN ) {
 			
 		}
+		
+		//	--	Estado: explosões e niguiris voando!
 		else if ( gameStatus == GameStatus.EXPLOSION_TIME ) {
 			if (!checkMovement()) {
 				setGameStatus( GameStatus.DAMAGE_DEAL );
@@ -309,6 +357,8 @@ public class Screen extends JPanel implements Constants {
 				} catch (InterruptedException ex) {	}
 			}
 		}
+		
+		//	--	Estado: dano sendo causado
 		else if ( gameStatus == GameStatus.DAMAGE_DEAL ) {
 			int totalDamage = 0;
 			for (Niguiri n: niguiriList )
@@ -323,6 +373,8 @@ public class Screen extends JPanel implements Constants {
 			
 			setGameStatus( GameStatus.NIGUIRI_DEATH );
 		}
+		
+		//	--	Estado: niguiris morrendo
 		else if ( gameStatus == GameStatus.NIGUIRI_DEATH ) {
 			boolean hasDeath = false;
 			for (Niguiri n: niguiriList )
@@ -334,17 +386,28 @@ public class Screen extends JPanel implements Constants {
 			if (hasDeath)
 				new Sound("Death").play();
 			
-            if(playerList.size() <= 1){
-                JOptionPane gameOver = new JOptionPane();
-                JOptionPane.showMessageDialog(frame,"Player " + (playerList.get(0).getId()+1) + " Venceu", "Game Over", JOptionPane.INFORMATION_MESSAGE, null);
-                frame.remove(this);
-                
-            }
 			try {
 				Timer.sleep(2000);
 			} catch (InterruptedException ex) { }
 			
-			nextTurn();
+			//	Um jogador venceu
+			if(playerList.size() == 1){
+                JOptionPane.showMessageDialog(frame, "Jogador " + (playerList.get(0).getId()+1) + " venceu!", "Game Over",
+												JOptionPane.INFORMATION_MESSAGE, null);
+				gameOver = true;
+            }
+			//	Empate
+			else if (playerList.isEmpty()) {
+				JOptionPane.showMessageDialog(frame, "Empate!", "Game Over",
+												JOptionPane.INFORMATION_MESSAGE, null);
+				gameOver = true;
+			}
+			
+			if (!gameOver)
+				nextTurn();
+			else {
+				frame.resetGame();
+			}
 		}
 	}
 	
@@ -386,7 +449,8 @@ public class Screen extends JPanel implements Constants {
 		double sx = Math.random()*shakeMagnitude - shakeMagnitude/2;
 		double sy = Math.random()*shakeMagnitude - shakeMagnitude/2;
 
-		terrain.print(g, sx, sy);
+		if (terrain != null)
+			terrain.print(g, sx, sy);
 		
 		for (Player p: playerList) {
 			p.printNiguiri(g, sx, sy);
