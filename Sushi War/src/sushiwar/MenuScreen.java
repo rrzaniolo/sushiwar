@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,7 +118,7 @@ public class MenuScreen extends JPanel implements Constants {
     
     class SubMenu extends JOptionPane{
         private int numberOfPlayers;     
-        private Object [] ops = {"2 Players","3 Players","4 Players"}; 
+        private Object [] ops = {"2 Jogadores","3 Jogadores","4 Jogadores"}; 
 
         public SubMenu(){
             do{
@@ -137,14 +138,13 @@ public class MenuScreen extends JPanel implements Constants {
     class SubMenu2 extends JOptionPane{
         private String land;
         private int indice;
-        private Object [] ops = {"land01","land02","land03","land04","land05","land06","land07"}; 
+        private Object [] ops = {"Colina","Desfiladeiro","Vale das Trevas","Geometria","Planície","Ilhas Celestes","Tempestade"}; 
 
         public SubMenu2(){
-            do{
+            do {
              this.indice = showOptionDialog(frame, "Escolha o Terreno no qual deseja jogar", "Terreno", 
                     DEFAULT_OPTION, QUESTION_MESSAGE, icon, ops, null);
-            //System.out.println(indice);
-            }while(indice <0);
+            } while(indice <0);
             
             this.land = (String)(ops[indice]);
         }
