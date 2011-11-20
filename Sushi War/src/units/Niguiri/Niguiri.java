@@ -72,6 +72,7 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void setStatus( NiguiriStatus now ) {
 		if (status != now) {
+			blockMovement = false;
 			status = now;
 
 			if (now == NiguiriStatus.WALK) {
@@ -99,6 +100,7 @@ public class Niguiri extends Unit implements Constants {
 			}
 			else if (now == NiguiriStatus.FIRE) {
 				playAnimation("fire");
+				blockMovement = true;
 				ready = false;
 			}
 			else if (now == NiguiriStatus.CRY) {
@@ -152,7 +154,7 @@ public class Niguiri extends Unit implements Constants {
 		if (status == NiguiriStatus.DIE) {
 			if (sprite.isDone()) {
 				remove();
-				screen.explode( getPositionX(), getPositionY(), 5, 20, 35 );
+				screen.explode( getPositionX(), getPositionY(), 5, 30, 20 );
 			}
 		}
 		
@@ -199,6 +201,7 @@ public class Niguiri extends Unit implements Constants {
 	}
 	
 	public void remove() {
+		System.out.println("Removing " + name );
 		player.removeNiguiri(this);
 		moveTimer.finish();
 		sprite.remove();
@@ -250,51 +253,44 @@ public class Niguiri extends Unit implements Constants {
 	
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
+		super.keyPressedOnce(e);
+		System.out.println("   PRESSED! At " + screen.getGameStatus() );
+
 		if (status != NiguiriStatus.FIRE) {
-			super.keyPressedOnce(e);
-			
 			if (!onAir && isMoving())
 				setStatus(NiguiriStatus.WALK);
-		}
-		
-		//	--	Pulo normal  --
-		if ( ready && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
-			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_JUMP_VX, -MOVE_NIGUIRI_JUMP_VY );
-			setStatus(NiguiriStatus.JUMP);
-		}
-		
-		//	--	Pulo alto  --
-		else if ( ready && e.getKeyCode() == MOVE_NIGUIRI_HJUMP_KEY ) {
-			setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_HJUMP_VX, -MOVE_NIGUIRI_HJUMP_VY );
-			setStatus(NiguiriStatus.JUMP);
-		}
-		
-		/*else if ( e.getKeyCode() == KeyEvent.VK_UP)
-			crosshair.changeAngle(5);
-		
-		else if ( e.getKeyCode() == KeyEvent.VK_DOWN)
-			crosshair.changeAngle(-5);
-		*/
-		else if ( ready && e.getKeyCode() == KeyEvent.VK_SPACE) {
+
+			//	--	Pulo normal  --
+			if ( ready && e.getKeyCode() == MOVE_NIGUIRI_JUMP_KEY ) {
+				setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_JUMP_VX, -MOVE_NIGUIRI_JUMP_VY );
+				setStatus(NiguiriStatus.JUMP);
+			}
+
+			//	--	Pulo alto  --
+			else if ( ready && e.getKeyCode() == MOVE_NIGUIRI_HJUMP_KEY ) {
+				setSpeed( DirPad.Direction2X(facing)*MOVE_NIGUIRI_HJUMP_VX, -MOVE_NIGUIRI_HJUMP_VY );
+				setStatus(NiguiriStatus.JUMP);
+			}
+			
+			else if ( ready && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			setStatus( NiguiriStatus.FIRE );
 			powerBar.reset();
 			powerBar.toggle(true);
+		}
 		}
 		
 	}
 	
 	@Override
 	public void keyReleasedOnce( KeyEvent e ) {
-		if (status != NiguiriStatus.FIRE) {
-			super.keyReleasedOnce(e);
-			
-			if (!isMoving())
-				this.setStatus(NiguiriStatus.STAND);
-		}
+		super.keyReleasedOnce(e);
 		
 		if ( status == NiguiriStatus.FIRE && e.getKeyCode() == KeyEvent.VK_SPACE ) {
 			fire( powerBar.getPercentage() );
 		}
+		
+		if (status != NiguiriStatus.FIRE && !isMoving())
+			this.setStatus(NiguiriStatus.STAND);
 		
 	}
 	

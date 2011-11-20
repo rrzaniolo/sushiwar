@@ -28,6 +28,7 @@ public class Unit extends Agent implements Constants {
 	protected boolean	respondWind		= false;
 	protected boolean	ready			= true;
 	protected boolean	onAir			= false;
+	protected boolean	blockMovement	= false;
 	protected double	flyHeight		= 0;
 	protected double	vx				= 0;
 	protected double	vy				= 0;
@@ -79,7 +80,7 @@ public class Unit extends Agent implements Constants {
 		//	Calcular deslocamento sem atravessar o terreno
 		double dy = Math.min( flyHeight, vy/MOVE_TIMER_PERIOD );
 
-		if (dy != 0)
+		if (!blockMovement && dy != 0)
 			this.move(0, dy);
 				//vy = 0;
 		
@@ -107,7 +108,8 @@ public class Unit extends Agent implements Constants {
 			dx += ux * MOVE_NIGUIRI_SPEED;
 		
 		dx = dx/MOVE_TIMER_PERIOD;
-		this.move( dx, 0 );
+		if (!blockMovement)
+			this.move( dx, 0 );
 		
 		//	Se tiver atingido terreno, cancelar movimento em X.
 		if (screen.hitTerrain(this, vy >= -MOVE_FALLING_HEIGHT)) {
@@ -163,10 +165,12 @@ public class Unit extends Agent implements Constants {
 	public void keyPressedOnce( KeyEvent e ) {
 		super.keyPressedOnce(e);
 		
-		if (ux == -1)
-			facing = Direction.LEFT;
-		else if (ux == 1)
-			facing = Direction.RIGHT;
+		if (!blockMovement) {
+			if (ux == -1)
+				facing = Direction.LEFT;
+			else if (ux == 1)
+				facing = Direction.RIGHT;
+		}
 	}
 	  
 	@Override
