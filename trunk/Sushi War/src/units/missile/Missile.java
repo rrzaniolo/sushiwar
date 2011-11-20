@@ -47,9 +47,6 @@ public abstract class Missile extends Unit {
 		screen.explode( x, y, damage, explosionRadius, explosionPower );
 		screen.removeMissile(this);
 		
-		Sound explosionSound = new Sound("Explosion");
-		explosionSound.play();
-		
 		this.moveTimer.finish();
 	}
 }

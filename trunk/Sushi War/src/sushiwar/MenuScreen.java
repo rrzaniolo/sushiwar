@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import sound.Music;
@@ -61,7 +60,6 @@ public class MenuScreen extends JPanel implements Constants {
 		}
 		
 		// -- Inicializando música --
-        this.menuMusic = new Music("MushishiOP");
 		
 		//	--	Inicializando botões  --		
         start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
@@ -74,12 +72,14 @@ public class MenuScreen extends JPanel implements Constants {
     
     public void showMenu (){
         this.setVisible(true);
+		this.menuMusic = new Music("MushishiOP");
 		menuMusic.play();
     }  
     
 	public void hideMenu() {
 		this.setVisible(false);
-		menuMusic.halt();
+		if (menuMusic != null)
+			menuMusic.halt();
 	}
 	
     private class StartActionControl extends ButtonAction {

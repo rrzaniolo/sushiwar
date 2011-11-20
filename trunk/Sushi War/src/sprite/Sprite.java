@@ -161,7 +161,7 @@ public class Sprite implements TimerListener, Constants {
 		if (animNow != null) {
 			timeCount -= SPRITE_TIMER_PERIOD;
 		
-			if (timeCount <= 0) {
+			if (timeCount <= 0 && !(!animNow.isLooping() && frameNow == animNow.getFrameCount()-1)) {
 				frameNow = animNow.getNextFrame( frameNow  );
 				timeCount = animNow.getFramePeriod( frameNow );
 				updateStatus += 0x01;
@@ -173,7 +173,7 @@ public class Sprite implements TimerListener, Constants {
 	}
 	
 	public boolean isDone() {
-		return !animNow.isLooping() && frameNow == animNow.getFrameCount()-1;
+		return !animNow.isLooping() && frameNow == animNow.getFrameCount()-1 && timeCount <= 0;
 	}
 	
 	//	--	Gráfico  --
