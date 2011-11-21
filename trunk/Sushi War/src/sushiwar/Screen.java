@@ -6,6 +6,8 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -92,13 +94,6 @@ public class Screen extends JPanel implements Constants {
 			System.out.println(ex.getMessage());
 		}
 
-		//	--	Carregar música de jogo  --
-
-		//gameMusic.play();
-
-		//	--	Inicializar terreno  --
-		//terrain = new Terrain(land, this);
-
 		//	--	Inicializar niguiris --
 		missileList = new ArrayList<Missile>(0);
 		niguiriList = new ArrayList<Niguiri>(0);
@@ -106,30 +101,23 @@ public class Screen extends JPanel implements Constants {
 		//	--	Inicializer jogadores  --
 
 		playerList = new ArrayList<Player>(0);
-		//for(int i=0; i<numPlayers; i++) {
-		//	playerList.add( new Player( numNiguiris, this ) );
-		//}
-
-		//playerActiveId = 0;
-		//playerActive = playerList.get(0);
-		//playerActive.toggle( true );
-
-		//for (Player p: playerList)
-		//	p.startNiguiri();
-
-		//	--	Inicializar controle de estado de jogo  --
-		//gameTimer = new Timer( new TimerControl(), 250 );
-		//gameTimer.start();
-
-		//	--	Inicializar controle de câmera  --
-		//shakeTimer = new Timer( new ShakeControl(), 100 );
-		//shakeTimer.start();
+		
+		//	--	Criar ação de menu  --
+		
+		frame.addKeyListener( new KeyAdapter() {
+			public void keyPressed( KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE && Screen.this.isVisible())
+					Screen.this.frame.toggleMenu(true);
+			}
+		});
 
 	}
 
 	public void startGame(int playerCount, String land) {
-		terrain = new Terrain(land, this);
+		clearGame();
 		
+		terrain = new Terrain(land, this);
+
 		int niguiriCount = 10 / playerCount;
 		for (int i = 0; i < playerCount; i++) {
 			playerList.add(new Player(niguiriCount, this));
@@ -142,8 +130,6 @@ public class Screen extends JPanel implements Constants {
 		for (Player p : playerList) {
 			p.startNiguiri();
 		}
-
-		//gameMusic.start();
 
 		gameTimer = new Timer(new TimerControl(), 250);
 		gameTimer.start();
@@ -160,8 +146,12 @@ public class Screen extends JPanel implements Constants {
 		//niguiriList.clear();
 		playerList.clear();
 		missileList.clear();
-		gameTimer.finish();
-		shakeTimer.finish();
+		
+		if (gameTimer != null)
+			gameTimer.finish();
+		if (shakeTimer != null)
+			shakeTimer.finish();
+		
 		Player.resetPlayerCount();
 
 		gameOver = false;
@@ -181,6 +171,10 @@ public class Screen extends JPanel implements Constants {
 		}
 	}
 
+	public void pauseGame() {
+		frame.toggleMenu(true);
+	}
+	
 	//	--	Controle de agentes  --
 	public void addNiguiri(Niguiri niguiri) {
 		niguiriList.add(niguiri);
@@ -466,6 +460,7 @@ public class Screen extends JPanel implements Constants {
 		}
 	}
 
+	
 	//	--	Controle de gráfico  --
 	@Override
 	protected void paintComponent(Graphics g) {

@@ -53,7 +53,7 @@ public class InfoBar implements Constants {
 		this.niguiri = niguiri;
 		
 		//	--	Rótulo de nome  --
-		nameLabel = new JLabel( niguiri.getName() );
+		/*nameLabel = new JLabel( niguiri.getName() );
 		nameLabel.setOpaque(true);
 		nameLabel.setBackground( BACKGROUND_COLOR );
 		nameLabel.setBorder( new LineBorder( BORDER_COLOR ) );
@@ -65,7 +65,7 @@ public class InfoBar implements Constants {
 							 NAMELABEL_WIDTH, LABEL_HEIGHT );
 		
 		nameLabel.setHorizontalAlignment( JLabel.CENTER );
-		screen.add( nameLabel );
+		screen.add( nameLabel );*/
 		
 		//	--	Rótulo de vida  --
 		lifeLabel = new JLabel( String.valueOf(niguiri.getLife()) );
@@ -76,7 +76,7 @@ public class InfoBar implements Constants {
 		lifeLabel.setFont( LABEL_FONT );
 		
 		lifeLabel.setBounds( (int) niguiri.getPositionX() - LIFELABEL_WIDTH/2,
-							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT*2),
+							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT),
 							 LIFELABEL_WIDTH, LABEL_HEIGHT );
 		
 		lifeLabel.setHorizontalAlignment( JLabel.CENTER );
@@ -88,20 +88,20 @@ public class InfoBar implements Constants {
 	
 	public void update() {
 		
-		nameLabel.setLocation( (int) niguiri.getPositionX() - NAMELABEL_WIDTH/2,
-							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT*3+1) );
+		//nameLabel.setLocation( (int) niguiri.getPositionX() - NAMELABEL_WIDTH/2,
+		//					 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT*3+1) );
 		lifeLabel.setText( String.valueOf( niguiri.getLife() ) );
 		lifeLabel.setLocation( (int) niguiri.getPositionX() - LIFELABEL_WIDTH/2,
-							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT*2) );
+							 (int) (niguiri.getPositionY() - niguiri.getHeight()/2 - LABEL_HEIGHT) );
 	}
 	
 	public void remove() {
-		screen.remove(nameLabel);
+		//screen.remove(nameLabel);
 		screen.remove(lifeLabel);
 	}
 	
 	public void setVisible( boolean is ) {
-		nameLabel.setVisible(is);
+		//nameLabel.setVisible(is);
 		lifeLabel.setVisible(is);
 	}
 	

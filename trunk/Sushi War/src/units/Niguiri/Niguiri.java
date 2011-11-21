@@ -77,37 +77,46 @@ public class Niguiri extends Unit implements Constants {
 
 			if (now == NiguiriStatus.WALK) {
 				playAnimation("walk");
+				infoBar.setVisible(false);
 				ready = true;
 			}
 			else if (now == NiguiriStatus.JUMP) {
 				playAnimation("jump");
+				infoBar.setVisible(false);
 				ready = false;
 			}
 			else if (now == NiguiriStatus.FALL) {
+				infoBar.setVisible(false);
 				ready = false;
 			}
 			else if (now == NiguiriStatus.LAND) {
+				infoBar.setVisible(false);
 				playAnimation("land");
 				ready = false;
 			}
 			else if (now == NiguiriStatus.STAND) {
+				infoBar.setVisible(true);
 				playAnimation("stand");
 				ready = true;
 			}
 			else if (now == NiguiriStatus.DIZZY) {
+				infoBar.setVisible(false);
 				playAnimation("dizzy");
 				ready = false;
 			}
 			else if (now == NiguiriStatus.FIRE) {
+				infoBar.setVisible(false);
 				playAnimation("fire");
 				blockMovement = true;
 				ready = false;
 			}
 			else if (now == NiguiriStatus.CRY) {
+				infoBar.setVisible(false);
 				playAnimation("cry");
 				ready = false;
 			}
 			else if (now == NiguiriStatus.DIE) {
+				infoBar.setVisible(true);
 				playAnimation("die");
 				ready = false;
 			}
@@ -144,7 +153,6 @@ public class Niguiri extends Unit implements Constants {
 	
 	public void toggle( boolean on ) {
 		super.toggle(on);
-		infoBar.setVisible(!on);
 	}
 	
 	public int update() {
@@ -201,7 +209,6 @@ public class Niguiri extends Unit implements Constants {
 	}
 	
 	public void remove() {
-		System.out.println("Removing " + name );
 		player.removeNiguiri(this);
 		moveTimer.finish();
 		sprite.remove();
@@ -254,7 +261,6 @@ public class Niguiri extends Unit implements Constants {
 	@Override
 	public void keyPressedOnce( KeyEvent e ) {
 		super.keyPressedOnce(e);
-		System.out.println("   PRESSED! At " + screen.getGameStatus() );
 
 		if (status != NiguiriStatus.FIRE) {
 			if (!onAir && isMoving())
@@ -272,11 +278,11 @@ public class Niguiri extends Unit implements Constants {
 				setStatus(NiguiriStatus.JUMP);
 			}
 			
-			else if ( ready && e.getKeyCode() == KeyEvent.VK_SPACE) {
-			setStatus( NiguiriStatus.FIRE );
-			powerBar.reset();
-			powerBar.toggle(true);
-		}
+			else if ( status == NiguiriStatus.STAND && e.getKeyCode() == KeyEvent.VK_SPACE) {
+				setStatus( NiguiriStatus.FIRE );
+				powerBar.reset();
+				powerBar.toggle(true);
+			}
 		}
 		
 	}
