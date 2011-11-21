@@ -1,8 +1,6 @@
 
 package sound;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import java.io.*;

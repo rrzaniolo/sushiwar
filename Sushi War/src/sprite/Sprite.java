@@ -19,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import player.DirPad.Direction;
 import sushiwar.Constants;
-import sushiwar.Screen;
 import timer.*;
 
 public class Sprite implements TimerListener, Constants {

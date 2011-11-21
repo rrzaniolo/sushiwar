@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,8 +82,8 @@ public class MenuScreen extends JPanel implements Constants {
     
     public void showMenu (){
         this.setVisible(true);
-		this.menuMusic = new Music("MushishiOP");
-		menuMusic.play();
+		//this.menuMusic = new Music("MushishiOP");
+		//menuMusic.play();
     }  
     
 	public void hideMenu() {

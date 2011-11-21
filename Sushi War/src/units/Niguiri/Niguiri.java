@@ -9,7 +9,6 @@ package units.Niguiri;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import javax.swing.JPanel;
 import player.DirPad;
 import player.DirPad.Direction;
 import player.Player;

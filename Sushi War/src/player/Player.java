@@ -8,7 +8,6 @@ package player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import sushiwar.Constants;
 import sushiwar.Screen;
 import units.Niguiri.Niguiri;

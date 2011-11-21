@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import player.Player;
@@ -160,8 +157,8 @@ public class Screen extends JPanel implements Constants {
 
 	public void showGame() {
 		setVisible(true);
-		gameMusic = new Music("Jinggle");
-		gameMusic.play();
+		//gameMusic = new Music("Jinggle");
+		//gameMusic.play();
 	}
 
 	public void hideGame() {
