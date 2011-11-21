@@ -23,7 +23,7 @@ public class Music extends Thread {
 		repeat = true;
 		System.out.println(musicPath + " played");
 		System.out.println(musicPath + "alive: " + isAlive() );
-		start();
+		//start();
 	}
 	
 	public void playOnce() {

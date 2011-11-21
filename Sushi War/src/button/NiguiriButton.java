@@ -23,6 +23,7 @@ public class NiguiriButton {
 	private MouseStatus			mouseStatus;
 	private JPanel				screen;
 	private ButtonAction		action;
+	private boolean				visible;
 	
 	private static final int	height = 30;
 	
@@ -36,6 +37,7 @@ public class NiguiriButton {
 		this.y = y;
 		this.width = width;
 		this.screen = screen;
+		this.visible = true;
 		
 		sprite = new ButtonSprite( screen );
 		sprite.playAnimation("close");
@@ -49,20 +51,26 @@ public class NiguiriButton {
 		this.action = action;
 	}
 	
+	public void setVisible( boolean visible ) {
+		this.visible = visible;
+	}
+	
 	public void print( Graphics g ) {
-		Graphics g2 = screen.getGraphics();
-		FontMetrics fm = g2.getFontMetrics();
-		
-		textOffset = height - (height - fm.getHeight());
-		
-		g.setColor( Color.white );
-		g.fillRect( x+23, y, width-23, height );
-		g.setColor( Color.black );
-		g.fillRect( x+24, y+1, width-25, height-2 );
-		g.setColor( Color.white );
-		g.drawString( text, x+50, y+textOffset);
-		
-		sprite.print( x, y+(height-45)/2 , g );
+		if (visible) {
+			Graphics g2 = screen.getGraphics();
+			FontMetrics fm = g2.getFontMetrics();
+
+			textOffset = height - (height - fm.getHeight());
+
+			g.setColor( Color.white );
+			g.fillRect( x+23, y, width-23, height );
+			g.setColor( Color.black );
+			g.fillRect( x+24, y+1, width-25, height-2 );
+			g.setColor( Color.white );
+			g.drawString( text, x+50, y+textOffset);
+
+			sprite.print( x, y+(height-45)/2 , g );
+		}
 	}
 	
 	private class MotionControl extends MouseMotionAdapter {
@@ -97,7 +105,7 @@ public class NiguiriButton {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (action != null) {
+			if (action != null && visible) {
 				int mx = e.getX();
 				int my = e.getY();
 				if ( mx > x && mx < x+width && my > y && my < y+height )

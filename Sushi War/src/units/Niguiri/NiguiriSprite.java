@@ -26,7 +26,7 @@ public class NiguiriSprite extends Sprite {
 		this.addAnimation( new Animation("jump", 14, 3, 30, false) );
 		this.addAnimation( new Animation("land", 17, 7, 40, false) );
 		this.addAnimation( new Animation("dizzy", 24, 8, 25, true) );
-		this.addAnimation( new Animation("fire", 32, 4, 40, false) );
+		this.addAnimation( new Animation("fire", 32, 3, 40, false) );
 		anim = new Animation("cry", 35, 8, 60, true);
 		anim.setFramePeriod(4, 1000);
 		this.addAnimation( anim );

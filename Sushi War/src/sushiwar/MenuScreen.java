@@ -29,6 +29,7 @@ public class MenuScreen extends JPanel implements Constants {
     private Music               menuMusic       = null;
     private NiguiriButton       start           = null;
     private NiguiriButton       exit            = null;
+	private NiguiriButton       resume          = null;
     private Image				background;
     
     
@@ -63,11 +64,20 @@ public class MenuScreen extends JPanel implements Constants {
 		// -- Inicializando música --
 		
 		//	--	Inicializando botões  --		
-        start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
+        /*start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
         start.setAction( new StartActionControl() );
         
         exit = new NiguiriButton( (windowWidth - 150)/2,(windowHeight - 45)/2 + 45 , 150, "SAIR", this );
+        exit.setAction( new ExitActionControl() );*/
+		start = new NiguiriButton( (windowWidth - 250), (windowHeight - 150), 200, "NOVO JOGO", this );
+        start.setAction( new StartActionControl() );
+        
+        exit = new NiguiriButton( (windowWidth - 250),(windowHeight - 100) , 200, "SAIR", this );
         exit.setAction( new ExitActionControl() );
+		
+		resume = new NiguiriButton( (windowWidth - 250),(windowHeight - 200) , 200, "RETORNAR", this );
+        resume.setAction( new ResumeActionControl() );
+		resume.setVisible( false );
                         
     }
     
@@ -81,6 +91,10 @@ public class MenuScreen extends JPanel implements Constants {
 		this.setVisible(false);
 		if (menuMusic != null)
 			menuMusic.halt();
+	}
+	
+	public void canResume( boolean can ) {
+		resume.setVisible(can);
 	}
 	
     private class StartActionControl extends ButtonAction {
@@ -106,6 +120,15 @@ public class MenuScreen extends JPanel implements Constants {
 		
 	}
     
+	private class ResumeActionControl extends ButtonAction {
+
+		@Override
+        public void execute() {
+            frame.toggleMenu(false);
+		}
+		
+	}
+	
     @Override
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent(g);
@@ -113,6 +136,7 @@ public class MenuScreen extends JPanel implements Constants {
 		
         start.print(g);
         exit.print(g);
+		resume.print(g);
 		
 	}
     

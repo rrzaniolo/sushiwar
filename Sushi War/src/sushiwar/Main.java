@@ -34,6 +34,19 @@ public class Main extends JFrame {
 		game.clearGame();
 		game.hideGame();
 		menu.showMenu();
+		menu.canResume(false);
+	}
+	
+	public void toggleMenu( boolean on ) {
+		if (on) {
+			game.hideGame();
+			menu.showMenu();
+			menu.canResume(true);
+		}
+		else {
+			game.showGame();
+			menu.hideMenu();
+		}
 	}
 	
 	public static void main( String []args ) {
