@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import player.Player;
@@ -70,7 +71,6 @@ public class Screen extends JPanel implements Constants {
 		this.frame = frame;
 		this.width = w;
 		this.height = h;
-
 		this.setLayout(null);
 
 		setSize(w, h);
@@ -208,7 +208,6 @@ public class Screen extends JPanel implements Constants {
 	//	--	Controle de status de jogo  --
 	public void setGameStatus(GameStatus status) {
 		gameStatus = status;
-		System.out.println(status.toString());
 		if (status == GameStatus.PLAYER_TURN) {
 			pauseTurn(false);
 		} else {
@@ -358,7 +357,6 @@ public class Screen extends JPanel implements Constants {
 
 	//	--	Atualização  --
 	public void update() {
-		
 		if (skipCycle > 0) {
 			skipCycle--;
 			return;

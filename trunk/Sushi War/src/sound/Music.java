@@ -19,9 +19,7 @@ public class Music extends Thread {
 	
 	public void play() {
 		repeat = true;
-		System.out.println(musicPath + " played");
-		System.out.println(musicPath + "alive: " + isAlive() );
-		//start();
+		start();
 	}
 	
 	public void playOnce() {
@@ -54,6 +52,5 @@ public class Music extends Thread {
 			}
 			
 		} while (repeat);
-		System.out.println(musicPath + " halted");
 	}
 }
