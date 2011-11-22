@@ -144,11 +144,10 @@ public class MenuScreen extends JPanel implements Constants {
         private Object [] ops = {"2 Jogadores","3 Jogadores","4 Jogadores"}; 
 
         public SubMenu(){
-            do{
+            do {
             numberOfPlayers = showOptionDialog(frame, "Escolha o Número de Jogadores", "Jogadores", 
                     DEFAULT_OPTION, QUESTION_MESSAGE, icon, ops, null);
-            System.out.println(numberOfPlayers);
-            }while(numberOfPlayers <0);
+            } while(numberOfPlayers <0);
             
             numberOfPlayers = numberOfPlayers +2;
         }

@@ -4,7 +4,6 @@ package units.Niguiri;
 /**
  * @author Hossomi
  * 
- * CLASS Niguiri ------------------------------------------
  */
 
 import java.awt.Graphics;
@@ -41,7 +40,18 @@ public class Niguiri extends Unit implements Constants {
 	}
 	
 	//	-----------------------------------------------------------------------
-	
+
+	/**
+	 * Personagem controlado pelo jogador. Responde a todos os comandos básicos
+	 * como setas direcionais, pulo e barra de espaço.
+	 * 
+	 * @param x Posição X do Oniguiri
+	 * @param y Posição Y do Oniguiri
+	 * @param player Jogador controlador do Oniguiri
+	 * @param screen Tela do jogo
+	 * @param respondControl Se verdadeiro, o Oniguiri responderá aos controles
+	 *	desde o início
+	 */
 	public Niguiri( double x, double y, Player player, Screen screen, boolean respondControl ) {
 		super(x, y, 30, 30, screen, respondControl );
 		setCollisionBox( 7, 9, 16, 16 );
@@ -69,6 +79,11 @@ public class Niguiri extends Unit implements Constants {
 	
 	//	--  Manipulação  ------------------------------------------------------
 	
+	/**
+	 * Define o status atual do Oniguiri. Seu status determina se ele responde
+	 * aos comandos, se pode atirar ou se pode movimentar.
+	 * @param now Status atual
+	 */
 	public void setStatus( NiguiriStatus now ) {
 		if (status != now) {
 			blockMovement = false;
@@ -122,14 +137,27 @@ public class Niguiri extends Unit implements Constants {
 		}
 	}
 	
+	/**
+	 * Modifica a vida do Oniguiri. Reduzir a zero não o mata automaticamente.
+	 * @param life Nova vida do Oniguiri
+	 */
 	public void setLife( int life ) {
 		this.life = life;
 	}
 	
+	/**
+	 * Registra dano recebido pelo Oniguiri. Não reduz sua vida automaticamente.
+	 * @param damage Dano recebido
+	 */
 	public void applyDamage( int damage ) {
 		damageTaken += damage;
 	}
 	
+	/**
+	 * Efetua o dano registrado, deduzindo-o da sua vida. Não mata automatiamente
+	 * e zera o dano registrado.
+	 * @return 
+	 */
 	public int doDamage() {
 		int damage = damageTaken;
 		life = Math.max( life -= damageTaken, 0 );
@@ -138,10 +166,17 @@ public class Niguiri extends Unit implements Constants {
 		return damage;
 	}
 	
+	/**
+	 * Mata o Oniguiri. Pode ser cancelado alterando seu status.
+	 */
 	public void kill() {
 		setStatus( NiguiriStatus.DIE );
 	}
 	
+	/**
+	 * Atira um sushi explosivo com uma determinada potência.
+	 * @param power Potência do tiro (em %)
+	 */
 	public void fire( int power ) {
 		ExplodingSushi sushi = new ExplodingSushi( this, power, screen );
 		powerBar.toggle(false);
@@ -150,10 +185,20 @@ public class Niguiri extends Unit implements Constants {
 		screen.setGameStatus( Screen.GameStatus.MISSILE_FLY );
 	}
 	
+	/**
+	 * Ativa ou desativa o Oniguiri. Um Oniguiri desativado não responde a nenhum
+	 * comando.
+	 * @param on Se verdadeiro, o Oniguiri é ativado
+	 */
 	public void toggle( boolean on ) {
 		super.toggle(on);
 	}
 	
+	/**
+	 * Realiza atualizações de status do Oniguiri dependendo de sua posição ou
+	 * status atual.
+	 * @return 
+	 */
 	public int update() {
 		int updateStatus = super.update();
 		boolean hitGround = (updateStatus & Constants.MOVE_HITGROUND_VERTICAL) != 0;
@@ -207,6 +252,9 @@ public class Niguiri extends Unit implements Constants {
 		return 0;
 	}
 	
+	/**
+	 * Remove o Oniguiri de jogo.
+	 */
 	public void remove() {
 		player.removeNiguiri(this);
 		moveTimer.finish();
@@ -219,34 +267,66 @@ public class Niguiri extends Unit implements Constants {
 	
 	//	--  Informação  -------------------------------------------------------
 	
+	/**
+	 * Retorna o controlador deste Oniguiri.
+	 * @return O controlador do Oniguiri
+	 */
 	public Player getPlayer(){
         return this.player;
     }
 	
+	/**
+	 * Retorna o id do controlador deste Oniguiri.
+	 * @return O id do controlador do Oniguiri
+	 */
 	public int getPlayerId() {
 		return player.getId();
 	}
 	
+	/**
+	 * Retorna o nome do Oniguiri.
+	 * @return O nome do oniguiri
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * Retorna a vida do Oniguiri.
+	 * @return A vida do Oniguiri
+	 */
 	public int getLife() {
 		return life;
 	}
 	
+	/**	
+	 * Retorna o ponto de onde o tiro deve partir.
+	 * @return O X do ponto de saída do tiro
+	 */
 	public double getFireX() {
 		return x + Constants.NIGUIRI_FIRE_RADIUS * Math.cos( crosshair.getAngle() );
 	}
 	
+	/**	
+	 * Retorna o ponto de onde o tiro deve partir.
+	 * @return O Y do ponto de saída do tiro
+	 */
 	public double getFireY() {
 		return y + Constants.NIGUIRI_FIRE_RADIUS * Math.sin( crosshair.getAngle() );
 	}
 	
+	/**
+	 * Retorna o ângulo em que o Oniguiri está mirando.
+	 * @return O ângulo da mira
+	 */
 	public double getFireAngle() {
 		return crosshair.getAngle();
 	}
 	
+	/**
+	 * Retorna a quantidade de dano recebido registrado no Oniguiri.
+	 * @return O dano registrado
+	 */
 	public int getDamageTaken() {
 		return damageTaken;
 	}
@@ -301,20 +381,40 @@ public class Niguiri extends Unit implements Constants {
 	
 	//	--  Gráfico  ----------------------------------------------------------
 	
+	/**
+	 * Imprime num contexto gráfico.
+	 * @param g Contexto gráfico
+	 */
 	@Override
 	public void print( Graphics g ){
 		super.print(g);
 	}
 	
+	/**
+	 * Imprime num contexto gráfico com um deslocamento.
+	 * @param g Contexto gráfico
+	 * @param sx Deslocamento em X
+	 * @param sy Deslocamento em Y
+	 */
 	public void print( Graphics g, double sx, double sy ){
 		super.print(g, sx, sy);
 	}
 	
+	/**
+	 * Imprime num contexto gráfico.
+	 * @param g Contexto gráfico
+	 */
 	public void printCrosshair( Graphics g ) {
 		if (respondControl && status == NiguiriStatus.STAND )
 			crosshair.print(g);
 	}
 	
+	/**
+	 * Imprime num contexto gráfico com um deslocamento.
+	 * @param g Contexto gráfico
+	 * @param sx Deslocamento em X
+	 * @param sy Deslocamento em Y
+	 */
 	public void printCrosshair( Graphics g, double sx, double sy ) {
 		if (respondControl && status == NiguiriStatus.STAND )
 			crosshair.print(g, sx, sy);
