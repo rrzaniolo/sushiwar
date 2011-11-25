@@ -175,6 +175,14 @@ public class Sprite implements TimerListener, Constants {
 		return !animNow.isLooping() && frameNow == animNow.getFrameCount()-1 && timeCount <= 0;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
 	//	--	Gráfico  --
 	public void print( double x, double y, Graphics g ) {
 		Graphics2D g2 = (Graphics2D) g;

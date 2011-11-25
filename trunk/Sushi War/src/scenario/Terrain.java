@@ -4,7 +4,6 @@
  */
 package scenario;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -12,7 +11,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.swing.ImageIcon;
-import sprite.Sprite;
 import sushiwar.Constants;
 import sushiwar.Screen;
 import units.Agent;
