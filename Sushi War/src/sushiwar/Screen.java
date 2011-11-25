@@ -20,6 +20,7 @@ import player.Player;
 import scenario.Terrain;
 import sound.Music;
 import sound.Sound;
+import sushiwar.Main.MenuStatus;
 import timer.Timer;
 import timer.TimerListener;
 import units.Agent;
@@ -104,7 +105,7 @@ public class Screen extends JPanel implements Constants {
 		frame.addKeyListener( new KeyAdapter() {
 			public void keyPressed( KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE && Screen.this.isVisible())
-					Screen.this.frame.toggleMenu(true);
+					Screen.this.frame.toggleMenu( MenuStatus.MENU_MAIN );
 			}
 		});
 
@@ -169,7 +170,7 @@ public class Screen extends JPanel implements Constants {
 	}
 
 	public void pauseGame() {
-		frame.toggleMenu(true);
+		frame.toggleMenu( MenuStatus.MENU_MAIN );
 	}
 	
 	//	--	Controle de agentes  --
@@ -459,12 +460,12 @@ public class Screen extends JPanel implements Constants {
 	//	--	Controle de gráfico  --
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(background, 0, 0, null);
+		//super.paintComponent(g);
 
 		double sx = Math.random() * shakeMagnitude - shakeMagnitude / 2;
 		double sy = Math.random() * shakeMagnitude - shakeMagnitude / 2;
 
+		g.drawImage(background, (int)sx, (int)sy, null);
 		if (terrain != null) {
 			terrain.print(g, sx, sy);
 		}

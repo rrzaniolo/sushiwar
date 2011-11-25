@@ -4,7 +4,6 @@
  */
 package units.missile;
 
-import javax.swing.JPanel;
 import sprite.Animation;
 import sprite.Sprite;
 import sushiwar.Screen;
@@ -18,7 +17,7 @@ public class ExplodingSushi extends Missile {
 	
 	public ExplodingSushi( Niguiri niguiri, double firePower, Screen screen ) {
 		
-		super( niguiri.getFireX(), niguiri.getFireY(), 30, 30, 20, 50, 45, screen );
+		super( niguiri.getFireX(), niguiri.getFireY(), 30, 30, 40, 60, 50, screen );
 		
 		//	--	Sprite  --
 		sprite = new Sprite( "Sushi", 20, 20, screen, false );

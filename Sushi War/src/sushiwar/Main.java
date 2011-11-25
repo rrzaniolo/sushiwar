@@ -4,7 +4,9 @@
  */
 package sushiwar;
 
+import menu.MenuPrincipal;
 import javax.swing.JFrame;
+import menu.MenuJogo;
 
 /**
  * @author Hossomi
@@ -15,8 +17,13 @@ import javax.swing.JFrame;
 
 public class Main extends JFrame {
 	
-	private static MenuScreen menu;
+	private static MenuJogo	gameMenu;
+	private static MenuPrincipal mainMenu;
 	private static Screen game;
+	
+	public enum MenuStatus {
+		MENU_MAIN, MENU_GAME, MENU_NONE;
+	}
 	
 	public Main() {
 		super("Sushi War");
@@ -26,38 +33,47 @@ public class Main extends JFrame {
 	
 	public void startGame( int playerCount, String land ) {
 		game.startGame( playerCount, land );
-		menu.hideMenu();
-		game.showGame();
+		toggleMenu( MenuStatus.MENU_NONE );
 	}
 	
 	public void resetGame() {
 		game.clearGame();
 		game.hideGame();
-		menu.showMenu();
-		menu.canResume(false);
+		mainMenu.showMenu();
+		mainMenu.canResume(false);
 	}
 	
-	public void toggleMenu( boolean on ) {
-		if (on) {
+	public void toggleMenu( MenuStatus which ) {
+		if ( which == MenuStatus.MENU_MAIN) {
 			game.hideGame();
-			menu.showMenu();
-			menu.canResume(true);
+			gameMenu.hideMenu();
+			mainMenu.showMenu();
+			mainMenu.canResume(true);
+		}
+		else if ( which == MenuStatus.MENU_GAME) {
+			game.hideGame();
+			gameMenu.showMenu();
+			mainMenu.hideMenu();
 		}
 		else {
 			game.showGame();
-			menu.hideMenu();
+			gameMenu.hideMenu();
+			mainMenu.hideMenu();
 		}
 	}
 	
 	public static void main( String []args ) {
 		Main frame = new Main();
 		
-        menu = new MenuScreen(800, 600,"MushishiOP", frame);
+        mainMenu = new MenuPrincipal(800, 600,"MushishiOP", frame);
+		gameMenu = new MenuJogo( 800, 600, frame );
 		game = new Screen( 800, 600, frame );
-		frame.add(menu);
+		frame.add(mainMenu);
+		frame.add(gameMenu);
 		frame.add(game);
 		game.hideGame();
-		menu.showMenu();
+		gameMenu.setVisible(false);
+		mainMenu.showMenu();
 //        Screen scr = new Screen(800,600, frame);
 //        frame.add(scr);
 		

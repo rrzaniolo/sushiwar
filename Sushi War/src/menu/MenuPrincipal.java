@@ -1,4 +1,4 @@
-package sushiwar;
+package menu;
 
 import button.ButtonAction;
 import button.NiguiriButton;
@@ -14,12 +14,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import sound.Music;
+import sushiwar.Constants;
+import sushiwar.Main;
+import sushiwar.Main.MenuStatus;
+import sushiwar.Screen;
 
 /**
  *
  * @author Daron Vardmir
  */
-public class MenuScreen extends JPanel implements Constants {
+public class MenuPrincipal extends JPanel implements Constants {
     public	int                 width;
 	public	int                 height;
     private int                 numberOfPlayers;
@@ -32,10 +36,10 @@ public class MenuScreen extends JPanel implements Constants {
     private Image				background;
     
     
-    public MenuScreen(int windowWidth, int windowHeight, String music, Main frame){
+    public MenuPrincipal(int windowWidth, int windowHeight, String music, Main frame){
 		
 		//	--	Inicializando janela  --
-        URL url = MenuScreen.class.getResource("/assets/MenuImage.png");
+        URL url = MenuPrincipal.class.getResource("/assets/MenuImage.png");
 		background = new ImageIcon(url).getImage();
         
 		this.frame = frame;
@@ -50,7 +54,7 @@ public class MenuScreen extends JPanel implements Constants {
         this.setLayout( null );
 		
 		//	--	Inicializando fonte  --
-        InputStream is = MenuScreen.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
+        InputStream is = MenuPrincipal.class.getResourceAsStream( "/assets/InfoBarFont.ttf");
 		try {
 			Font theFont = Font.createFont( Font.TRUETYPE_FONT, is );
 			setFont( theFont.deriveFont(Font.PLAIN, 20));			
@@ -63,11 +67,7 @@ public class MenuScreen extends JPanel implements Constants {
 		// -- Inicializando música --
 		
 		//	--	Inicializando botões  --		
-        /*start = new NiguiriButton( (windowWidth - 150)/2, (windowHeight - 45)/2, 150, "START",this );
-        start.setAction( new StartActionControl() );
-        
-        exit = new NiguiriButton( (windowWidth - 150)/2,(windowHeight - 45)/2 + 45 , 150, "SAIR", this );
-        exit.setAction( new ExitActionControl() );*/
+
 		start = new NiguiriButton( (windowWidth - 250), (windowHeight - 150), 200, "NOVO JOGO", this );
         start.setAction( new StartActionControl() );
         
@@ -100,12 +100,13 @@ public class MenuScreen extends JPanel implements Constants {
 
 		@Override
         public void execute() {
-            SubMenu submenu = new SubMenu();
+			frame.toggleMenu( MenuStatus.MENU_GAME );
+            /*SubMenu submenu = new SubMenu();
             int nump = submenu.getNumberOfPlayer();
             SubMenu2 submenu2 = new SubMenu2();
             String land = submenu2.getLand();
             
-            frame.startGame( nump, land );
+            frame.startGame( nump, land );*/
 		}
 		
 	}
@@ -123,7 +124,7 @@ public class MenuScreen extends JPanel implements Constants {
 
 		@Override
         public void execute() {
-            frame.toggleMenu(false);
+            frame.toggleMenu( MenuStatus.MENU_NONE);
 		}
 		
 	}
@@ -138,41 +139,5 @@ public class MenuScreen extends JPanel implements Constants {
 		resume.print(g);
 		
 	}
-    
-    class SubMenu extends JOptionPane{
-        private int numberOfPlayers;     
-        private Object [] ops = {"2 Jogadores","3 Jogadores","4 Jogadores"}; 
 
-        public SubMenu(){
-            do {
-            numberOfPlayers = showOptionDialog(frame, "Escolha o Número de Jogadores", "Jogadores", 
-                    DEFAULT_OPTION, QUESTION_MESSAGE, icon, ops, null);
-            } while(numberOfPlayers <0);
-            
-            numberOfPlayers = numberOfPlayers +2;
-        }
-        
-        public int getNumberOfPlayer(){
-            return(numberOfPlayers);
-        }
-    }
-    
-    class SubMenu2 extends JOptionPane{
-        private String land;
-        private int indice;
-        private Object [] ops = {"Colina","Desfiladeiro","Vale das Trevas","Geometria","Planície","Ilhas Celestes","Tempestade"}; 
-
-        public SubMenu2(){
-            do {
-             this.indice = showOptionDialog(frame, "Escolha o Terreno no qual deseja jogar", "Terreno", 
-                    DEFAULT_OPTION, QUESTION_MESSAGE, icon, ops, null);
-            } while(indice <0);
-            
-            this.land = (String)(ops[indice]);
-        }
-        
-        public String getLand(){
-            return(land);
-        }
-    }
 }

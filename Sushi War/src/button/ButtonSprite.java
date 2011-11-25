@@ -17,8 +17,8 @@ public class ButtonSprite extends Sprite {
 	public ButtonSprite( JPanel screen ) {
 		super( "ButtonNiguiri", 45, 45, screen );
 		
-		addAnimation( new Animation( "open", 0, 4, 20 ));
-		addAnimation( new Animation( "close", 0, 1, 1 ));
+		addAnimation( new Animation( "open", 3, 4, 20 ));
+		addAnimation( new Animation( "close", 0, 4, 20 ));
 	}
 	
 }

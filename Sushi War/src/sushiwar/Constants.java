@@ -49,7 +49,8 @@ public interface Constants {
 	
 	//	--	Player stuff  --
 	static final int	PLAYER_NIGUIRI_COUNT	= 1;
-    static final int	PLAYER_COUNT            = 4;
+    static final int	PLAYER_MAX              = 4;
+	static final int	PLAYER_MIN              = 2;
 	
 	//	--	Screen stuff  --
 	static final Color	SCREEN_DEFAULT_BGCOLOR	= Color.decode("0x0080ff");
@@ -60,5 +61,6 @@ public interface Constants {
 	static final int	SCREEN_OUT_TOTAL		= 0x10000;
     
     // -- Menu stuff --
-    static final Color MENU_DEFAULT_BGCOLOR     = Color.decode("0x0080ff");
+    static final Color MENU_DEFAULT_BGCOLOR     = Color.black;
+	static final String[] MENU_TERRAIN_NAMES	= {"Colina", "Geometria", "Planície", "Tempestade", "Vale das Trevas", "Ilhas Celestes", "Desfiladeiro" };
 }

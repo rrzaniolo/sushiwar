@@ -59,7 +59,7 @@ public class NiguiriButton {
 		if (visible) {
 			Graphics g2 = screen.getGraphics();
 			FontMetrics fm = g2.getFontMetrics();
-
+			
 			textOffset = height - (height - fm.getHeight());
 
 			g.setColor( Color.white );
