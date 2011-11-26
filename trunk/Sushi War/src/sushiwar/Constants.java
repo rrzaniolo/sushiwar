@@ -62,5 +62,5 @@ public interface Constants {
     
     // -- Menu stuff --
     static final Color MENU_DEFAULT_BGCOLOR     = Color.black;
-	static final String[] MENU_TERRAIN_NAMES	= {"Colina", "Geometria", "Planície", "Tempestade", "Vale das Trevas", "Ilhas Celestes", "Desfiladeiro" };
+	static final int	MENU_TERRAIN_COUNT		= 7;
 }
