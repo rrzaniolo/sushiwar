@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import scenario.Terrain;
+import sound.Sound;
 import sprite.Animation;
 import sprite.Sprite;
 import sushiwar.Constants;
@@ -29,7 +29,7 @@ import sushiwar.Main.MenuStatus;
 public class MenuJogo extends JPanel implements Constants {
 	private static Image		terrainBackground;
 	private int					currentTerrain;
-	private TerrainPreview[]	terrainPreview;
+	private TerrainPreview		terrainPreview;
 	
 	private int					currentPlayerCount;
 	private PlayerPreview		playerPreview;
@@ -80,12 +80,10 @@ public class MenuJogo extends JPanel implements Constants {
 		g2.drawImage(img, transf, null);
 		
 		//	Previews
-		terrainPreview = new TerrainPreview[ MENU_TERRAIN_NAMES.length ];
-		for (int i = 0; i < terrainPreview.length; i++)
-			terrainPreview[i] = new TerrainPreview( MENU_TERRAIN_NAMES[i], width/4, height/8 );
+		terrainPreview = new TerrainPreview( width/4, height/8 );
 		
-		addMouseListener( terrainPreview[0] );
-		addMouseMotionListener( terrainPreview[0] );
+		addMouseListener( terrainPreview );
+		addMouseMotionListener( terrainPreview );
 		
 		//	--	Inicializar número de jogadores  --
 		
@@ -116,7 +114,7 @@ public class MenuJogo extends JPanel implements Constants {
 		super.paintComponent(g);
 		g.drawImage( background, 0, 0, null);
 		
-		terrainPreview[ currentTerrain ].print(g);
+		terrainPreview.print(g);
 		playerPreview.print(g);
 		
 		back.print(g);
@@ -124,64 +122,78 @@ public class MenuJogo extends JPanel implements Constants {
 	}
 	
 	private class TerrainPreview extends MouseAdapter implements MouseMotionListener {
-		private Image preview;
+		private Image[] preview;
 		private boolean over;
 		private int x, y;
 		
-		public TerrainPreview( String name, int x, int y ) {
+		public TerrainPreview( int x, int y ) {
 			this.x = x;
 			this.y = y;
 			
-			AffineTransform transf = AffineTransform.getScaleInstance(.5, .5);
-			URL url = MenuJogo.class.getResource("/assets/" + name + ".png");
+			preview = new Image[ MENU_TERRAIN_COUNT ];
 			
-			Image img = new ImageIcon( url ).getImage();
-			BufferedImage bimg = new BufferedImage( img.getWidth(null)/2, img.getHeight(null)/2, BufferedImage.TYPE_INT_ARGB );
-			
-			Graphics2D g2 = (Graphics2D) bimg.getGraphics();
-			g2.drawImage( img, transf, null );
-			
-			for (int j = 0; j < img.getHeight(null)/2; j++)
-				for (int i = 0; i < img.getWidth(null)/2; i++)
-					if ( (bimg.getRGB(i, j) & 0x11000000) != 0)
-						bimg.setRGB(i, j, 0xffffc080);
-			
-			preview = new BufferedImage( img.getWidth(null)/2, img.getHeight(null)/2, BufferedImage.TYPE_INT_ARGB );
-			Graphics g = preview.getGraphics();
-			g.drawImage( terrainBackground, 0, 0, null );
-			g.drawImage( bimg, 0, 0, null );
+			for (int t = 0; t < MENU_TERRAIN_COUNT; t++) {
+				AffineTransform transf = AffineTransform.getScaleInstance(.5, .5);
+				URL url = MenuJogo.class.getResource("/assets/Terreno" + t + ".png");
+
+				Image img = new ImageIcon( url ).getImage();
+				BufferedImage bimg = new BufferedImage( img.getWidth(null)/2, img.getHeight(null)/2, BufferedImage.TYPE_INT_ARGB );
+
+				Graphics2D g2 = (Graphics2D) bimg.getGraphics();
+				g2.drawImage( img, transf, null );
+
+				for (int j = 0; j < img.getHeight(null)/2; j++)
+					for (int i = 0; i < img.getWidth(null)/2; i++)
+						if ( (bimg.getRGB(i, j) & 0x11000000) != 0)
+							bimg.setRGB(i, j, 0xffffc080);
+
+				preview[t] = new BufferedImage( img.getWidth(null)/2, img.getHeight(null)/2, BufferedImage.TYPE_INT_ARGB );
+				Graphics g = preview[t].getGraphics();
+				g.drawImage( terrainBackground, 0, 0, null );
+				g.drawImage( bimg, 0, 0, null );
+			}
 		}
 		
 		public void print(Graphics g ) {
-			g.setColor( Color.white );
-			g.fillRect(x-5, y-5, preview.getWidth(null)+10, preview.getHeight(null)+10);
-			
 			if (over) {
+				g.setColor( Color.white );
+				g.drawRect(x-4, y-4, preview[currentTerrain].getWidth(null)+7, preview[currentTerrain].getHeight(null)+7);
+			
 				g.setColor( Color.black );
-				g.drawRect(x-4, y-4, preview.getWidth(null)+7, preview.getHeight(null)+7);
+				g.drawRect(x-3, y-3, preview[currentTerrain].getWidth(null)+5, preview[currentTerrain].getHeight(null)+5);
 			}
 			
-			g.drawImage( preview, x, y, null );
+			g.setColor( Color.white );
+			g.drawRect(x-2, y-2, preview[currentTerrain].getWidth(null)+3, preview[currentTerrain].getHeight(null)+3);
+			g.setColor( Color.black );
+			g.drawRect(x-1, y-1, preview[currentTerrain].getWidth(null)+1, preview[currentTerrain].getHeight(null)+1);
+			
+			
+			
+			g.drawImage( preview[currentTerrain], x, y, null );
 		}
 		
 		@Override
-		public void mouseClicked(MouseEvent e) {
-			if (e.getX() > x && e.getX() < x + preview.getWidth(null)
-				&& e.getY() > y && e.getY() < y + preview.getHeight(null) ) {
+		public void mousePressed(MouseEvent e) {
+			if (e.getX() > x && e.getX() < x + preview[currentTerrain].getWidth(null)
+				&& e.getY() > y && e.getY() < y + preview[currentTerrain].getHeight(null) ) {
 				
-				removeMouseListener( terrainPreview[ currentTerrain ] );
-				removeMouseMotionListener( terrainPreview[ currentTerrain ] );
-				currentTerrain = (currentTerrain + 1) % terrainPreview.length;
-				addMouseListener( terrainPreview[ currentTerrain ] );
-				addMouseMotionListener( terrainPreview[ currentTerrain ] );
+				if (e.getButton() == MouseEvent.BUTTON1) 
+					currentTerrain = Math.min(currentTerrain + 1, MENU_TERRAIN_COUNT-1);
+				else
+					currentTerrain = Math.max(currentTerrain - 1, 0);
+				
 				repaint();
+				
+				Sound snd = new Sound("Select");
+				snd.play();
 			}
 		}
-
+		
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			if (e.getX() > x && e.getX() < x + preview.getWidth(null)
-				&& e.getY() > y && e.getY() < y + preview.getHeight(null) )
+			if (e.getX() > x && e.getX() < x + preview[currentTerrain].getWidth(null)
+				&& e.getY() > y && e.getY() < y + preview[currentTerrain].getHeight(null) )
 				
 				over = true;
 			
@@ -190,6 +202,13 @@ public class MenuJogo extends JPanel implements Constants {
 			
 			repaint();
 		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			mouseMoved(e);
+		}
+		
+		
 		
 	}
 	
@@ -229,7 +248,7 @@ public class MenuJogo extends JPanel implements Constants {
 		}
 		
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			if ( e.getX() > x && e.getX() < x + width
 				&& e.getY() > y && e.getY() < y + height ) {
 				
@@ -237,6 +256,9 @@ public class MenuJogo extends JPanel implements Constants {
 					addPlayer(1);
 				else
 					addPlayer(-1);
+				
+				Sound snd = new Sound("Select");
+				snd.play();
 			}
 		}
 
@@ -257,6 +279,11 @@ public class MenuJogo extends JPanel implements Constants {
 			}
 		}		
 		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			mouseMoved(e);
+		}
+		
 	}
 	
 	private class BackActionControl extends ButtonAction {
@@ -272,7 +299,7 @@ public class MenuJogo extends JPanel implements Constants {
 
 		@Override
 		public void execute() {
-			frame.startGame( currentPlayerCount, MENU_TERRAIN_NAMES[ currentTerrain ] );
+			frame.startGame( currentPlayerCount, currentTerrain );
 		}
 		
 	}

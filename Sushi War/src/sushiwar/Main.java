@@ -31,8 +31,9 @@ public class Main extends JFrame {
 
 	}
 	
-	public void startGame( int playerCount, String land ) {
-		game.startGame( playerCount, land );
+	public void startGame( int playerCount, int land ) {
+		game.startGame( playerCount, "Terreno" + land );
+		mainMenu.canResume(true);
 		toggleMenu( MenuStatus.MENU_NONE );
 	}
 	
@@ -48,7 +49,6 @@ public class Main extends JFrame {
 			game.hideGame();
 			gameMenu.hideMenu();
 			mainMenu.showMenu();
-			mainMenu.canResume(true);
 		}
 		else if ( which == MenuStatus.MENU_GAME) {
 			game.hideGame();

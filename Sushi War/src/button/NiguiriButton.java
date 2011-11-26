@@ -4,10 +4,13 @@ package button;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JPanel;
+import sound.Sound;
 
 /**
  *
@@ -57,7 +60,7 @@ public class NiguiriButton {
 	
 	public void print( Graphics g ) {
 		if (visible) {
-			Graphics g2 = screen.getGraphics();
+			Graphics2D g2 = (Graphics2D) screen.getGraphics();
 			FontMetrics fm = g2.getFontMetrics();
 			
 			textOffset = height - (height - fm.getHeight());
@@ -104,12 +107,15 @@ public class NiguiriButton {
 	private class MouseControl extends MouseAdapter {
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			if (action != null && visible) {
 				int mx = e.getX();
 				int my = e.getY();
-				if ( mx > x && mx < x+width && my > y && my < y+height )
+				if ( mx > x && mx < x+width && my > y && my < y+height ) {
 					action.execute();
+					Sound snd = new Sound("Select");
+					snd.play();
+				}
 			}
 		}
 		
