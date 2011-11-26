@@ -28,6 +28,7 @@ public class Main extends JFrame {
 	public Main() {
 		super("Sushi War");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 	}
 	

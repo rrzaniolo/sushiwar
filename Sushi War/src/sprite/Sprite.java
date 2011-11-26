@@ -41,6 +41,7 @@ public class Sprite implements TimerListener, Constants {
 		//	Carregando spritesheet
 		URL fileURL = Sprite.class.getResource("/assets/" + file + ".png");
 		Image tmpImage = new ImageIcon(fileURL).getImage();
+		System.out.println(fileURL.getPath());
 		
 		//	Copiando para uma BufferedImage, para que
 		//	possamos cortá-la em sprites
